@@ -3,6 +3,8 @@
 - Alex Luo
 - Ted Lee
 - Kathrina Pillay
+
+  
 Our project is a productivity application where users can creata and complete tasks to earn points and decorate a virtual room space by spending points to purchase decorations.
 
 # To build the frontend:
