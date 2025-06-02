@@ -1,7 +1,6 @@
 import React from 'react';
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Provider } from 'react-redux';
 import { store } from './store';
@@ -13,6 +12,7 @@ import StatPage from './components/StatPage';
 import MarketPage from './components/MarketPage';
 import EditPage from './components/EditPage';
 import TaskPage from './components/TaskPage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const router = createBrowserRouter([
   {
@@ -25,23 +25,23 @@ const router = createBrowserRouter([
   },
   {
     path: '/home',
-    element: <HomePage />,
+    element: <ProtectedRoute><HomePage /></ProtectedRoute>,
   },
   {
     path: '/tasks',
-    element: <TaskPage />
+    element: <ProtectedRoute><TaskPage /></ProtectedRoute>
   },
   {
     path: '/stats',
-    element: <StatPage />
+    element: <ProtectedRoute><StatPage /></ProtectedRoute>
   },
   {
     path: '/marketplace',
-    element: <MarketPage />
+    element: <ProtectedRoute><MarketPage /></ProtectedRoute>
   },
   {
     path: '/edit',
-    element: <EditPage />
+    element: <ProtectedRoute><EditPage /></ProtectedRoute>
   }
   // TODO: Add other routes as needed
 ]);
