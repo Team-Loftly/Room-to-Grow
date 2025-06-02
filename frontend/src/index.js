@@ -1,17 +1,56 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { Provider } from 'react-redux';
+import { store } from './store';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+import HomePage from './components/HomePage';
+import LoginPage from './components/LoginPage';
+import RegisterPage from './components/RegisterPage';
+import StatPage from './components/StatPage';
+import MarketPage from './components/MarketPage';
+import EditPage from './components/EditPage';
+import TaskPage from './components/TaskPage';
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <LoginPage />
+  },
+  {
+    path: '/register',
+    element: <RegisterPage />
+  },
+  {
+    path: '/home',
+    element: <HomePage />,
+  },
+  {
+    path: '/tasks',
+    element: <TaskPage />
+  },
+  {
+    path: '/stats',
+    element: <StatPage />
+  },
+  {
+    path: '/marketplace',
+    element: <MarketPage />
+  },
+  {
+    path: '/edit',
+    element: <EditPage />
+  }
+  // TODO: Add other routes as needed
+]);
+
+createRoot(document.getElementById('root')).render(
+  <Provider store={store}>
+    <StrictMode>
+      <RouterProvider router={router} />
+    </StrictMode>
+  </Provider>
+
+)

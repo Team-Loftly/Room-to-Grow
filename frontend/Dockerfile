@@ -9,7 +9,9 @@ COPY package*.json ./
  
 # Install dependencies
 RUN npm install
- 
+RUN npm install redux react-redux
+RUN npm install @reduxjs/toolkit react-redux
+RUN npm install react-router-dom
 # Copy the rest of your application files
 COPY . .
  
