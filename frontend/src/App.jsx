@@ -1,10 +1,4 @@
-import React from 'react';
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { Provider } from 'react-redux';
-import { store } from './store';
-
 import HomePage from './components/HomePage';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
@@ -46,11 +40,10 @@ const router = createBrowserRouter([
   // TODO: Add other routes as needed
 ]);
 
-createRoot(document.getElementById('root')).render(
-  <Provider store={store}>
-    <StrictMode>
-      <RouterProvider router={router} />
-    </StrictMode>
-  </Provider>
+function App() {
+  return (
+    <RouterProvider router={router} />
+  )
+}
 
-)
+export default App
