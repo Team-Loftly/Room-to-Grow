@@ -45,7 +45,10 @@ export default function StatPage() {
 					boxSizing: "border-box",
 				}}
 			>
-				<Paper elevation={3} sx={{ p: 2, mb: 3, borderRadius: 3 }}>
+				<Paper
+					elevation={3}
+					sx={{ p: 2, mb: 3, borderRadius: 3, overflowX: "auto" }}
+				>
 					<Typography variant="h5" color="primary" gutterBottom>
 						Weekly Overview
 					</Typography>
