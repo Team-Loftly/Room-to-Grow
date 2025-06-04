@@ -72,16 +72,16 @@ export default function StatPage() {
 						/>
 					)}
 
-					{/* {selectedChart === "tasks" && (
+					{selectedChart === "tasks" && (
 						<VisualInsight
 							title="Tasks Completed"
 							chartLabel="Tasks"
-							chartData={[
-								tasksCompleted["This Week"],
-								tasksCompleted["Last Week"],
-							]}
+							chartData={{
+								"This Week": tasksCompleted["This Week"],
+								"Last Week": tasksCompleted["Last Week"],
+							}}
 						/>
-					)} */}
+					)}
 				</Paper>
 
 				{Object.entries(categoryHours).map(([category, hours]) => (
