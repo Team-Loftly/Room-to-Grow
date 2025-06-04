@@ -126,7 +126,7 @@ export default function StatPage() {
 						alt=""
 						style={{
 							width: "20px",
-							height: "fit-content",
+							height: "auto",
 							"margin-right": "7px",
 						}}
 					/>
