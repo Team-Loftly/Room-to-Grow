@@ -1,7 +1,7 @@
 export default function EditPage() {
-    return (
-        <div className="Edit">
-          <p>Edit Page</p>
-        </div>
-      );
+  return (
+    <div className="Edit">
+      <p>Edit Page</p>
+    </div>
+  );
 }
