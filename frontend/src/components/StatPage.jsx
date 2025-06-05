@@ -15,7 +15,7 @@ import check from "../assets/checked.png";
 
 export default function StatPage() {
   const { hoursSpent, tasksCompleted, categoryHours } = useSelector(
-    (state) => state.metrics,
+    (state) => state.metrics
   );
 
   const [selectedChart, setSelectedChart] = useState("hours");

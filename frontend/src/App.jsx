@@ -10,47 +10,47 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
 
 const router = createBrowserRouter([
-	{
-		path: "/",
-		element: <LoginPage />,
-	},
-	{
-		path: "/register",
-		element: <RegisterPage />,
-	},
-	{
-		element: (
-			<ProtectedRoute>
-				<Layout />
-			</ProtectedRoute>
-		),
-		children: [
-			{
-				path: "/home",
-				element: <HomePage />,
-			},
-			{
-				path: "/tasks",
-				element: <TaskPage />,
-			},
-			{
-				path: "/stats",
-				element: <StatPage />,
-			},
-			{
-				path: "/marketplace",
-				element: <MarketPage />,
-			},
-			{
-				path: "/edit",
-				element: <EditPage />,
-			},
-		],
-	},
+  {
+    path: "/",
+    element: <LoginPage />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
+  },
+  {
+    element: (
+      <ProtectedRoute>
+        <Layout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        path: "/home",
+        element: <HomePage />,
+      },
+      {
+        path: "/tasks",
+        element: <TaskPage />,
+      },
+      {
+        path: "/stats",
+        element: <StatPage />,
+      },
+      {
+        path: "/marketplace",
+        element: <MarketPage />,
+      },
+      {
+        path: "/edit",
+        element: <EditPage />,
+      },
+    ],
+  },
 ]);
 
 function App() {
-	return <RouterProvider router={router} />;
+  return <RouterProvider router={router} />;
 }
 
 export default App;
