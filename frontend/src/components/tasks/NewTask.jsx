@@ -38,7 +38,7 @@ export default function NewTask() {
     }));
   };
 
-  const handleDaysChange = (newDays) => {
+  const handleDaysChange = (event, newDays) => {
     setFormValues((prevValues) => ({
       ...prevValues,
       days: newDays,
