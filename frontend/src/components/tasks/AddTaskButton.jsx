@@ -5,6 +5,10 @@ import AddIcon from "@mui/icons-material/Add";
 import { Typography } from "@mui/material";
 
 export default function AddTaskButton() {
+  const handleClick = () => {
+    // !!! TODO;
+  };
+
   return (
     <Box>
       <Button
@@ -17,6 +21,9 @@ export default function AddTaskButton() {
           p: 2,
           display: "flex",
           justifyContent: "center",
+        }}
+        onClick={() => {
+          handleClick();
         }}
       >
         <Typography>Add Task</Typography>

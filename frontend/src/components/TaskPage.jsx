@@ -4,8 +4,9 @@ import { Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import BookPage from "./tasks/BookPage";
 import StatPage from "./StatPage";
-import AddTaskButton from "./tasks/AddTaskButton";
-import NewTask from "./tasks/NewTask";
+import MyTasks from "./tasks/MyTasks";
+import React from "react";
+import { useState } from "react";
 
 export default function TaskPage() {
   return (
@@ -24,14 +25,7 @@ export default function TaskPage() {
           }}
         >
           <BookPage>
-            <Stack
-              direction="column"
-              spacing={2}
-              sx={{ width: "100%", height: "85vh", display: "flex" }}
-            >
-              <Typography variant="h6">My Tasks</Typography>
-              <AddTaskButton />
-            </Stack>
+            <MyTasks />
           </BookPage>
           <BookPage>
             <StatPage />
