@@ -14,7 +14,9 @@ export default function AddTaskButton() {
       <Button
         variant="contained"
         sx={{
-          backgroundColor: "#000000",
+          backgroundColor: "#1E2939",
+          color: "white",
+          fontWeight: "bold",
           width: "100%",
           height: 20,
           borderRadius: 3,

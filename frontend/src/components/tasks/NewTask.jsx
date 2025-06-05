@@ -81,6 +81,7 @@ export default function NewTask() {
       sx={{
         bgcolor: "white",
         p: 3,
+        borderRadius: 3,
       }}
     >
       <Stack spacing={2} sx={{ width: "100%" }}>
@@ -172,9 +173,19 @@ export default function NewTask() {
           />
         </Collapse>
 
-        <Button variant="contained">Save</Button>
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: "#1E2939",
+            color: "white",
+            fontWeight: "bold",
+          }}
+        >
+          Save
+        </Button>
         <Button
           variant="outlined"
+          sx={{ color: "#1E2939", borderColor: "#1E2939" }}
           onClick={() => {
             handleCancel();
           }}

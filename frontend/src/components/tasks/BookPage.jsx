@@ -5,15 +5,13 @@ export default function BookPage({ children }) {
   return (
     <Box
       sx={{
-        flex: 1,
-        width: "50%",
+        width: "100%",
         height: "100%",
-        borderRadius: 15,
-        bgcolor: "tan",
-        p: 5,
         display: "flex",
         justifyContent: "center",
         boxSizing: "border-box",
+        flex: 1,
+        minWidth: 0,
       }}
     >
       {children}

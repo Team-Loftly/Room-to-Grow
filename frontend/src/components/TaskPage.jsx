@@ -7,31 +7,42 @@ import StatPage from "./StatPage";
 import MyTasks from "./tasks/MyTasks";
 import React from "react";
 import { useState } from "react";
+import Book from "../assets/Book.png";
 
 export default function TaskPage() {
   return (
-    <Box>
-      <NavBar />
-      <Container maxWidth="false" sx={{ bgcolor: "black", height: "85vh" }}>
-        <Stack
-          direction="row"
-          spacing={5}
-          sx={{
-            height: "100%",
-            px: 10,
-            py: 5,
-            bgcolor: "pink",
-            boxSizing: "border-box",
-          }}
-        >
-          <BookPage>
-            <MyTasks />
-          </BookPage>
-          <BookPage>
-            <StatPage />
-          </BookPage>
-        </Stack>
-      </Container>
+    <Box
+      sx={{
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        bgcolor: "#1E2939",
+      }}
+    >
+      <Stack
+        direction="row"
+        spacing={4}
+        sx={{
+          height: "95vh",
+          width: "90%",
+          pt: 5,
+          px: 7,
+          pb: 10,
+          bgcolor: "#1E2939",
+          backgroundImage: `url(${Book})`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "100% 100%",
+          boxSizing: "border-box",
+        }}
+      >
+        <BookPage>
+          <MyTasks />
+        </BookPage>
+        <BookPage>
+          <StatPage />
+        </BookPage>
+      </Stack>
     </Box>
   );
 }

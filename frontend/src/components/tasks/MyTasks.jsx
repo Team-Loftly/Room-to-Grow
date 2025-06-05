@@ -10,9 +10,16 @@ export default function MyTasks() {
     <Stack
       direction="column"
       spacing={2}
-      sx={{ width: "100%", boxSizing: "border-box", display: "flex" }}
+      sx={{
+        width: "100%",
+        boxSizing: "border-box",
+        display: "flex",
+        p: 2,
+      }}
     >
-      <Typography variant="h6">My Tasks</Typography>
+      <Typography variant="h6" sx={{ alignSelf: "center" }}>
+        My Tasks
+      </Typography>
       <AddTaskButton />
       <Box
         sx={{
