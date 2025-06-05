@@ -13,8 +13,8 @@ export default function AddTaskButton() {
           backgroundColor: "#000000",
           width: "100%",
           height: 20,
-          borderRadius: 5,
-          p: 4,
+          borderRadius: 3,
+          p: 2,
           display: "flex",
           justifyContent: "center",
         }}

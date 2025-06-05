@@ -5,6 +5,7 @@ import Stack from "@mui/material/Stack";
 import BookPage from "./tasks/BookPage";
 import StatPage from "./StatPage";
 import AddTaskButton from "./tasks/AddTaskButton";
+import NewTask from "./tasks/NewTask";
 
 export default function TaskPage() {
   return (
