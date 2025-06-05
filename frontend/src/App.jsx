@@ -7,61 +7,50 @@ import MarketPage from "./components/MarketPage";
 import EditPage from "./components/EditPage";
 import TaskPage from "./components/TaskPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Layout from "./components/Layout";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <LoginPage />,
-  },
-  {
-    path: "/register",
-    element: <RegisterPage />,
-  },
-  {
-    path: "/home",
-    element: (
-      <ProtectedRoute>
-        <HomePage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/tasks",
-    element: (
-      <ProtectedRoute>
-        <TaskPage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/stats",
-    element: (
-      <ProtectedRoute>
-        <StatPage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/marketplace",
-    element: (
-      <ProtectedRoute>
-        <MarketPage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/edit",
-    element: (
-      <ProtectedRoute>
-        <EditPage />
-      </ProtectedRoute>
-    ),
-  },
-  // TODO: Add other routes as needed
+	{
+		path: "/",
+		element: <LoginPage />,
+	},
+	{
+		path: "/register",
+		element: <RegisterPage />,
+	},
+	{
+		element: (
+			<ProtectedRoute>
+				<Layout />
+			</ProtectedRoute>
+		),
+		children: [
+			{
+				path: "/home",
+				element: <HomePage />,
+			},
+			{
+				path: "/tasks",
+				element: <TaskPage />,
+			},
+			{
+				path: "/stats",
+				element: <StatPage />,
+			},
+			{
+				path: "/marketplace",
+				element: <MarketPage />,
+			},
+			{
+				path: "/edit",
+				element: <EditPage />,
+			},
+		],
+	},
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+	return <RouterProvider router={router} />;
 }
 
 export default App;
