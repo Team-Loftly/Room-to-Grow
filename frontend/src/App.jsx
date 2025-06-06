@@ -7,6 +7,7 @@ import MarketPage from "./components/MarketPage";
 import EditPage from "./components/EditPage";
 import TaskPage from "./components/TaskPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Layout from "./components/Layout";
 
 const router = createBrowserRouter([
   {
@@ -18,46 +19,34 @@ const router = createBrowserRouter([
     element: <RegisterPage />,
   },
   {
-    path: "/home",
     element: (
       <ProtectedRoute>
-        <HomePage />
+        <Layout />
       </ProtectedRoute>
     ),
+    children: [
+      {
+        path: "/home",
+        element: <HomePage />,
+      },
+      {
+        path: "/tasks",
+        element: <TaskPage />,
+      },
+      {
+        path: "/stats",
+        element: <StatPage />,
+      },
+      {
+        path: "/marketplace",
+        element: <MarketPage />,
+      },
+      {
+        path: "/edit",
+        element: <EditPage />,
+      },
+    ],
   },
-  {
-    path: "/tasks",
-    element: (
-      <ProtectedRoute>
-        <TaskPage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/stats",
-    element: (
-      <ProtectedRoute>
-        <StatPage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/marketplace",
-    element: (
-      <ProtectedRoute>
-        <MarketPage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/edit",
-    element: (
-      <ProtectedRoute>
-        <EditPage />
-      </ProtectedRoute>
-    ),
-  },
-  // TODO: Add other routes as needed
 ]);
 
 function App() {

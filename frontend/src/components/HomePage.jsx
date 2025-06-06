@@ -19,7 +19,6 @@ export default function HomePage() {
 
   return (
     <section className="w-full h-screen relative">
-      <NavBar />
       <HUD />
       <Canvas
         camera={{ position: [-75, 60, 75], fov: 60 }}
