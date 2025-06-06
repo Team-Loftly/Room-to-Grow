@@ -15,7 +15,7 @@ import check from "../assets/checked.png";
 
 export default function StatPage() {
   const { hoursSpent, tasksCompleted, categoryHours } = useSelector(
-    (state) => state.metrics,
+    (state) => state.metrics
   );
 
   const [selectedChart, setSelectedChart] = useState("hours");
@@ -31,9 +31,10 @@ export default function StatPage() {
         height: "100%",
         display: "flex",
         flexDirection: "column",
+        p: 2,
       }}
     >
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="h6" gutterBottom sx={{ alignSelf: "center" }}>
         My Metrics
       </Typography>
 
@@ -47,7 +48,13 @@ export default function StatPage() {
       >
         <Paper
           elevation={3}
-          sx={{ p: 2, mb: 3, borderRadius: 3, overflowX: "auto" }}
+          sx={{
+            p: 2,
+            mb: 3,
+            borderRadius: 3,
+            overflowX: "auto",
+            width: "100%",
+          }}
         >
           <Typography variant="h5" color="primary" gutterBottom>
             Weekly Overview
@@ -95,6 +102,7 @@ export default function StatPage() {
               borderRadius: 3,
               mb: 2,
               display: "flex",
+              width: "100%",
             }}
           >
             <img
