@@ -1,11 +1,4 @@
-import {
-  AppBar,
-  Box,
-  Toolbar,
-  IconButton,
-  Button,
-  Typography,
-} from "@mui/material";
+import { AppBar, Toolbar, IconButton, Button, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
 
@@ -19,32 +12,30 @@ export default function NavBar() {
     navigate("/");
   };
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            className="hover:cursor-pointer"
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1 }}
-            onClick={() => navigate("/home")}
-          >
-            Room to Grow
-          </Typography>
-          <Button onClick={logoutUser} color="inherit">
-            Logout
-          </Button>
-        </Toolbar>
-      </AppBar>
-    </Box>
+    <AppBar position="static">
+      <Toolbar>
+        <IconButton
+          size="large"
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          sx={{ mr: 2 }}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Typography
+          className="hover:cursor-pointer"
+          variant="h6"
+          component="div"
+          sx={{ flexGrow: 1 }}
+          onClick={() => navigate("/home")}
+        >
+          Room to Grow
+        </Typography>
+        <Button onClick={logoutUser} color="inherit">
+          Logout
+        </Button>
+      </Toolbar>
+    </AppBar>
   );
 }

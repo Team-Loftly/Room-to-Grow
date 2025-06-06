@@ -10,7 +10,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import VisualInsight from "../components/stats/VisualInsight";
-import check from "../assets/checked.png";
+import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 
 export default function Stats() {
   const { hoursSpent, tasksCompleted, categoryHours } = useSelector(
@@ -104,13 +104,9 @@ export default function Stats() {
               width: "100%",
             }}
           >
-            <img
-              src={check}
-              alt=""
-              style={{
-                width: "20px",
-                height: "auto",
-                "margin-right": "7px",
+            <CheckCircleOutlineOutlinedIcon
+              sx={{
+                "margin-right": 5,
               }}
             />
             <Typography key={category} variant="body1">
@@ -128,13 +124,9 @@ export default function Stats() {
             display: "flex",
           }}
         >
-          <img
-            src={check}
-            alt=""
-            style={{
-              width: "20px",
-              height: "auto",
-              "margin-right": "7px",
+          <CheckCircleOutlineOutlinedIcon
+            sx={{
+              "margin-right": 5,
             }}
           />
           <Typography variant="body1">
