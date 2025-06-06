@@ -1,56 +1,39 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import HomePage from "./components/HomePage";
-import LoginPage from "./components/LoginPage";
-import RegisterPage from "./components/RegisterPage";
-import StatPage from "./components/StatPage";
-import MarketPage from "./components/MarketPage";
-import EditPage from "./components/EditPage";
-import TaskPage from "./components/TaskPage";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Registeration from "./pages/Registeration";
+import Stats from "./pages/Stats";
+import Market from "./pages/Market";
+import EditRoom from "./pages/EditRoom";
+import Tasks from "./pages/Tasks";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <LoginPage />,
-  },
-  {
-    path: "/register",
-    element: <RegisterPage />,
-  },
-  {
-    element: (
-      <ProtectedRoute>
-        <Layout />
-      </ProtectedRoute>
-    ),
-    children: [
-      {
-        path: "/home",
-        element: <HomePage />,
-      },
-      {
-        path: "/tasks",
-        element: <TaskPage />,
-      },
-      {
-        path: "/stats",
-        element: <StatPage />,
-      },
-      {
-        path: "/marketplace",
-        element: <MarketPage />,
-      },
-      {
-        path: "/edit",
-        element: <EditPage />,
-      },
-    ],
-  },
-]);
-
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <Router>
+      <Routes>
+        {/* public routes */}
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Registeration />} />
+
+        {/* protected routes */}
+        <Route
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="/home" element={<Home />} />
+          <Route path="/tasks" element={<Tasks />} />
+          <Route path="/stats" element={<Stats />} />
+          <Route path="/marketplace" element={<Market />} />
+          <Route path="/edit" element={<EditRoom />} />
+        </Route>
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
