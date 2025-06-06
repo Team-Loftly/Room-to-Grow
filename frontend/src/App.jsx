@@ -11,28 +11,30 @@ import Layout from "./components/Layout";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* public routes */}
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Registeration />} />
+    <>
+      <main>
+        <Routes>
+          {/* public routes */}
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Registeration />} />
 
-        {/* protected routes */}
-        <Route
-          element={
-            <ProtectedRoute>
-              <Layout />
-            </ProtectedRoute>
-          }
-        >
-          <Route path="/home" element={<Home />} />
-          <Route path="/tasks" element={<Tasks />} />
-          <Route path="/stats" element={<Stats />} />
-          <Route path="/marketplace" element={<Market />} />
-          <Route path="/edit" element={<EditRoom />} />
-        </Route>
-      </Routes>
-    </Router>
+          {/* protected routes */}
+          <Route
+            element={
+              <ProtectedRoute>
+                <Layout />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="/home" element={<Home />} />
+            <Route path="/tasks" element={<Tasks />} />
+            <Route path="/stats" element={<Stats />} />
+            <Route path="/marketplace" element={<Market />} />
+            <Route path="/edit" element={<EditRoom />} />
+          </Route>
+        </Routes>
+      </main>
+    </>
   );
 }
 

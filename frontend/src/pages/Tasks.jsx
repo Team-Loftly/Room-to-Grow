@@ -9,7 +9,7 @@ export default function Tasks() {
   return (
     <Box
       sx={{
-        height: "100vh",
+        height: "100%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -20,7 +20,7 @@ export default function Tasks() {
         direction="row"
         spacing={4}
         sx={{
-          height: "95vh",
+          height: "95%",
           width: "90%",
           pt: 5,
           px: 7,

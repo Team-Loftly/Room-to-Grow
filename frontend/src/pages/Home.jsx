@@ -3,6 +3,7 @@ import { OrbitControls } from "@react-three/drei";
 
 import HUD from "../components/home/HUD";
 import PlaceholderCafe from "../models/PlaceholderCafe";
+import { Box } from "@mui/material";
 import "../css/Home.css";
 
 export default function Home() {
@@ -17,12 +18,17 @@ export default function Home() {
   const { scale: roomScale, position: roomPosition } = adjustForScreenSize();
 
   return (
-    <section className="w-full h-screen relative">
+    <Box
+      sx={{
+        boxSizing: "border-box",
+        height: "100%",
+        display: "flex",
+        boxSizing: "border-box",
+        flexDirection: "column",
+      }}
+    >
       <HUD />
-      <Canvas
-        camera={{ position: [-75, 60, 75], fov: 60 }}
-        className="w-full h-screen bg-gray-800"
-      >
+      <Canvas camera={{ position: [-60, 48, 60], fov: 60 }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
         <PlaceholderCafe scale={roomScale} position={roomPosition} />
@@ -36,6 +42,6 @@ export default function Home() {
           enableRotate
         />
       </Canvas>
-    </section>
+    </Box>
   );
 }
