@@ -1,4 +1,6 @@
-import { Stack, Box, Paper, Divider, Typography } from "@mui/material";
+import { Stack, Divider } from "@mui/material";
+import ItemDisplay from "../components/market/ItemDisplay";
+import ItemGrid from "../components/market/ItemGrid";
 
 function Market() {
   return (
@@ -18,31 +20,8 @@ function Market() {
         alignItems: "center",
       }}
     >
-      <Box
-        sx={{
-          flexGrow: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          bgcolor: "grey.100",
-          m: 3,
-        }}
-      >
-        <Typography variant="h4">Left Component</Typography>
-      </Box>
-
-      <Box
-        sx={{
-          flexGrow: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          bgcolor: "grey.200",
-          m: 3,
-        }}
-      >
-        <Typography variant="h4">Right Component</Typography>
-      </Box>
+      <ItemDisplay />
+      <ItemGrid />
     </Stack>
   );
 }
