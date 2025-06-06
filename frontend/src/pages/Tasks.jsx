@@ -1,15 +1,11 @@
-import NavBar from "./NavBar";
-import { Box, Container } from "@mui/material";
-import { Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import Stack from "@mui/material/Stack";
-import BookPage from "./tasks/BookPage";
-import StatPage from "./StatPage";
-import MyTasks from "./tasks/MyTasks";
-import React from "react";
-import { useState } from "react";
+import BookPage from "../components/tasks/BookPage";
+import StatPage from "./Stats";
+import MyTasks from "../components/tasks/MyTasks";
 import Book from "../assets/Book.png";
 
-export default function TaskPage() {
+export default function Tasks() {
   return (
     <Box
       sx={{

@@ -9,11 +9,10 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import Stack from "@mui/material/Stack";
-import VisualInsight from "./VisualInsight";
+import VisualInsight from "../components/stats/VisualInsight";
 import check from "../assets/checked.png";
 
-export default function StatPage() {
+export default function Stats() {
   const { hoursSpent, tasksCompleted, categoryHours } = useSelector(
     (state) => state.metrics
   );

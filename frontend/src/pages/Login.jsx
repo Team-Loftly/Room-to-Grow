@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { TextField, Button, Box, Paper } from "@mui/material";
-import SiteHeader from "./SiteHeader";
-export default function RegisterPage() {
+import SiteHeader from "../components/SiteHeader";
+
+// Login Content
+export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,24 +17,22 @@ export default function RegisterPage() {
     }
   }, []);
 
-  const registerUser = () => {
-    // register new user using email, password
-    // uses localStorage for now -- replace with backend calls later
+  const loginUser = () => {
+    // login existing user using localStorage for now -- replace with backend calls later
     const users = JSON.parse(localStorage.getItem("users")) || [];
-    if (users.find((user) => user.email === email)) {
-      // user already exists
-      alert("user already exists!!");
+    if (
+      !users.find((user) => user.email === email && user.password === password)
+    ) {
+      alert("Incorrect Email/Password!");
       return;
     }
-    // register new user and go to home
-    if (email !== "" && password !== "") {
-      users.push({ email, password });
-      localStorage.setItem("users", JSON.stringify(users));
-      localStorage.setItem("currentUser", JSON.stringify({ email }));
-      navigate("/home");
-    } else {
-      alert("Invalid email/password!");
-    }
+    // login successful
+    localStorage.setItem("currentUser", JSON.stringify({ email }));
+    navigate("/home");
+  };
+
+  const registerUser = () => {
+    navigate("/register");
   };
 
   return (
@@ -58,7 +58,7 @@ export default function RegisterPage() {
           component="form"
           display="flex"
           flexDirection="column"
-          onSubmit={registerUser}
+          onSubmit={loginUser}
           gap={1}
         >
           <SiteHeader />
@@ -73,6 +73,9 @@ export default function RegisterPage() {
             onChange={(e) => setPassword(e.target.value)}
           />
           <Button type="submit" variant="outlined">
+            Login
+          </Button>
+          <Button variant="outlined" onClick={registerUser}>
             Register
           </Button>
         </Box>

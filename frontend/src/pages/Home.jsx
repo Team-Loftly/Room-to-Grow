@@ -1,12 +1,11 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 
-import NavBar from "./NavBar";
-import HUD from "./home/HUD";
+import HUD from "../components/home/HUD";
 import PlaceholderCafe from "../models/PlaceholderCafe";
-import "../css/HomePage.css";
+import "../css/Home.css";
 
-export default function HomePage() {
+export default function Home() {
   const adjustForScreenSize = () => {
     const isSmallScreen = window.innerWidth < 800;
     return {
