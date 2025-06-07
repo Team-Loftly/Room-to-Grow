@@ -23,3 +23,10 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 - Basic lighting and camera settings have been set
 - Displays a seperate component for HUD buttons for different features 
 - UI styling done through tailwindCSS
+
+### Task Page
+- Created form for user to add a new task
+  - Form changes depending on if it's a timed task or checkmark task
+  - Form clears if "Cancel" is clicked
+- Used Material UI to style "My Tasks" and "My Stats" to fit on pages of a book image 
+- Responsive to different screen sizes (landscape mode)
