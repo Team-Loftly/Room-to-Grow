@@ -23,7 +23,6 @@ export default function Home() {
         boxSizing: "border-box",
         height: "100%",
         display: "flex",
-        boxSizing: "border-box",
         flexDirection: "column",
       }}
     >
