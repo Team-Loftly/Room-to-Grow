@@ -30,3 +30,9 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
   - Form clears if "Cancel" is clicked
 - Used Material UI to style "My Tasks" and "My Stats" to fit on pages of a book image 
 - Responsive to different screen sizes (landscape mode)
+
+### Sign up & Login Page
+- Created a sign up and login form for users to create and account and log in.
+- User state is saved in local storage.
+- If the user is logged in, sign up/login page redirect to the home page.
+- If the user is not logged in, all other pages redirect to the login page.
