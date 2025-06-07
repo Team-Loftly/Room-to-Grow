@@ -41,3 +41,4 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 ### Marketplace Page
 - Created a item display card on left side of page to show more details and interactions with an item from the marketplace
 - Created a grid of item tiles on right side of page to allow users to view the different items from the marketplace.
+- Used Material UI for styling and for responsiveness to different screen sizes.
