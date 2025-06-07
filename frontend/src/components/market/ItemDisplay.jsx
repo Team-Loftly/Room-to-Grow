@@ -61,7 +61,7 @@ export default function ItemDisplay() {
             fontSize: 25,
           }}
         >
-          Buy for 15 points!
+          Buy for 15 coins!
         </Button>
       </CardActions>
     </Card>
