@@ -6,16 +6,17 @@ export default function ItemTile({ id }) {
       sx={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-between",
         flexDirection: "column",
         bgcolor: "grey.100",
-        borderRadius: 10,
-        m: 1,
+        borderRadius: 4,
+        m: 2,
       }}
     >
       <Typography
+        variant="h4"
         sx={{
-          fontSize: 50,
+          p: 1,
+          wordBreak: "break-word",
         }}
       >
         Furniture {id}
