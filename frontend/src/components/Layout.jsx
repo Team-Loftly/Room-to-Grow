@@ -9,7 +9,6 @@ export default function Layout() {
         boxSizing: "border-box",
         height: "100vh",
         display: "flex",
-        boxSizing: "border-box",
         flexDirection: "column",
       }}
     >
