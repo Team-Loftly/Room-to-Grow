@@ -16,15 +16,17 @@ export default function ItemDisplay() {
         flexDirection: "column",
         bgcolor: "grey.100",
         borderRadius: 10,
-        width: "28%",
+        maxWidth: "28%",
+        maxHeight: "100%",
         marginLeft: 14,
         marginRight: 14,
       }}
     >
       <Typography
+        variant="h2"
         sx={{
-          fontSize: 50,
           marginTop: 1,
+          wordBreak: "break-word",
         }}
       >
         Furniture 0
