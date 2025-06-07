@@ -28,6 +28,7 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 - Created form for user to add a new task
   - Form changes depending on if it's a timed task or checkmark task
   - Form clears if "Cancel" is clicked
+- Created a stats page on the right side of a book background image using Material UI components and mock redux data to view visual metrics about completed tasks.
 - Used Material UI to style "My Tasks" and "My Stats" to fit on pages of a book image 
 - Responsive to different screen sizes (landscape mode)
 
@@ -36,3 +37,7 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 - User state is saved in local storage.
 - If the user is logged in, sign up/login page redirect to the home page.
 - If the user is not logged in, all other pages redirect to the login page.
+
+### Marketplace Page
+- Created a item display card on left side of page to show more details and interactions with an item from the marketplace
+- Created a grid of item tiles on right side of page to allow users to view the different items from the marketplace.
