@@ -5,9 +5,35 @@ import {
   CardActions,
   Typography,
   Button,
+  Alert
 } from "@mui/material";
+import { selectSelectedItem } from "../../features/marketSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectInventoryCoins, selectInventoryItems, spendCoins, addItem } from "../../features/inventorySlice";
+import { useState } from "react";
 
 export default function ItemDisplay() {
+  const selectedItem = useSelector(selectSelectedItem);
+  const currentCoins = useSelector(selectInventoryCoins);
+  const currentItems = useSelector(selectInventoryItems);
+  const dispatch = useDispatch();
+  const [purchaseMessage, setPurchaseMessage] = useState("");
+
+  const handlePurchase = () => {
+    if (currentCoins < selectedItem.price) {
+      setPurchaseMessage("You don't have enough coins.");
+      return;
+    }
+
+    if (currentItems.some(item => item.name === selectedItem.name)) {
+      setPurchaseMessage("You already own this item.");
+      return;
+    }
+
+    dispatch(spendCoins(selectedItem.price));
+    dispatch(addItem(selectedItem));
+    setPurchaseMessage("Purchase successful!");
+  };
   return (
     <Card
       sx={{
@@ -23,30 +49,32 @@ export default function ItemDisplay() {
       }}
     >
       <Typography
-        variant="h2"
+        variant="h4"
         sx={{
           marginTop: 1,
           wordBreak: "break-word",
         }}
       >
-        Furniture 0
+        {selectedItem.name}
       </Typography>
       <CardMedia
         component="img"
-        image="/furniture_placeholder.jpg"
-        alt="Furniture Item"
+        image={selectedItem.image}
+        alt={selectedItem.category}
         sx={{
-          height: "60%",
-          objectFit: "cover",
+          maxHeight: 400,
+          maxWidth: 400,
+          objectFit: "contain",
+          borderRadius: 2,
         }}
       />
       <CardContent>
         <Typography
           sx={{
-            fontSize: 25,
+            fontSize: 20,
           }}
         >
-          A cozy queen sized bed.
+          {selectedItem.description}
         </Typography>
       </CardContent>
       <CardActions
@@ -55,15 +83,22 @@ export default function ItemDisplay() {
         }}
       >
         <Button
+        onClick={handlePurchase}
           variant="contained"
           size="large"
           sx={{
             fontSize: 25,
           }}
         >
-          Buy for 15 coins!
+          Buy for {selectedItem.price} coins!
         </Button>
       </CardActions>
+      {purchaseMessage && (
+          <Alert severity={purchaseMessage === "Purchase successful!" ? "success": "error"} 
+          onClose={() => setPurchaseMessage("")}>
+            {purchaseMessage}
+          </Alert>
+        )}
     </Card>
   );
 }

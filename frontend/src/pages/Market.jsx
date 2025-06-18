@@ -1,8 +1,10 @@
 import { Stack, Divider } from "@mui/material";
 import ItemDisplay from "../components/market/ItemDisplay";
 import ItemGrid from "../components/market/ItemGrid";
-
+import { useSelector } from "react-redux";
+import { selectMarketItems } from "../features/marketSlice";
 function Market() {
+  const items = useSelector(selectMarketItems);
   return (
     <Stack
       direction="row"
@@ -21,7 +23,7 @@ function Market() {
       }}
     >
       <ItemDisplay />
-      <ItemGrid />
+      <ItemGrid items={items} title="Marketplace"/>
     </Stack>
   );
 }
