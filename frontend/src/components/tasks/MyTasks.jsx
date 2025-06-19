@@ -1,6 +1,6 @@
 import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
-import Button from "@mui/icons-material/Button";
+import Button from "@mui/material/Button";
 import CreateTask from "./CreateTask";
 import Stack from "@mui/material/Stack";
 import TaskCardList from "./TaskCardList";
