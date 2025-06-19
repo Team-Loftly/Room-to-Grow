@@ -1,7 +1,49 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  taskList: [],
+  taskList: [
+    {
+      id: 214,
+      title: "Cramming session",
+      description: "Chapter 2.2",
+      days: [],
+      priority: 3,
+      type: "timed",
+      hours: 0,
+      minutes: 30,
+      checkmarks: null,
+    },
+    {
+      id: 31,
+      title: "Brush teeth",
+      description: "Desc",
+      days: [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+      ],
+      priority: 1,
+      type: "checkmark",
+      hours: null,
+      minutes: null,
+      checkmarks: 2,
+    },
+    {
+      id: 100,
+      title: "Piano practice",
+      description: "Moonlight Sonata",
+      days: ["Wednesday"],
+      priority: 2,
+      type: "timed",
+      hours: 1,
+      minutes: 0,
+      checkmarks: null,
+    },
+  ],
 };
 
 const tasksSlice = createSlice({
@@ -9,13 +51,18 @@ const tasksSlice = createSlice({
   initialState,
   reducers: {
     addTask: (state, action) => {
-      console.log("Reducer hit with payload:", action.payload);
       state.taskList.push(action.payload);
+    },
+    deleteTask: (state, action) => {
+      console.log("Task deleted", action.payload);
+      state.taskList = state.taskList.filter(
+        (task) => task.id !== action.payload
+      );
     },
   },
 });
 
-export const { addTask } = tasksSlice.actions;
+export const { addTask, deleteTask } = tasksSlice.actions;
 
 export const selectTaskList = (state) => state.tasks.taskList;
 

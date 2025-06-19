@@ -108,7 +108,6 @@ export default function CreateTask({ onClose }) {
       }}
     >
       <Stack spacing={2} sx={{ width: "100%" }}>
-        <Typography component="span">New Task</Typography>
         <TextField
           label="Title"
           placeholder="Title"
