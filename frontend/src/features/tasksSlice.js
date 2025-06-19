@@ -12,6 +12,7 @@ const initialState = {
       hours: 0,
       minutes: 30,
       checkmarks: null,
+      progress: 0,
     },
     {
       id: 31,
@@ -31,6 +32,7 @@ const initialState = {
       hours: null,
       minutes: null,
       checkmarks: 2,
+      progress: 1,
     },
     {
       id: 100,
@@ -42,6 +44,7 @@ const initialState = {
       hours: 1,
       minutes: 0,
       checkmarks: null,
+      progress: 30,
     },
   ],
 };

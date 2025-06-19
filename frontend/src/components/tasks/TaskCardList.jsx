@@ -3,7 +3,7 @@ import TaskCard from "./TaskCard";
 
 export default function TaskCardList({ tasks }) {
   return (
-    <Stack>
+    <Stack direction="column" spacing={2}>
       {tasks.map((task) => (
         <Stack key={task.id}>
           <TaskCard task={task} />
