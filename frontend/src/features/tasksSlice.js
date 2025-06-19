@@ -9,6 +9,7 @@ const tasksSlice = createSlice({
   initialState,
   reducers: {
     addTask: (state, action) => {
+      console.log("Reducer hit with payload:", action.payload);
       state.taskList.push(action.payload);
     },
   },
