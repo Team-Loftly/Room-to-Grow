@@ -13,7 +13,7 @@ export default function NavBar() {
     navigate("/");
   };
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: "#0a571f" }}>
       <Toolbar>
         <Typography
           className="hover:cursor-pointer"
