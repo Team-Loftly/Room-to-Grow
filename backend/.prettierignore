@@ -4,7 +4,6 @@ dist/
 *.log
 temp/
 src/vendor-scripts/
-public/
 
 src/assets/
 src/css

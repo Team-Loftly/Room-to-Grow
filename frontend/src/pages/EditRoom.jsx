@@ -22,7 +22,7 @@ function EditRoom() {
       }}
     >
       <h2>Three Js render should go here...</h2>
-      <ItemGrid items={items} title="Inventory"/>
+      <ItemGrid items={items} title="Inventory" />
     </Stack>
   );
 }

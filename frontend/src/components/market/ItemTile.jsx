@@ -42,9 +42,7 @@ export default function ItemTile({ item, selected, onSelect }) {
           borderRadius: 2,
         }}
       />
-      <Typography variant="b2">
-        {item.category}
-      </Typography>
+      <Typography variant="b2">{item.category}</Typography>
     </Card>
   );
 }

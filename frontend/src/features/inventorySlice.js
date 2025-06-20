@@ -38,7 +38,8 @@ const inventorySlice = createSlice({
   },
 });
 
-export const { addCoins, spendCoins, addItem, removeItem } = inventorySlice.actions;
+export const { addCoins, spendCoins, addItem, removeItem } =
+  inventorySlice.actions;
 
 export const selectInventoryItems = (state) => state.inventory.inventory;
 export const selectInventoryCoins = (state) => state.inventory.coins;
