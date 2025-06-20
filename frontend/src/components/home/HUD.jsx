@@ -1,6 +1,9 @@
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { openTimer } from "../../features/timerSlice";
 
 export default function HUD() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   return (
     <div className="flex top-0 left-0 w-full h-16 bg-gray-800 flex justify-around items-center text-white">
@@ -11,14 +14,6 @@ export default function HUD() {
         className="hover:cursor-pointer hover:transform hover:scale-120 transition-transform duration-200"
       >
         Tasks
-      </button>
-      <button
-        onClick={() => {
-          navigate("/stats");
-        }}
-        className="hover:cursor-pointer hover:transform hover:scale-120 transition-transform duration-200"
-      >
-        Stats
       </button>
       <button
         onClick={() => {
@@ -38,7 +33,7 @@ export default function HUD() {
       </button>
       <button
         onClick={() => {
-          /*TODO startup timer on home page or create another page*/
+          dispatch(openTimer());
         }}
         className="hover:cursor-pointer hover:transform hover:scale-120 transition-transform duration-200"
       >
