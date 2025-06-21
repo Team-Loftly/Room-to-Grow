@@ -15,7 +15,7 @@ import {
   spendCoins,
   addItem,
 } from "../../features/inventorySlice";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function ItemDisplay() {
   const selectedItem = useSelector(selectSelectedItem);
@@ -23,6 +23,10 @@ export default function ItemDisplay() {
   const currentItems = useSelector(selectInventoryItems);
   const dispatch = useDispatch();
   const [purchaseMessage, setPurchaseMessage] = useState("");
+
+  useEffect(() => {
+    setPurchaseMessage("");
+  }, [selectedItem]);
 
   const handlePurchase = () => {
     if (currentCoins < selectedItem.price) {
@@ -47,8 +51,8 @@ export default function ItemDisplay() {
         flexDirection: "column",
         bgcolor: "grey.100",
         borderRadius: 10,
-        maxWidth: "28%",
-        maxHeight: "100%",
+        width: "28%",
+        height: "80%",
         marginLeft: 14,
         marginRight: 14,
       }}
