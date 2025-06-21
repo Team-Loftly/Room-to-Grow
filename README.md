@@ -32,7 +32,7 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
   - The user is rewarded with coins
   - The task is removed from the list of tasks to complete
   - A temporary notification appears congratulating the user on completing their task
-  - "Hours Spent This Week" in metrics is updated
+  - "Tasks Completed" in metrics is updated
 
 
 ### Marketplace Page
