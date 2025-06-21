@@ -36,8 +36,10 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 
 
 ### Marketplace Page
-- Added Redux for the market page and user coins/inventory so now you can purchase some placeholder items and view them from the Edit Room
-- Added unique furniture to the store instead of the previous placeholder item.
+- Added Redux for the marketplace page so that users can select and purchase items.
+- Added Redux to manage user state for coins and items - so the application can track how many coins the user has as well as which items they own.
+- Added some unique furniture items to the marketplace instead of the placeholder items.
+- Added the ability for users to purchase items from the marketplace page using their coins.
 
 ### Edit Room Page
 - Added Redux for the edit room page so you can now view the items you purchased on this page
