@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+const BASE_API_URL = import.meta.env.VITE_APP_API_URL
 
 export const fetchStats = createAsyncThunk(
   "stats/fetchStats",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("http://localhost:3001/metrics");
+      const response = await axios.get(`${BASE_API_URL}/metrics`);
 
       const data = response.data;
 
