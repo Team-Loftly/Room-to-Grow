@@ -37,7 +37,7 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 - Added Redux for the edit room page so you can now view the items you purchased on this page
 
 ### Initialize Backend
-- Changed are in the `initial-backend` branch
+- Changes are in the `initial-backend` branch
 - Added a backend server that has one "get" endpoint that sends mock stats data
 - Added CreateAsyncThunk to the metrics slice to allow redux to call the api asynchronusly
 - Stats component now calls the api to load in the metrics data and renders it dynamically
