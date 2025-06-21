@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchStats } from "../features/metricsSlice";
 import {
   Box,
   Typography,
@@ -13,15 +14,66 @@ import VisualInsight from "../components/stats/VisualInsight";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 
 export default function Stats() {
+  const dispatch = useDispatch();
   const { hoursSpent, tasksCompleted, categoryHours } = useSelector(
-    (state) => state.metrics
+    (state) => state.metrics.stats
   );
+  const status = useSelector((state) => state.metrics.status);
+  const error = useSelector((state) => state.metrics.error);
 
   const [selectedChart, setSelectedChart] = useState("hours");
 
   const handleChartChange = (event) => {
     setSelectedChart(event.target.value);
   };
+
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchStats());
+    }
+  }, [status, dispatch]);
+
+  if (status === "loading") {
+    return (
+      <Box
+      sx={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        p: 2,
+      }}
+    >
+      <Typography variant="h6" gutterBottom sx={{ alignSelf: "center" }}>
+        My Metrics
+      </Typography>
+      <Typography gutterBottom sx={{ alignSelf: "center" }}>
+        Loading Stats
+      </Typography>
+    </Box>
+    );
+  }
+
+  if (status === "failed") {
+    return (
+      <Box
+      sx={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        p: 2,
+      }}
+    >
+      <Typography variant="h6" gutterBottom sx={{ alignSelf: "center" }}>
+        My Metrics
+      </Typography>
+      <Typography gutterBottom sx={{ alignSelf: "center" }}>
+        Error loading stats
+      </Typography>
+    </Box>
+    );
+  }
 
   return (
     <Box
@@ -95,6 +147,7 @@ export default function Stats() {
 
         {Object.entries(categoryHours).map(([category, hours]) => (
           <Paper
+            key={category}
             sx={{
               p: 2,
               flexGrow: 1,
@@ -106,10 +159,10 @@ export default function Stats() {
           >
             <CheckCircleOutlineOutlinedIcon
               sx={{
-                "margin-right": 5,
+                "marginRight": 5,
               }}
             />
-            <Typography key={category} variant="body1">
+            <Typography  variant="body1">
               You have {category.toLowerCase()} for {hours} hours this week
             </Typography>
           </Paper>
@@ -126,7 +179,7 @@ export default function Stats() {
         >
           <CheckCircleOutlineOutlinedIcon
             sx={{
-              "margin-right": 5,
+              "marginRight": 5,
             }}
           />
           <Typography variant="body1">

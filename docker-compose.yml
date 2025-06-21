@@ -1,0 +1,24 @@
+services:
+  # Frontend Service
+  frontend:
+    build:
+      context: ./frontend # directory containing dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      VITE_APP_API_URL: http://localhost:3001
+    depends_on:
+      - backend
+
+  # Backend Service
+  backend:
+    build:
+      context: ./backend # directory containing dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules

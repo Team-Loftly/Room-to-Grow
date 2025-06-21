@@ -23,7 +23,7 @@ function Market() {
       }}
     >
       <ItemDisplay />
-      <ItemGrid items={items} title="Marketplace"/>
+      <ItemGrid items={items} title="Marketplace" />
     </Stack>
   );
 }

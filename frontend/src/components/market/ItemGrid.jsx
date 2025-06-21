@@ -4,7 +4,7 @@ import ItemTile from "./ItemTile";
 import { setSelectedItem } from "../../features/marketSlice";
 import { useDispatch } from "react-redux";
 
-export default function ItemGrid({items, title}) {
+export default function ItemGrid({ items, title }) {
   const [selectedId, setSelectedId] = useState(null);
   const dispatch = useDispatch();
 
@@ -29,10 +29,10 @@ export default function ItemGrid({items, title}) {
       }}
     >
       <Typography
-        variant="h5" 
-        align="center" 
-        fontWeight="bold" 
-        gutterBottom 
+        variant="h5"
+        align="center"
+        fontWeight="bold"
+        gutterBottom
         sx={{ width: "100%" }}
       >
         {title}

@@ -5,11 +5,16 @@ import {
   CardActions,
   Typography,
   Button,
-  Alert
+  Alert,
 } from "@mui/material";
 import { selectSelectedItem } from "../../features/marketSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { selectInventoryCoins, selectInventoryItems, spendCoins, addItem } from "../../features/inventorySlice";
+import {
+  selectInventoryCoins,
+  selectInventoryItems,
+  spendCoins,
+  addItem,
+} from "../../features/inventorySlice";
 import { useState } from "react";
 
 export default function ItemDisplay() {
@@ -25,7 +30,7 @@ export default function ItemDisplay() {
       return;
     }
 
-    if (currentItems.some(item => item.name === selectedItem.name)) {
+    if (currentItems.some((item) => item.name === selectedItem.name)) {
       setPurchaseMessage("You already own this item.");
       return;
     }
@@ -83,7 +88,7 @@ export default function ItemDisplay() {
         }}
       >
         <Button
-        onClick={handlePurchase}
+          onClick={handlePurchase}
           variant="contained"
           size="large"
           sx={{
@@ -94,11 +99,15 @@ export default function ItemDisplay() {
         </Button>
       </CardActions>
       {purchaseMessage && (
-          <Alert severity={purchaseMessage === "Purchase successful!" ? "success": "error"} 
-          onClose={() => setPurchaseMessage("")}>
-            {purchaseMessage}
-          </Alert>
-        )}
+        <Alert
+          severity={
+            purchaseMessage === "Purchase successful!" ? "success" : "error"
+          }
+          onClose={() => setPurchaseMessage("")}
+        >
+          {purchaseMessage}
+        </Alert>
+      )}
     </Card>
   );
 }

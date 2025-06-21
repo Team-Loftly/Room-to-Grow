@@ -9,9 +9,8 @@ Introducing Room to Grow, a productivity web app where users can create and comp
 Earn coins and spend them at the Marketplace to buy various decorations for your room! Every minute of focus counts!
 
 ## Build Instructions:
-- cd frontend
-- docker build -t frontend . (including the ".")
-- docker run -p 3000:3000 frontend
+- go to root directory, where docker-compose.yaml is located
+- docker-compose up --build
 - access the site at: http://localhost:3000.
 
 ## M2
