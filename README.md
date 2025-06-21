@@ -15,9 +15,11 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 
 ## M2
 ### Home Page
-- Implemented the timer on the HUD using redux
-- Replaced the placeholder Three.js room with a custom room, with at least one furniture dynamically loaded in
-- Changed styling to make it look better
+- Implemented the timer as a Dialog popup accesible via the HUD. Implemented with states useing Redux.
+- Replaced placeholder Three.js room with a custom empty room.
+- Layed out skeleton code format for loading in furniture models into room, with one desk and chair loaded in for now.
+- Removed Stats button from HUD, as it is accesible via the Tasks page.
+- Removed Navigation Bar menu button, and changed Color.
 
 ### Task Page
 - Tasks are now pulled from the store and displayed in a list on the "My Tasks" page
@@ -33,7 +35,6 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
   - The task is removed from the list of tasks to complete
   - A temporary notification appears congratulating the user on completing their task
   - "Tasks Completed" in metrics is updated
-
 
 ### Marketplace Page
 - Added Redux for the marketplace page so that users can select and purchase items.
