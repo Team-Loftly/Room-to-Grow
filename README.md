@@ -29,8 +29,8 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 - If the task is expanded and the "Delete" button is clicked, the task is removed from the store and the task is removed from the screen and a temporary notification appears informing them that their task was successfully deleted
 - When a clicks a checkbox on their checkmark task, their progress is updated and stored
 - When all checkboxes are ticked for a task:
-  -The user is rewarded with coins
-  -The task is removed from the list of tasks to complete
+  - The user is rewarded with coins
+  - The task is removed from the list of tasks to complete
   - A temporary notification appears congratulating the user on completing their task
   - "Hours Spent This Week" in metrics is updated
 
