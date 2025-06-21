@@ -16,8 +16,8 @@ const initialState = {
     },
     {
       id: 31,
-      title: "Brush teeth",
-      description: "Desc",
+      title: "Drink water",
+      description: "Hydration is important!",
       days: [
         "Monday",
         "Tuesday",
@@ -31,7 +31,7 @@ const initialState = {
       type: "checkmark",
       hours: null,
       minutes: null,
-      checkmarks: 2,
+      checkmarks: 4,
       progress: 1,
     },
     {
@@ -62,10 +62,16 @@ const tasksSlice = createSlice({
         (task) => task.id !== action.payload
       );
     },
+    updateCheckmarkProgress: (state, action) => {
+      const { taskId, progressMade } = action.payload;
+      const task = state.taskList.find((t) => t.id == taskId);
+      task.progress = task.progress + progressMade;
+    },
   },
 });
 
-export const { addTask, deleteTask } = tasksSlice.actions;
+export const { addTask, deleteTask, updateCheckmarkProgress } =
+  tasksSlice.actions;
 
 export const selectTaskList = (state) => state.tasks.taskList;
 
