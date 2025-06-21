@@ -15,7 +15,7 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 
 ## M2
 ### Home Page
-- Implemented the timer as a Dialog popup accesible via the HUD. Implemented with states useing Redux.
+- Implemented the timer as a Dialog popup accesible via the HUD. Implemented with states using Redux.
 - Replaced placeholder Three.js room with a custom empty room.
 - Layed out skeleton code format for loading in furniture models into room, with one desk and chair loaded in for now.
 - Removed Stats button from HUD, as it is accesible via the Tasks page.
