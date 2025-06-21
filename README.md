@@ -26,7 +26,14 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 - If user selects the "timed" type when creating a task, sets the values for hours and minutes, and then switches the type to "checkmark", the hours and minutes fields are set back to null. Applies in the opposite direction as well
 - When the user clicks "Save", the task is added to the store
 - Implemented form validation so that the user can't click "Save" if a required field is empty
-- If the task is expanded and the "Delete" button is clicked, the task is removed from the store and the task is removed from the screen
+- If the task is expanded and the "Delete" button is clicked, the task is removed from the store and the task is removed from the screen and a temporary notification appears informing them that their task was successfully deleted
+- When a clicks a checkbox on their checkmark task, their progress is updated and stored
+- When all checkboxes are ticked for a task:
+  -The user is rewarded with coins
+  -The task is removed from the list of tasks to complete
+  - A temporary notification appears congratulating the user on completing their task
+  - "Hours Spent This Week" in metrics is updated
+
 
 ### Marketplace Page
 - Added Redux for the market page and user coins/inventory so now you can purchase some placeholder items and view them from the Edit Room
