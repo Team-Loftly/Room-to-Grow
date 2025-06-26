@@ -9,93 +9,50 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // go straight to home if the user is currently logged in
+  // if we're logged in, navigate straight to home
   useEffect(() => {
-    const currentUser = localStorage.getItem("currentUser");
-    if (currentUser) {
-      navigate("/home");
-    }
+    const token = localStorage.getItem("token");
+    if (token) navigate("/home");
   }, [navigate]);
 
-  const loginUser = (e) => {
+  const loginUser = async (e) => {
     e.preventDefault();
+    setError("");
 
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const user = users.find(
-      (user) => user.email === email && user.password === password
-    );
+    try {
+      const response = await fetch("http://localhost:3001/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (!user) {
-      setError("Incorrect Email or Password");
-      return;
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || "Login failed");
+        return;
+      }
+      // login was successful
+      localStorage.setItem("token", data.token);
+      navigate("/home");
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong. Try again later.");
     }
-
-    localStorage.setItem("currentUser", JSON.stringify({ email }));
-    navigate("/home");
   };
 
-  const registerUser = () => {
-    navigate("/register");
-  };
+  const goToRegister = () => navigate("/register");
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: "100vh",
-      }}
-    >
-      <Paper
-        elevation={8}
-        sx={{
-          padding: 4,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          width: 450,
-          gap: 2,
-        }}
-      >
+    <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+      <Paper elevation={8} sx={{ p: 4, width: 450, display: "flex", flexDirection: "column", gap: 2 }}>
         <SiteHeader />
-
-        {error && (
-          <Alert severity="error" onClose={() => setError("")}>
-            {error}
-          </Alert>
-        )}
-
-        <Box
-          component="form"
-          onSubmit={loginUser}
-          display="flex"
-          flexDirection="column"
-          gap={2}
-          width="100%"
-        >
-          <TextField
-            label="Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            fullWidth
-            required
-          />
-          <TextField
-            label="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            fullWidth
-            required
-          />
-          <Button type="submit" variant="outlined" fullWidth>
-            Login
-          </Button>
-          <Button variant="outlined" onClick={registerUser} fullWidth>
-            Register
-          </Button>
+        {error && <Alert severity="error" onClose={() => setError("")}>{error}</Alert>}
+        <Box component="form" onSubmit={loginUser} display="flex" flexDirection="column" gap={2}>
+          <TextField label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required fullWidth />
+          <TextField label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required fullWidth />
+          <Button type="submit" variant="outlined" fullWidth>Login</Button>
+          <Button variant="outlined" onClick={goToRegister} fullWidth>Register</Button>
         </Box>
       </Paper>
     </Box>

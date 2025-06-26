@@ -9,89 +9,47 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // go to home if user is already logged in
+  // if we're already logged in, navigate straight to home.
   useEffect(() => {
-    const currentUser = localStorage.getItem("currentUser");
-    if (currentUser) {
-      navigate("/home");
-    }
+    const token = localStorage.getItem("token");
+    if (token) navigate("/home");
   }, [navigate]);
 
-  const registerUser = (e) => {
+  const registerUser = async (e) => {
     e.preventDefault();
+    setError("");
 
-    const users = JSON.parse(localStorage.getItem("users")) || [];
+    try {
+      const response = await fetch("http://localhost:3001/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (users.find((user) => user.email === email)) {
-      setError("User already exists");
-      return;
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || "Registration failed");
+        return;
+      }
+      // registration was successful
+      localStorage.setItem("token", data.token);
+      navigate("/home");
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong. Try again later.");
     }
-
-    if (!email || !password) {
-      setError("Invalid email or password");
-      return;
-    }
-
-    // Register new user
-    users.push({ email, password });
-    localStorage.setItem("users", JSON.stringify(users));
-    localStorage.setItem("currentUser", JSON.stringify({ email }));
-    navigate("/home");
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: "100vh",
-      }}
-    >
-      <Paper
-        elevation={8}
-        sx={{
-          padding: 4,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          width: 450,
-          gap: 2,
-        }}
-      >
+    <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+      <Paper elevation={8} sx={{ p: 4, width: 450, display: "flex", flexDirection: "column", gap: 2 }}>
         <SiteHeader />
-        {error && (
-          <Alert severity="error" onClose={() => setError("")}>
-            {error}
-          </Alert>
-        )}
-        <Box
-          component="form"
-          onSubmit={registerUser}
-          display="flex"
-          flexDirection="column"
-          gap={2}
-          width="100%"
-        >
-          <TextField
-            label="Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            fullWidth
-          />
-          <TextField
-            label="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            fullWidth
-          />
-          <Button type="submit" variant="outlined" fullWidth>
-            Register
-          </Button>
+        {error && <Alert severity="error" onClose={() => setError("")}>{error}</Alert>}
+        <Box component="form" onSubmit={registerUser} display="flex" flexDirection="column" gap={2}>
+          <TextField label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required fullWidth />
+          <TextField label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required fullWidth />
+          <Button type="submit" variant="outlined" fullWidth>Register</Button>
         </Box>
       </Paper>
     </Box>
