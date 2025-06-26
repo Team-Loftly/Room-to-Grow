@@ -2,14 +2,16 @@ import express from "express";
 import cors from "cors";
 import Log from "../util/Log.js";
 import path from "path";
-import StatusCodes from "http-status-codes";
+
+import metricsRouter from '../routes/metrics.js';
+import authRouter from '../routes/auth.js';
 
 export default class Server {
   constructor(port) {
     Log.info(`Server::<init>( ${port} )`);
     this.port = port;
     this.express = express();
-
+    this.express.use(express.json());
     this.registerMiddleware();
     this.registerRoutes();
     this.registerStaticFiles();
@@ -37,27 +39,8 @@ export default class Server {
   }
 
   registerRoutes() {
-    this.express.get("/metrics", (req, res) => {
-      res.status(StatusCodes.OK).json({ result: {
-        hoursSpent: {
-          "This Week": 10,
-          "Last Week": 5,
-          Total: 20,
-        },
-        tasksCompleted: {
-          "This Week": 20,
-          "Last Week": 10,
-          Total: 50,
-        },
-      
-        categoryHours: {
-          Coded: 4,
-          Read: 6,
-          Exercised: 2,
-          "Played Piano": 10,
-        },
-      } });
-    });
+    this.express.use('/metrics', metricsRouter);
+    this.express.use('/auth', authRouter);
   }
 
   registerStaticFiles() {

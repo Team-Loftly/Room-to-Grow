@@ -9,7 +9,7 @@ export default function NavBar() {
   const coins = useSelector(selectInventoryCoins);
 
   const logoutUser = () => {
-    localStorage.removeItem("currentUser");
+    localStorage.removeItem("token");
     navigate("/");
   };
   return (

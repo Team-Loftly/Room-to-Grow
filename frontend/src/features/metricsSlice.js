@@ -6,7 +6,12 @@ export const fetchStats = createAsyncThunk(
   "stats/fetchStats",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${BASE_API_URL}/metrics`);
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${BASE_API_URL}/metrics`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const data = response.data;
 

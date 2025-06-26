@@ -13,6 +13,29 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 - docker-compose up --build
 - access the site at: http://localhost:3000.
 
+## M3
+
+### Security Vulnerability Considerations
+- We've added a number of features to ensure our application is secure.
+- Registration:
+  - There's a new /auth/register endpoint that is hit when a user registers for our app. The user submits an email and password that are sent to the backend API. The password is then hashed using bcrypt and a User object is created and stored in our Users MongoDB collection.
+- Login:
+  - There's a new /auth/login endpoint that is hit when a user attempts to login. The user's email/password are sent to the backend API. If a User object with the given email is found in our DB, it's hashed password is compared with the unhashed password given by the user. The login is only successful if the passwords match.
+- A JWT (JSON web token) is generated based on the user's randomly generated user_id and our secret key. The JWT is returned by our register and login API (lasts 1 hour).
+- Protecting Routes in the frontend (JWT):
+  - In our frontend, all routes except the login/register page are protected by checking whether there's a valid JWT token stored in localstorage. If there isn't, or if the token is expired, the user will be redirected to the login page to acquire a new JWT token.
+- Protecting Endpoints in the backend (JWT):
+  - In our backend, all API endpoints except the auth ones require a JWT token to be passed in as a header. This token is then checked for validity before the request is allowed to proceed. This protects against unauthorized requests to our APIs.
+- Server side input validation:
+  - email: Emails are validated against a regex that checks that they match a valid email format.
+  - password: Passwords are validated s.t. their length must be greater than 0. In the future, we can make this more secure by having additional requirements for any passwords (length, special chars, etc).
+- Other:
+  - The front end checks the status of the JWT token each time the user attempts to navigate to a different page, and logs the user out if it is expired.
+- Future improvements:
+  - Require stronger passwords
+  - Add a timeout feature if an incorrect password is entered too many times
+  - The isTokenExpired check is stored in the frontend- so maybe it could be disabled by by a malicious person to get by with an invalid token. Even then, the backend API endpoints would be protected as that does its own validation, but there's room for improvement here.
+
 ## M2
 ### Home Page
 - Implemented the timer as a Dialog popup accesible via the HUD. Implemented with states using Redux.

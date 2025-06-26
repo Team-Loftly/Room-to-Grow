@@ -8,8 +8,21 @@ import EditRoom from "./pages/EditRoom";
 import Tasks from "./pages/Tasks";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
-
+import { useEffect } from "react";
+import { isTokenExpired } from "./util";
+import { useNavigate
+ } from "react-router-dom";
 function App() {
+  const navigate = useNavigate();
+  // check the user's token each time they attempt to navigate away
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token && isTokenExpired(token)) {
+      localStorage.removeItem("token");
+      navigate("/");
+    }
+  }, [navigate]);
+
   return (
     <>
       <main>

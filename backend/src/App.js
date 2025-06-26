@@ -1,5 +1,6 @@
 import Server from "./api/Server.js";
 import Log from "./util/Log.js";
+import connectDB from "./connectDB.js";
 
 export class App {
   async initServer(port) {
@@ -23,3 +24,6 @@ const app = new App();
 (async () => {
   await app.initServer(port);
 })();
+
+Log.info("DB - starting");
+connectDB();
