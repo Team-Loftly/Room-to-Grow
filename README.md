@@ -29,12 +29,11 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 - Server side input validation:
   - email: Emails are validated against a regex that checks that they match a valid email format.
   - password: Passwords are validated s.t. their length must be greater than 0. In the future, we can make this more secure by having additional requirements for any passwords (length, special chars, etc).
-- Other:
-  - The front end checks the status of the JWT token each time the user attempts to navigate to a different page, and logs the user out if it is expired.
 - Future improvements:
   - Require stronger passwords
   - Add a timeout feature if an incorrect password is entered too many times
   - The isTokenExpired check is stored in the frontend- so maybe it could be disabled by by a malicious person to get by with an invalid token. Even then, the backend API endpoints would be protected as that does its own validation, but there's room for improvement here.
+  - As we add more API endpoints, we need to take care to prevent against SQL injection attacks for any endpoints accepting user inputs - especially the tasks page.
 
 ## M2
 ### Home Page
