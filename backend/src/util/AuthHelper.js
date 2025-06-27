@@ -45,9 +45,9 @@ const requireAuth = function (req, res, next) {
     const token = authHeader.split(" ")[1];
   
     try {
-      const payload = jwt.verify(token, JWT_SECRET);
+      const payload = jwt.verify(token, JWT_SECRET); // {id, exp, iat} // iat = issued at timestamp
       // set the user id from the token
-      req.userId = payload.userId;
+      req.userId = payload.id;
       // proceed with call
       next();
     } catch (err) {

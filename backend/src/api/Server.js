@@ -5,6 +5,7 @@ import path from "path";
 
 import metricsRouter from '../routes/metrics.js';
 import authRouter from '../routes/auth.js';
+import decorRouter from '../routes/decorations.js';
 
 export default class Server {
   constructor(port) {
@@ -41,6 +42,7 @@ export default class Server {
   registerRoutes() {
     this.express.use('/metrics', metricsRouter);
     this.express.use('/auth', authRouter);
+    this.express.use('/decor', decorRouter);
   }
 
   registerStaticFiles() {

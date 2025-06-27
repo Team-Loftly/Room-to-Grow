@@ -6,6 +6,7 @@ import {
   Typography,
   Button,
   Alert,
+  Stack,
 } from "@mui/material";
 import { selectSelectedItem } from "../../features/marketSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -43,6 +44,21 @@ export default function ItemDisplay() {
     dispatch(addItem(selectedItem));
     setPurchaseMessage("Purchase successful!");
   };
+
+  if (!selectedItem) {
+    // item is still loading
+    return (
+      <Stack>
+        <Typography
+          justifyContent="center"
+          alignItems="center"
+          sx={{ height: "100vh" }}
+        >
+          Loading...
+        </Typography>
+      </Stack>
+    )
+  }
   return (
     <Card
       sx={{
