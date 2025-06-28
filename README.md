@@ -15,6 +15,21 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 
 ## M3
 
+### Marketplace backend
+- We've implemented our marketplace backend as follows:
+  - There's a /decor API that returns marketplace items stored in our Decorations collection. These items are stored in a json file initially and seeded to our collection when the server initializes.
+  - Market items are fetched when you navigate to the marketplace page and then stored in our marketSlice.
+
+### Inventory backend
+- We've implemented our user inventory backend as follows:
+  - There's a /inventory API with the following endpoints:
+    - / -> gets the inventory for the user with the user id assoicated with the given JWT token.
+    - /create -> creates a new inventory entry for the user with the user id assoicated with the given JWT token. This is called once when a user registers from the register page.
+    - /update -> updates the inventory entry for the user with the user id assoicated with the given JWT token. This is called each time the user's inventory is updated -- coins added/removed, or items purchased.
+      - The inventorySlice has spendCoinsAndUpdate, addItemsAndUpdate, and addCoinsAndUpdate, which handle updating the redux state as well as sending an updateInventory request to the backend. Our components will call just these update functions.
+  - There's an Inventory collection that maps a user id to coins and decorations - used by our API to track the inventory for each user.
+- With this update, we can now create multiple user accounts and persist each user's inventory data independently.
+
 ### Security Vulnerability Considerations
 - We've added a number of features to ensure our application is secure.
 - Registration:
