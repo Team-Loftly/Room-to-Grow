@@ -15,10 +15,8 @@ export default function NavBar() {
 
   // fetch items on mount
   useEffect(() => {
-    if (status === "idle") {
-      dispatch(fetchInventory());
-    }
-  }, [dispatch, status]);
+    dispatch(fetchInventory());
+  }, [dispatch]);
 
   // handle loading and error
   if (status === "loading") {
