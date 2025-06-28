@@ -39,7 +39,7 @@ export const fetchDecorations = createAsyncThunk(
 
 const initialState = {
   selectedItem: null,
-  items: [],
+  items: [], // list of decorations, including an _id field added by mongo db
   status: "idle",
   error: null,
 };

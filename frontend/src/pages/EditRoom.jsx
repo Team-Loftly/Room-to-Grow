@@ -1,9 +1,45 @@
-import { Stack, Divider } from "@mui/material";
+import { Stack, Divider, Typography } from "@mui/material";
 import ItemGrid from "../components/market/ItemGrid";
-import { useSelector } from "react-redux";
-import { selectInventoryItems } from "../features/inventorySlice";
+import { useSelector, useDispatch} from "react-redux";
+import { selectInventoryItems, selectInventoryError, selectInventoryStatus } from "../features/inventorySlice";
+import { fetchInventory } from "../features/inventorySlice";
+import { useEffect } from "react";
+
 function EditRoom() {
-  const items = useSelector(selectInventoryItems);
+  const dispatch = useDispatch();
+  const decorations = useSelector(selectInventoryItems);
+  const status = useSelector(selectInventoryStatus);
+  const error = useSelector(selectInventoryError);
+
+  // fetch items on mount
+  useEffect(() => {
+    dispatch(fetchInventory());
+  }, [dispatch]);
+
+  // handle loading and error
+  if (status === "loading") {
+    return (
+      <Stack
+        justifyContent="center"
+        alignItems="center"
+        sx={{ height: "100vh" }}
+      >
+        <Typography>Loading</Typography>
+      </Stack>
+    );
+  }
+
+  if (status === "failed") {
+    return (
+      <Stack
+        justifyContent="center"
+        alignItems="center"
+        sx={{ height: "100vh" }}
+      >
+        <Typography color="error">Error: {error}</Typography>
+      </Stack>
+    );
+  }
   return (
     <Stack
       direction="row"
@@ -22,7 +58,7 @@ function EditRoom() {
       }}
     >
       <h2>Three Js render should go here...</h2>
-      <ItemGrid items={items} title="Inventory" />
+      <ItemGrid items={decorations} title="Inventory" />
     </Stack>
   );
 }

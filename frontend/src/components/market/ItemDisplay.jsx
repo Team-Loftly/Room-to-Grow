@@ -13,8 +13,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   selectInventoryCoins,
   selectInventoryItems,
-  spendCoins,
-  addItem,
+  spendCoinsAndUpdate,
+  addItemAndUpdate,
 } from "../../features/inventorySlice";
 import { useState, useEffect } from "react";
 
@@ -40,8 +40,8 @@ export default function ItemDisplay() {
       return;
     }
 
-    dispatch(spendCoins(selectedItem.price));
-    dispatch(addItem(selectedItem));
+    dispatch(spendCoinsAndUpdate(selectedItem.price));
+    dispatch(addItemAndUpdate(selectedItem._id));
     setPurchaseMessage("Purchase successful!");
   };
 

@@ -11,7 +11,9 @@ router.get("/", requireAuth, async (req, res) => {
     try {
         // replaces decoration ids with their objects from the Decorations collection
         const inventory = await Inventory.findOne({userId: user_id}).populate('decorations');
-
+        if (!inventory) {
+            return res.status(StatusCodes.NOT_FOUND).json({message: "Inventory not found"});
+        }
         res.status(StatusCodes.OK).json(inventory);
     } catch (err) {
         console.log(err);
@@ -34,7 +36,7 @@ router.post("/create", requireAuth, async (req, res) => {
         // create and save a new inventory
         const newInventory = new Inventory({
             userId: user_id,
-            coins: coins || 0,
+            coins: coins || 1000,
             decorations: inventory || []
         });
         await newInventory.save();
@@ -50,7 +52,7 @@ router.post("/create", requireAuth, async (req, res) => {
 // update the user's inventory
 router.post("/update", requireAuth, async (req, res) => {
     const user_id = req.userId;
-    const inventory = req.body.inventory;
+    const decorations = req.body.decorations;
     const coins = req.body.coins;
     // TODO: Add server side va
     try {
@@ -59,7 +61,7 @@ router.post("/update", requireAuth, async (req, res) => {
             {
                 $set: {
                     coins: coins,
-                    decorations: inventory
+                    decorations: decorations
                 }
             },
             { new: true } // return the updated document

@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import User from './src/models/Users.js';
 import Decorations from './src/models/Decorations.js';
+import Inventory from './src/models/Inventory.js';
 import connectDB from './src/connectDB.js';
 
 
@@ -11,6 +12,10 @@ const seed = async () => {
   // clear saved users in the database
   await User.deleteMany();
   console.log("cleared registered users");
+
+  // clear saved inventories in the database
+  await Inventory.deleteMany();
+  console.log("cleared created inventories");
 
   // add items to the decorations collection
   await Decorations.deleteMany();

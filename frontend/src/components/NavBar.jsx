@@ -1,12 +1,37 @@
-import { Box, AppBar, Toolbar, Button, Typography } from "@mui/material";
-import { useSelector } from "react-redux";
+import { Box, AppBar, Toolbar, Button, Typography, Stack } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { selectInventoryCoins } from "../features/inventorySlice";
+import { selectInventoryCoins, selectInventoryError, selectInventoryStatus } from "../features/inventorySlice";
+import { fetchInventory } from "../features/inventorySlice";
+import { useEffect } from "react";
 // nav bar that includes common functionality like log out, go to home, etc
 // should be included on every page except login/register
 export default function NavBar() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const coins = useSelector(selectInventoryCoins);
+  const status = useSelector(selectInventoryStatus);
+  const error = useSelector(selectInventoryError);
+
+  // fetch items on mount
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchInventory());
+    }
+  }, [dispatch, status]);
+
+  // handle loading and error
+  if (status === "loading") {
+    return (
+      <Stack
+        justifyContent="center"
+        alignItems="center"
+        sx={{ height: "100vh" }}
+      >
+        <Typography>Loading</Typography>
+      </Stack>
+    );
+  }
 
   const logoutUser = () => {
     localStorage.removeItem("token");
@@ -25,10 +50,10 @@ export default function NavBar() {
           Room to Grow
         </Typography>
 
-        <Box sx={{ mr: 2 }}>
+        {status === "failed" ? <Typography color="error">Error: {error}</Typography>
+     : <Box sx={{ mr: 2 }}>
           <Typography variant="body1">{coins} coins</Typography>
-        </Box>
-
+        </Box>}
         <Button onClick={logoutUser} color="inherit">
           Logout
         </Button>
