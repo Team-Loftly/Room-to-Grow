@@ -7,13 +7,15 @@ const router = express.Router();
 
 // get list of decorations
 router.get("/", requireAuth, async (req, res) => {
-    try {
-        const decorations = await Decorations.find();
-        res.status(StatusCodes.OK).json(decorations);
-    } catch (err) {
-        console.log(err);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message: "Error retrieving decorations"});
-    }
-  });
+  try {
+    const decorations = await Decorations.find();
+    res.status(StatusCodes.OK).json(decorations);
+  } catch (err) {
+    console.log(err);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: "Error retrieving decorations" });
+  }
+});
 
-  export default router;
+export default router;

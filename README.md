@@ -10,10 +10,24 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 
 ## Build Instructions:
 - go to root directory, where docker-compose.yaml is located
-- docker-compose up --build
+- docker compose up --build
 - access the site at: http://localhost:3000.
 
 ## M3
+
+### Test Suite
+- Our test suite is located in backend/test
+- Our testing tools:
+  - Test env - Mocha + chai
+  - Mocking database functions - sinon
+  - Generating the report - mochawesome
+  - simulating http reqs - supertest
+- backend/test/testApp.js creates a separate test server instance with mocked auth helper functions.
+- We use mochawesome to generate an html report of the tests in backend/mochawesome-report/mochawesome.html
+- To run the tests:
+  - cd backend
+  - npm test
+  - open backend/mochawesome-report/mochawesome.html in your browser to view the results
 
 ### Marketplace backend
 - We've implemented our marketplace backend as follows:

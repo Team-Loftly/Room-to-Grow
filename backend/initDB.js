@@ -1,10 +1,9 @@
-import fs from 'fs';
-import path from 'path';
-import User from './src/models/Users.js';
-import Decorations from './src/models/Decorations.js';
-import Inventory from './src/models/Inventory.js';
-import connectDB from './src/connectDB.js';
-
+import fs from "fs";
+import path from "path";
+import User from "./src/models/Users.js";
+import Decorations from "./src/models/Decorations.js";
+import Inventory from "./src/models/Inventory.js";
+import connectDB from "./src/connectDB.js";
 
 const seed = async () => {
   await connectDB();
@@ -22,7 +21,7 @@ const seed = async () => {
   console.log("cleared saved decorations");
 
   // Load decorations
-  const filePath = path.resolve('./src/data/decorations.json');
+  const filePath = path.resolve("./src/data/decorations.json");
   const rawData = fs.readFileSync(filePath);
   const { items } = JSON.parse(rawData);
 

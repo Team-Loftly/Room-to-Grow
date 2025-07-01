@@ -3,16 +3,20 @@ import cors from "cors";
 import Log from "../util/Log.js";
 import path from "path";
 
-import metricsRouter from '../routes/metrics.js';
-import authRouter from '../routes/auth.js';
-import decorRouter from '../routes/decorations.js';
-import inventoryRouter from '../routes/inventory.js';
+import metricsRouter from "../routes/metrics.js";
+import createAuthRouter from "../routes/auth.js";
+import decorRouter from "../routes/decorations.js";
+import inventoryRouter from "../routes/inventory.js";
+
+import * as AuthHelper from "../util/AuthHelper.js";
 
 export default class Server {
-  constructor(port) {
+  // can pass in a stubbed authhelper for testing - otherwise it will use the import above
+  constructor(port, { authHelper = AuthHelper } = {}) {
     Log.info(`Server::<init>( ${port} )`);
     this.port = port;
     this.express = express();
+    this.authHelper = authHelper;
     this.express.use(express.json());
     this.registerMiddleware();
     this.registerRoutes();
@@ -41,15 +45,19 @@ export default class Server {
   }
 
   registerRoutes() {
-    this.express.use('/metrics', metricsRouter);
-    this.express.use('/auth', authRouter);
-    this.express.use('/decor', decorRouter);
-    this.express.use('/inventory', inventoryRouter);
+    this.express.use("/metrics", metricsRouter);
+    this.express.use("/auth", createAuthRouter(this.authHelper));
+    this.express.use("/decor", decorRouter);
+    this.express.use("/inventory", inventoryRouter);
   }
 
   registerStaticFiles() {
     const publicPath = path.resolve(process.cwd(), "public");
     this.express.use(express.static(publicPath));
     Log.info("Server::registerStaticFiles() - public path set");
+  }
+
+  getApp() {
+    return this.express;
   }
 }
