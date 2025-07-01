@@ -1,64 +1,47 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+const BASE_API_URL = import.meta.env.VITE_APP_API_URL
 
-// placeholder items for now
-// TODO: replace these with items from DB later on
-// items have a source image, price, name, description, category
+// fetch decorations
+export const fetchDecorations = createAsyncThunk(
+  "market/fetchDecorations",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${BASE_API_URL}/decor`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching data with Axios:", error);
+
+      // details in error.response for HTTP errors, error.request for network errors, error.message for other errors
+      if (axios.isAxiosError(error) && error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+        return rejectWithValue(
+          error.response.data.error ||
+            `Request failed with status ${error.response.status}`
+        );
+      } else if (axios.isAxiosError(error) && error.request) {
+        console.error("No response received:", error.request);
+        return rejectWithValue("Network error: No response from server.");
+      } else {
+        console.error("Error message:", error.message);
+        return rejectWithValue(error.message || "An unknown error occurred.");
+      }
+    }
+  }
+);
+
 const initialState = {
-  selectedItem: {
-    // the item currently selected on the market page
-    name: "Mystical Lava Lamp",
-    description: "A mystical lava lamp with an eerie glow.",
-    price: 100,
-    category: "Desk Decorations",
-    image: "./images/lavalamp-dark.png",
-  },
-  items: [
-    {
-      name: "Mystical Lava Lamp",
-      description: "A mystical lava lamp with an eerie glow.",
-      price: 100,
-      category: "Desk Decorations",
-      image: "./images/lavalamp-dark.png",
-    },
-    {
-      name: "The Supernova",
-      description: "A beautiful space-themed wall painting.",
-      price: 200,
-      category: "Wall Decorations",
-      image: "./images/supernova.png",
-    },
-    {
-      name: "Classy TV",
-      description:
-        "A classy looking TV complete with a set of retro games- don't play too long!",
-      price: 500,
-      category: "Furniture",
-      image: "./images/tv.png",
-    },
-    {
-      name: "Cheery Lava Lamp",
-      description:
-        "A cheerful lava lamp with a bright glow that warms your heart.",
-      price: 100,
-      category: "Desk Decorations",
-      image: "./images/lavalamp-bright.png",
-    },
-    {
-      name: "The Blackhole",
-      description: "A stunning wall painting depicting a black hole.",
-      price: 200,
-      category: "Wall Decorations",
-      image: "./images/blackhole.png",
-    },
-    {
-      name: "Flat Screen TV",
-      description:
-        "A bright flat screen TV. Comes equipped with a modern gaming system.",
-      price: 800,
-      category: "Furniture",
-      image: "./images/tv-modern.png",
-    },
-  ],
+  selectedItem: null,
+  items: [], // list of decorations, including an _id field added by mongo db
+  status: "idle",
+  error: null,
 };
 
 const marketSlice = createSlice({
@@ -69,11 +52,28 @@ const marketSlice = createSlice({
       state.selectedItem = action.payload;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchDecorations.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchDecorations.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.items = action.payload;
+        state.selectedItem = action.payload[0] || null; // Set first item as selected
+      })
+      .addCase(fetchDecorations.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      });
+  },
 });
 
 export const { setSelectedItem } = marketSlice.actions;
 
 export const selectMarketItems = (state) => state.market.items;
 export const selectSelectedItem = (state) => state.market.selectedItem;
+export const selectMarketStatus = (state) => state.market.status;
+export const selectMarketError = (state) => state.market.error;
 
 export default marketSlice.reducer;

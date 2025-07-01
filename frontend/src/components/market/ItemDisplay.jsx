@@ -6,14 +6,15 @@ import {
   Typography,
   Button,
   Alert,
+  Stack,
 } from "@mui/material";
 import { selectSelectedItem } from "../../features/marketSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectInventoryCoins,
   selectInventoryItems,
-  spendCoins,
-  addItem,
+  spendCoinsAndUpdate,
+  addItemAndUpdate,
 } from "../../features/inventorySlice";
 import { useState, useEffect } from "react";
 
@@ -39,10 +40,25 @@ export default function ItemDisplay() {
       return;
     }
 
-    dispatch(spendCoins(selectedItem.price));
-    dispatch(addItem(selectedItem));
+    dispatch(spendCoinsAndUpdate(selectedItem.price));
+    dispatch(addItemAndUpdate(selectedItem._id));
     setPurchaseMessage("Purchase successful!");
   };
+
+  if (!selectedItem) {
+    // item is still loading
+    return (
+      <Stack>
+        <Typography
+          justifyContent="center"
+          alignItems="center"
+          sx={{ height: "100vh" }}
+        >
+          Loading...
+        </Typography>
+      </Stack>
+    )
+  }
   return (
     <Card
       sx={{

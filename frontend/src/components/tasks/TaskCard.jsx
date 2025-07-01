@@ -13,7 +13,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useDispatch } from "react-redux";
 import { deleteTask, updateCheckmarkProgress } from "../../features/tasksSlice";
-import { addCoins } from "../../features/inventorySlice";
+import { addCoinsAndUpdate } from "../../features/inventorySlice";
 import { completeTask } from "../../features/metricsSlice";
 
 export default function TaskCard({ task }) {
@@ -40,7 +40,7 @@ export default function TaskCard({ task }) {
 
     if (newProgress == task.checkmarks) {
       setCompletion(true);
-      dispatch(addCoins(100));
+      dispatch(addCoinsAndUpdate(100));
       dispatch(completeTask());
       setTimeout(() => {
         dispatch(deleteTask(task.id));

@@ -2,9 +2,12 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { TextField, Button, Box, Paper, Alert } from "@mui/material";
 import SiteHeader from "../components/SiteHeader";
+import { fetchInventory } from "../features/inventorySlice";
+import { useDispatch } from "react-redux";
 
 export default function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -34,6 +37,9 @@ export default function Login() {
       }
       // login was successful
       localStorage.setItem("token", data.token);
+      // fetch the user's inventory and store it in the slice
+      dispatch(fetchInventory());
+      // navigate to home
       navigate("/home");
     } catch (err) {
       console.error(err);
