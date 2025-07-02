@@ -9,6 +9,7 @@ import decorRouter from "../routes/decorations.js";
 import createInventoryRouter from "../routes/inventory.js";
 
 import * as AuthHelper from "../util/AuthHelper.js";
+import createHabitsRouter from "../routes/Habits.js";
 
 export default class Server {
   // can pass in a stubbed authhelper, requireAuth for testing - otherwise it will use the import above
@@ -50,6 +51,7 @@ export default class Server {
     this.express.use("/auth", createAuthRouter(this.authHelper));
     this.express.use("/decor", decorRouter);
     this.express.use("/inventory", createInventoryRouter(this.requireAuth));
+    this.express.use("/habits", createHabitsRouter(this.requireAuth));
   }
 
   registerStaticFiles() {
