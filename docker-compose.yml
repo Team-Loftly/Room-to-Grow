@@ -20,15 +20,24 @@ services:
     ports:
       - "3001:3001"
     volumes:
-      - ./backend:/app
       - /app/node_modules
     environment:
       - MONGO_URL=mongodb://mongo:27017/mydatabase
+    develop:
+      watch:
+        - path: ./backend/src
+          action: sync+restart
+          target: /app/src
+        - action: rebuild
+          path: ./backend/package.json
     depends_on:
       - mongo
 
   mongo:
     image: mongo:6
+    command:
+      - '--logpath'
+      - '/var/log/mongodb/mongod.log'
     container_name: mongodb
     restart: always
     ports:
