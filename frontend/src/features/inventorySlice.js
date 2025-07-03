@@ -1,25 +1,29 @@
 // tracks user inventory of items
 // tracks user number of coins
-import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-const BASE_API_URL = import.meta.env.VITE_APP_API_URL
+const BASE_API_URL = import.meta.env.VITE_APP_API_URL;
 
 export const spendCoinsAndUpdate = (amount) => (dispatch, getState) => {
   dispatch(spendCoins(amount));
   const state = getState().inventory;
   dispatch(updateInventory(state));
+  dispatch(fetchInventory()); // fetch inventory again to populate decorId
 };
 
 export const addItemAndUpdate = (item) => (dispatch, getState) => {
   dispatch(addItem(item));
   const state = getState().inventory;
+  console.log("Current inventory state:", state);
   dispatch(updateInventory(state));
+  dispatch(fetchInventory()); // fetch inventory again to populate decorId
 };
 
 export const addCoinsAndUpdate = (amount) => (dispatch, getState) => {
   dispatch(addCoins(amount));
   const state = getState().inventory;
   dispatch(updateInventory(state));
+  dispatch(fetchInventory()); // fetch inventory again to populate decorId
 };
 
 export const fetchInventory = createAsyncThunk(
@@ -27,7 +31,7 @@ export const fetchInventory = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`${BASE_API_URL}/inventory`, {
+      const response = await axios.get(`${BASE_API_URL}/rooms`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -63,7 +67,7 @@ export const updateInventory = createAsyncThunk(
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        `${BASE_API_URL}/inventory/update`,
+        `${BASE_API_URL}/rooms/update`,
         {
           coins: state.coins,
           decorations: state.decorations,
@@ -99,12 +103,12 @@ export const updateInventory = createAsyncThunk(
 );
 
 export const createInventory = createAsyncThunk(
-  "inventory/updateInventory",
+  "inventory/createInventory",
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        `${BASE_API_URL}/inventory/create`,
+        `${BASE_API_URL}/rooms/create`,
         {}, // body
         {
           headers: {
@@ -138,7 +142,7 @@ export const createInventory = createAsyncThunk(
 
 const initialState = {
   coins: 0,
-  decorations: [], // list of decoration _id fields
+  decorations: [],
   status: "idle",
   error: null,
 };
@@ -156,11 +160,17 @@ const inventorySlice = createSlice({
       }
     },
     addItem: (state, action) => {
-      state.decorations.push(action.payload); // must be an _id
+      state.decorations.push({
+        decorId: action.payload,
+        placed: false,
+        position: [0, 0, 0],
+        rotation: [0, 0, 0],
+        scale: [1, 1, 1],
+      });
     },
     removeItem: (state, action) => {
-      state.decorations = state.decorations.filter( // must be an _id
-        (id) => id !== action.payload
+      state.decorations = state.decorations.filter(
+        (item) => item.decorId !== action.payload
       );
     },
   },
@@ -172,7 +182,7 @@ const inventorySlice = createSlice({
       .addCase(fetchInventory.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.decorations = action.payload.decorations;
-        state.coins= action.payload.coins;
+        state.coins = action.payload.coins;
       })
       .addCase(fetchInventory.rejected, (state, action) => {
         state.status = "failed";
