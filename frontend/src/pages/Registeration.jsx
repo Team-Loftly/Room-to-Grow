@@ -47,15 +47,60 @@ export default function Register() {
     }
   };
 
+  const goToLogin = () => navigate("/");
+
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-      <Paper elevation={8} sx={{ p: 4, width: 450, display: "flex", flexDirection: "column", gap: 2 }}>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+    >
+      <Paper
+        elevation={8}
+        sx={{
+          p: 4,
+          width: 450,
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+        }}
+      >
         <SiteHeader />
-        {error && <Alert severity="error" onClose={() => setError("")}>{error}</Alert>}
-        <Box component="form" onSubmit={registerUser} display="flex" flexDirection="column" gap={2}>
-          <TextField label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required fullWidth />
-          <TextField label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required fullWidth />
-          <Button type="submit" variant="outlined" fullWidth>Register</Button>
+        {error && (
+          <Alert severity="error" onClose={() => setError("")}>
+            {error}
+          </Alert>
+        )}
+        <Box
+          component="form"
+          onSubmit={registerUser}
+          display="flex"
+          flexDirection="column"
+          gap={2}
+        >
+          <TextField
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            fullWidth
+          />
+          <TextField
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            fullWidth
+          />
+          <Button type="submit" variant="contained" fullWidth>
+            Register
+          </Button>
+          <Button variant="outlined" onClick={goToLogin} fullWidth>
+            Back
+          </Button>
         </Box>
       </Paper>
     </Box>

@@ -137,6 +137,12 @@ const roomSlice = createSlice({
         state.decorations[index].position = position;
       }
     },
+    updateDecorationRotation(state, action) {
+      const { index, rotation } = action.payload;
+      if (state.decorations[index]) {
+        state.decorations[index].rotation = rotation;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -160,5 +166,6 @@ const roomSlice = createSlice({
   },
 });
 
-export const { updateDecorationPosition } = roomSlice.actions;
+export const { updateDecorationPosition, updateDecorationRotation } =
+  roomSlice.actions;
 export default roomSlice.reducer;
