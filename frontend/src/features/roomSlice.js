@@ -130,7 +130,14 @@ const initialState = {
 const roomSlice = createSlice({
   name: "room",
   initialState,
-  reducers: {},
+  reducers: {
+    updateDecorationPosition(state, action) {
+      const { index, position } = action.payload;
+      if (state.decorations[index]) {
+        state.decorations[index].position = position;
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchRoom.pending, (state) => {
@@ -153,5 +160,5 @@ const roomSlice = createSlice({
   },
 });
 
-export const {} = roomSlice.actions;
+export const { updateDecorationPosition } = roomSlice.actions;
 export default roomSlice.reducer;
