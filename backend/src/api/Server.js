@@ -7,6 +7,7 @@ import metricsRouter from "../routes/metrics.js";
 import createAuthRouter from "../routes/auth.js";
 import decorRouter from "../routes/decorations.js";
 import createInventoryRouter from "../routes/inventory.js";
+import createRoomRouter from "../routes/rooms.js";
 
 import * as AuthHelper from "../util/AuthHelper.js";
 
@@ -50,6 +51,7 @@ export default class Server {
     this.express.use("/auth", createAuthRouter(this.authHelper));
     this.express.use("/decor", decorRouter);
     this.express.use("/inventory", createInventoryRouter(this.requireAuth));
+    this.express.use("/rooms", createRoomRouter(this.requireAuth));
   }
 
   registerStaticFiles() {

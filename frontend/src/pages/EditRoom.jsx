@@ -1,9 +1,14 @@
 import { Stack, Divider, Typography } from "@mui/material";
 import ItemGrid from "../components/market/ItemGrid";
-import { useSelector, useDispatch} from "react-redux";
-import { selectInventoryItems, selectInventoryError, selectInventoryStatus } from "../features/inventorySlice";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  selectInventoryItems,
+  selectInventoryError,
+  selectInventoryStatus,
+} from "../features/inventorySlice";
 import { fetchInventory } from "../features/inventorySlice";
 import { useEffect } from "react";
+import Room from "../components/Room.jsx";
 
 function EditRoom() {
   const dispatch = useDispatch();
@@ -57,7 +62,7 @@ function EditRoom() {
         alignItems: "center",
       }}
     >
-      <h2>Three Js render should go here...</h2>
+      <Room isEditable={true} />
       <ItemGrid items={decorations} title="Inventory" />
     </Stack>
   );
