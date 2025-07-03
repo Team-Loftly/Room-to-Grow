@@ -15,9 +15,9 @@ const loadFurniture = (model) =>
   );
 
 // Dict to hold index to position and rotation of each furniture item
-let furniturePositions = {};
+let furnitureTransformations = {};
 
-// MovableFurniture handles selection, dragging, and rotation logic per item
+// MovableFurniture handles selection and transformation logic per item
 function MovableFurniture({ item, index, isSelected, onSelect }) {
   const groupRef = useRef();
   const { camera, gl } = useThree();
@@ -63,8 +63,8 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
     const handleKeyDown = (event) => {
       if (!groupRef.current) return;
 
-      // Rotate around Y-axis
-      const rotationStep = Math.PI / 16; // ~11.25 degrees
+      // Rotate around Y-axis in 11.25 degree increments
+      const rotationStep = Math.PI / 16;
       if (event.key === "ArrowLeft") {
         groupRef.current.rotation.y += rotationStep;
       } else if (event.key === "ArrowRight") {
@@ -76,10 +76,10 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isSelected, camera, gl.domElement, item.rotation]);
 
-  // Commit new position and rotation on deselect
+  // Update new position and rotation in dict on deselect
   useEffect(() => {
     if (!isSelected && groupRef.current) {
-      furniturePositions[index] = {
+      furnitureTransformations[index] = {
         position: groupRef.current.position.toArray(),
         rotation: groupRef.current.rotation.toArray().slice(0, 3),
       };
@@ -140,10 +140,11 @@ export default function RoomScene({ isEditable }) {
     }
   };
 
+  // Apply transformations from dict items to the corresponding furniture list items
+  // and dispatch update to the backend
   const handleEditRoom = () => {
-    // go through each item in furniturePositions
     const updatedDecorations = furnitureList.map((item, index) => {
-      const newData = furniturePositions[index];
+      const newData = furnitureTransformations[index];
       if (newData) {
         return {
           ...item,
