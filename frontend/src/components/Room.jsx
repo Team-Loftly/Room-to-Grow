@@ -3,8 +3,12 @@ import { OrbitControls } from "@react-three/drei";
 import React, { lazy, Suspense, useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import * as THREE from "three";
-import EmptyRoom from "..//models/EmptyRoom";
-import { fetchRoom, updateRoom } from "../features/roomSlice"; // Import updateRoom
+import EmptyRoom from "../models/EmptyRoom";
+import {
+  fetchRoom,
+  updateRoom,
+  updateDecorationPosition,
+} from "../features/roomSlice";
 
 // Dynamically imports a furniture component by model name and loads it lazily.
 const loadFurniture = (model) =>
@@ -14,20 +18,17 @@ const loadFurniture = (model) =>
     )
   );
 
-// dict to hold index to position and rotation of each furniture item
-let furniturePositions = {};
-
-// MovableFurniture handles selection & dragging logic per item
 function MovableFurniture({ item, index, isSelected, onSelect }) {
   const groupRef = useRef();
+  const dispatch = useDispatch();
   const { camera, gl } = useThree();
   const raycaster = useRef(new THREE.Raycaster());
   const mouse = useRef(new THREE.Vector2());
-  // Plane to move objects on (XZ plane with Y fixed)
   const plane = useRef(
     new THREE.Plane(new THREE.Vector3(0, 1, 0), -item.position[1])
   );
 
+  // Handle object dragging on mouse move
   useEffect(() => {
     if (!isSelected) return;
 
@@ -41,10 +42,9 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
       const intersectPoint = new THREE.Vector3();
       if (raycaster.current.ray.intersectPlane(plane.current, intersectPoint)) {
         if (groupRef.current) {
-          // Move the group smoothly along X and Z, keep Y fixed
           groupRef.current.position.set(
             intersectPoint.x,
-            item.position[1], // Keep original Y, or update if dragging vertically is allowed
+            item.position[1],
             intersectPoint.z
           );
         }
@@ -55,14 +55,13 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [isSelected, camera, gl.domElement, item.position]);
 
-  // Commit new position on deselect
+  // When deselected, commit the final position to Redux
   useEffect(() => {
     if (!isSelected && groupRef.current) {
-      // Update the furniturePositions with the new position
-      furniturePositions[index] = groupRef.current.position.toArray();
-      // TODO: Update with rotation as well
+      const finalPos = groupRef.current.position.toArray();
+      dispatch(updateDecorationPosition({ index, position: finalPos }));
     }
-  }, [isSelected, index]);
+  }, [isSelected, index, dispatch]);
 
   const DynamicFurniture = loadFurniture(item.model);
 
@@ -88,7 +87,6 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
 export default function RoomScene({ isEditable }) {
   const dispatch = useDispatch();
 
-  // Fetch items on mount
   useEffect(() => {
     dispatch(fetchRoom());
   }, [dispatch]);
@@ -100,37 +98,19 @@ export default function RoomScene({ isEditable }) {
       position: [0, -15, 0],
     };
   };
+
   const { scale: roomScale, position: roomPosition } = adjustForScreenSize();
 
-  // Furniture list from redux state
   const furnitureList = useSelector((state) => state.room.decorations);
-
-  // Track selected item index
   const [selectedDecor, setSelectedDecor] = useState(null);
 
-  // Toggle selection
   const handleObjectSelection = (index) => {
     if (!isEditable) return;
-    if (selectedDecor === index) {
-      setSelectedDecor(null); // Deselect on second click
-    } else {
-      setSelectedDecor(index);
-    }
+    setSelectedDecor((prev) => (prev === index ? null : index));
   };
 
   const handleEditRoom = () => {
-    // go through each item in furniturePositions
-    const updatedDecorations = furnitureList.map((item, index) => {
-      const newPosition = furniturePositions[index];
-      if (newPosition) {
-        return {
-          ...item,
-          position: newPosition,
-        };
-      }
-      return item;
-    });
-    dispatch(updateRoom({ decorations: updatedDecorations }));
+    dispatch(updateRoom({ decorations: furnitureList }));
   };
 
   return (
@@ -146,15 +126,18 @@ export default function RoomScene({ isEditable }) {
         <EmptyRoom scale={roomScale} position={roomPosition} />
 
         <group position={[0, -12, 0]}>
-          {furnitureList.map((item, index) => (
-            <MovableFurniture
-              key={index}
-              item={item}
-              index={index}
-              isSelected={selectedDecor === index}
-              onSelect={handleObjectSelection}
-            />
-          ))}
+          {furnitureList.map(
+            (item, index) =>
+              item.placed && (
+                <MovableFurniture
+                  key={index}
+                  item={item}
+                  index={index}
+                  isSelected={selectedDecor === index}
+                  onSelect={handleObjectSelection}
+                />
+              )
+          )}
         </group>
 
         <OrbitControls
@@ -167,9 +150,9 @@ export default function RoomScene({ isEditable }) {
           enableRotate
         />
       </Canvas>
+
       {isEditable && (
         <button
-          // TODO: Add confirmation dialog before saving changes
           onClick={handleEditRoom}
           style={{
             position: "absolute",
@@ -183,7 +166,7 @@ export default function RoomScene({ isEditable }) {
             borderRadius: "5px",
             cursor: "pointer",
             fontSize: "16px",
-            zIndex: 100, // Ensure it's above the canvas
+            zIndex: 100,
           }}
         >
           Save Changes
