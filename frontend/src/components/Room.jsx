@@ -3,8 +3,13 @@ import { OrbitControls } from "@react-three/drei";
 import { lazy, Suspense, useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import * as THREE from "three";
-import EmptyRoom from "..//models/EmptyRoom";
-import { fetchRoom, updateRoom } from "../features/roomSlice";
+import EmptyRoom from "../models/EmptyRoom";
+import {
+  fetchRoom,
+  updateRoom,
+  updateDecorationPosition,
+  updateDecorationRotation,
+} from "../features/roomSlice";
 import Snackbar from "@mui/material/Snackbar";
 import Stack from "@mui/material/Stack";
 
@@ -16,21 +21,18 @@ const loadFurniture = (model) =>
     )
   );
 
-// Dict to hold index to position and rotation of each furniture item
-let furnitureTransformations = {};
-
 // MovableFurniture handles selection and transformation logic per item
 function MovableFurniture({ item, index, isSelected, onSelect }) {
   const groupRef = useRef();
+  const dispatch = useDispatch();
   const { camera, gl } = useThree();
   const raycaster = useRef(new THREE.Raycaster());
   const mouse = useRef(new THREE.Vector2());
-  // Plane to move objects on (XZ plane with Y fixed)
   const plane = useRef(
     new THREE.Plane(new THREE.Vector3(0, 1, 0), -item.position[1])
   );
 
-  // Handles position change
+  // Handle object dragging on mouse move
   useEffect(() => {
     if (!isSelected) return;
 
@@ -44,7 +46,6 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
       const intersectPoint = new THREE.Vector3();
       if (raycaster.current.ray.intersectPlane(plane.current, intersectPoint)) {
         if (groupRef.current) {
-          // Move the group smoothly along X and Z, keep Y fixed
           groupRef.current.position.set(
             intersectPoint.x,
             item.position[1],
@@ -64,7 +65,6 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
 
     const handleKeyDown = (event) => {
       if (!groupRef.current) return;
-
       // Rotate around Y-axis in 11.25 degree increments
       const rotationStep = Math.PI / 16;
       if (event.key === "ArrowLeft") {
@@ -78,15 +78,25 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isSelected, camera, gl.domElement, item.rotation]);
 
-  // Update new position and rotation in dict on deselect
+  // When deselected, commit the final position and rotation to Redux
   useEffect(() => {
     if (!isSelected && groupRef.current) {
-      furnitureTransformations[index] = {
-        position: groupRef.current.position.toArray(),
-        rotation: groupRef.current.rotation.toArray().slice(0, 3),
-      };
+      const finalPos = groupRef.current.position.toArray();
+      const finalRot = groupRef.current.rotation.toArray().slice(0, 3);
+      dispatch(
+        updateDecorationPosition({
+          index,
+          position: finalPos,
+        })
+      );
+      dispatch(
+        updateDecorationRotation({
+          index,
+          rotation: finalRot,
+        })
+      );
     }
-  }, [isSelected, index]);
+  }, [isSelected, index, dispatch]);
 
   const DynamicFurniture = loadFurniture(item.model);
 
@@ -112,7 +122,6 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
 export default function RoomScene({ isEditable }) {
   const dispatch = useDispatch();
 
-  // Fetch items on mount
   useEffect(() => {
     dispatch(fetchRoom());
   }, [dispatch]);
@@ -124,12 +133,10 @@ export default function RoomScene({ isEditable }) {
       position: [0, -15, 0],
     };
   };
+
   const { scale: roomScale, position: roomPosition } = adjustForScreenSize();
 
-  // Furniture list from redux state
   const furnitureList = useSelector((state) => state.room.decorations);
-
-  // Track selected item index
   const [selectedDecor, setSelectedDecor] = useState(null);
 
   // Used in "Changes Saved" toast notification
@@ -144,6 +151,7 @@ export default function RoomScene({ isEditable }) {
   // Handles the setting of selectedDecor when the mouse is clicked
   const handleObjectSelection = (index) => {
     if (!isEditable) return;
+    //    setSelectedDecor((prev) => (prev === index ? null : index)); !!!
     if (selectedDecor === index) {
       setSelectedDecor(null);
     } else {
@@ -155,21 +163,9 @@ export default function RoomScene({ isEditable }) {
     setSelectedDecor(null);
   };
 
-  // Apply transformations from dict items to the corresponding furniture list items
-  // and dispatch update to the backend
+  // Save transformations to the backend
   const handleEditRoom = () => {
-    const updatedDecorations = furnitureList.map((item, index) => {
-      const newData = furnitureTransformations[index];
-      if (newData) {
-        return {
-          ...item,
-          position: newData.position,
-          rotation: newData.rotation,
-        };
-      }
-      return item;
-    });
-    dispatch(updateRoom({ decorations: updatedDecorations }));
+    dispatch(updateRoom({ decorations: furnitureList }));
     setSaved(true);
   };
 
@@ -257,15 +253,18 @@ export default function RoomScene({ isEditable }) {
           <EmptyRoom scale={roomScale} position={roomPosition} />
 
           <group position={[0, -12, 0]}>
-            {furnitureList.map((item, index) => (
-              <MovableFurniture
-                key={index}
-                item={item}
-                index={index}
-                isSelected={selectedDecor === index}
-                onSelect={handleObjectSelection}
-              />
-            ))}
+            {furnitureList.map(
+              (item, index) =>
+                item.placed && (
+                  <MovableFurniture
+                    key={index}
+                    item={item}
+                    index={index}
+                    isSelected={selectedDecor === index}
+                    onSelect={handleObjectSelection}
+                  />
+                )
+            )}
           </group>
 
           <OrbitControls
