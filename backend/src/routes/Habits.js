@@ -172,19 +172,26 @@ export default function createHabitsRouter(requireAuth) {
         .status(StatusCodes.BAD_REQUEST)
         .json({ message: "Missing required habit fields." });
     }
+
     if (!["timed", "checkmark"].includes(type)) {
       return res
         .status(StatusCodes.BAD_REQUEST)
         .json({ message: "Invalid habit type." });
     }
-    if (type === "timed" && (hours === null || minutes === null)) {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ message: "Hours and minutes are required for timed habits." });
-    }
-    if (type === "checkmark" && checkmarks === null) {
+
+    if (
+      type === "timed" &&
+      (hours === null || minutes === null || (hours === 0 && minutes === 0))
+    ) {
       return res.status(StatusCodes.BAD_REQUEST).json({
-        message: "Checkmarks count is required for checkmark habits.",
+        message:
+          "Hours and minutes are required for timed habits and can't both be 0.",
+      });
+    }
+    if (type === "checkmark" && checkmarks === null && checkmarks < 1) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message:
+          "Checkmarks count is required for checkmark habits and can't be less than 1.",
       });
     }
 
@@ -235,6 +242,35 @@ export default function createHabitsRouter(requireAuth) {
       minutes,
       checkmarks,
     } = req.body;
+
+    if (
+      !title ||
+      !days ||
+      !Array.isArray(days) ||
+      days.length === 0 ||
+      !priority ||
+      !type
+    ) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "Missing required habit fields." });
+    }
+
+    if (
+      type === "timed" &&
+      (hours === null || minutes === null || (hours === 0 && minutes === 0))
+    ) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message:
+          "Hours and minutes are required for timed habits and can't both be 0.",
+      });
+    }
+    if (type === "checkmark" && checkmarks === null && checkmarks < 1) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message:
+          "Checkmarks count is required for checkmark habits and can't be less than 1.",
+      });
+    }
 
     if (!mongoose.Types.ObjectId.isValid(habit_id)) {
       return res
@@ -292,6 +328,41 @@ export default function createHabitsRouter(requireAuth) {
     }
   });
 
+  // DELETE an existing habit
+  router.delete("/:id", requireAuth, async (req, res) => {
+    const user_id = req.userId;
+    const habit_id = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(habit_id)) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "Invalid habit ID format." });
+    }
+
+    try {
+      const deletedHabit = await Habit.findOneAndDelete({
+        _id: habit_id,
+        userId: user_id,
+      });
+
+      if (!deletedHabit) {
+        return res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ message: "Habit not found or not authorized to delete." });
+      }
+
+      res.status(StatusCodes.OK).json({
+        message: "Habit deleted successfully.",
+        deletedId: habit_id,
+      });
+    } catch (err) {
+      console.error("Error deleting habit:", err);
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ message: "Error deleting habit." });
+    }
+  });
+
   // MARK a habit as completed/update progress
   router.post("/:id/complete", requireAuth, async (req, res) => {
     const user_id = req.userId;
@@ -303,10 +374,10 @@ export default function createHabitsRouter(requireAuth) {
         .status(StatusCodes.BAD_REQUEST)
         .json({ message: "Invalid habit ID." });
     }
-    if (typeof value !== "number" || value <= 0) {
+    if (typeof value !== "number") {
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ message: "Completion value must be a positive number." });
+        .json({ message: "Completion value must be a number." });
     }
 
     try {
@@ -337,11 +408,34 @@ export default function createHabitsRouter(requireAuth) {
       if (entryIndex !== -1) {
         // Update existing entry: add value, update timestamp
         habit.dailyStatuses[entryIndex].value += value;
+
+        // make sure you don't go under 0
+        if (habit.dailyStatuses[entryIndex].value < 0) {
+          habit.dailyStatuses[entryIndex].value = 0;
+        }
+
+        let cur_value = habit.dailyStatuses[entryIndex].value;
+        // don't go over completed
+        if (
+          habit.type === "timed" &&
+          habit.hours !== null &&
+          habit.minutes !== null
+        ) {
+          const goalInMinutes = habit.hours * 60 + habit.minutes;
+          cur_value = cur_value >= goalInMinutes ? goalInMinutes : cur_value;
+        } else if (habit.type === "checkmark" && habit.checkmarks !== null) {
+          cur_value =
+            cur_value >= habit.checkmarks ? habit.checkmarks : cur_value;
+        }
+
+        habit.dailyStatuses[entryIndex].value = cur_value;
+
         habit.dailyStatuses[entryIndex].date = now;
         currentProgressValue = habit.dailyStatuses[entryIndex].value;
       } else {
         // Create new entry
-        currentProgressValue = value;
+        let new_value = value >= 0 ? value : 0;
+        currentProgressValue = new_value;
         habit.dailyStatuses.push({
           date: now,
           status: "incomplete", // Set as incomplete for now, update to completed if criteria met
@@ -542,8 +636,7 @@ export default function createHabitsRouter(requireAuth) {
     }
   });
 
-  // GET historical data for a specific habit
-  router.get("/:id/history", requireAuth, async (req, res) => {
+  router.get("/:id/stats", requireAuth, async (req, res) => {
     const user_id = req.userId;
     const habit_id = req.params.id;
 
@@ -554,49 +647,89 @@ export default function createHabitsRouter(requireAuth) {
     }
 
     try {
-      const habitData = await Habit.findOne({
+      const habit = await Habit.findOne({
         _id: habit_id,
         userId: user_id,
-      }).select("dailyStatuses");
+      }).select("currentStreak dailyStatuses type title");
 
-      if (!habitData) {
+      if (!habit) {
         return res
           .status(StatusCodes.NOT_FOUND)
-          .json({ message: "Habit history not found or not authorized." });
+          .json({ message: "Habit not found or not authorized." });
       }
 
-      const categorizedHistory = {
-        incomplete: [],
-        completed: [],
-        failed: [],
-        skipped: [],
-      };
+      let completedDays = 0;
+      let failedDays = 0;
+      let skippedDays = 0;
+      let totalValue = 0;
 
-      if (habitData.dailyStatuses && habitData.dailyStatuses.length > 0) {
-        habitData.dailyStatuses.forEach((entry) => {
+      // --- Calculate current week boundaries (Sunday to Saturday) ---
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+
+      const currentWeekStart = new Date(now);
+      currentWeekStart.setDate(now.getDate() - now.getDay()); // Get Sunday (0) of current week
+      currentWeekStart.setHours(0, 0, 0, 0); // Ensure beginning of the day
+
+      const currentWeekEnd = new Date(now);
+      currentWeekEnd.setDate(now.getDate() + (6 - now.getDay())); // Get Saturday (6) of current week
+      currentWeekEnd.setHours(23, 59, 59, 999); // Ensure end of the day
+      // --- End current week calculations ---
+
+      // Initialize array for daily values of the current week (Sunday to Saturday)
+      // Each element starts as null, as requested for days that don't exist yet.
+      const totalValuePerDayCurrentWeek = new Array(7).fill(0);
+
+      if (habit.dailyStatuses && habit.dailyStatuses.length > 0) {
+        habit.dailyStatuses.forEach((entry) => {
+          const entryDate = new Date(entry.date);
+          const entryDateOnly = new Date(entryDate);
+          entryDateOnly.setHours(0, 0, 0, 0); // Normalize entry date to start of day for comparison
+
           switch (entry.status) {
-            case "incomplete":
-              categorizedHistory.incomplete.push(entry);
-              break;
             case "complete":
-              categorizedHistory.completed.push(entry);
+              completedDays++;
               break;
             case "failed":
-              categorizedHistory.failed.push(entry);
+              failedDays++;
               break;
             case "skipped":
-              categorizedHistory.skipped.push(entry);
+              skippedDays++;
               break;
+          }
+          totalValue += entry.value || 0;
+
+          if (
+            entryDateOnly >= currentWeekStart &&
+            entryDateOnly <= currentWeekEnd
+          ) {
+            const dayOfWeek = entryDate.getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
+
+            if (totalValuePerDayCurrentWeek[dayOfWeek] === null) {
+              totalValuePerDayCurrentWeek[dayOfWeek] = 0;
+            }
+            totalValuePerDayCurrentWeek[dayOfWeek] += entry.value || 0;
           }
         });
       }
 
-      res.status(StatusCodes.OK).json(categorizedHistory);
+      const habitStats = {
+        title: habit.title,
+        currentStreak: habit.currentStreak || 0,
+        completedDays: completedDays,
+        failedDays: failedDays,
+        skippedDays: skippedDays,
+        type: habit.type,
+        totalValue: totalValue,
+        totalValuePerDayCurrentWeek: totalValuePerDayCurrentWeek,
+      };
+
+      res.status(StatusCodes.OK).json(habitStats);
     } catch (err) {
-      console.error("Error retrieving habit history:", err);
+      console.error("Error retrieving habit statistics:", err);
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ message: "Error retrieving habit history" });
+        .json({ message: "Error retrieving habit statistics" });
     }
   });
 
