@@ -140,14 +140,18 @@ export default function RoomScene({ isEditable }) {
     setSaved(false);
   };
 
-  // Toggle selection
+  // Handles the setting of selectedDecor when the mouse is clicked
   const handleObjectSelection = (index) => {
     if (!isEditable) return;
     if (selectedDecor === index) {
-      setSelectedDecor(null); // Deselect on second click
+      setSelectedDecor(null);
     } else {
       setSelectedDecor(index);
     }
+  };
+  const handleBackgroundClick = () => {
+    if (!isEditable) return;
+    setSelectedDecor(null);
   };
 
   // Apply transformations from dict items to the corresponding furniture list items
@@ -176,7 +180,10 @@ export default function RoomScene({ isEditable }) {
         onClose={handleClose}
         message="Room changes saved"
       />
-      <Canvas camera={{ position: [-60, 48, 60], fov: 60 }}>
+      <Canvas
+        camera={{ position: [-60, 48, 60], fov: 60 }}
+        onPointerMissed={handleBackgroundClick}
+      >
         <ambientLight intensity={0.2} />
         <directionalLight
           color="#fff5b6"
