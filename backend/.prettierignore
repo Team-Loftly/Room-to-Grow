@@ -7,6 +7,7 @@ src/vendor-scripts/
 
 src/assets/
 src/css
+src/data/
 .dockerignore
 .gitignore
 .git/

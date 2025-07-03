@@ -1,0 +1,17 @@
+[{
+  "_id": {
+    "$oid": "686618cd9fe551152e08a967"
+  },
+  "userId": {
+    "$oid": "68660ef56fd728291e7ef8be"
+  },
+  "coins": 400,
+  "decorations": [
+    {
+      "$oid": "68660edaf079d0ff8d6cc86d"
+    },
+    {
+      "$oid": "68660edaf079d0ff8d6cc86e"
+    }
+  ]
+}]

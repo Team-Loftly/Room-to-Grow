@@ -7,9 +7,10 @@ const roomDecorSchema = new mongoose.Schema({
     ref: "Decorations",
     required: true,
   },
-  model: {
-    type: String,
+  placed: {
+    type: Boolean,
     required: true,
+    default: false, // default to false if not specified
   },
   position: {
     type: [Number],
@@ -21,7 +22,7 @@ const roomDecorSchema = new mongoose.Schema({
   },
   scale: {
     type: [Number],
-    required: true,
+    required: false, // scale is optional
   },
 });
 
