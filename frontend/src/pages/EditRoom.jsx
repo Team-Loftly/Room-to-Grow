@@ -62,7 +62,7 @@ function EditRoom() {
         alignItems: "center",
       }}
     >
-      <Room isEditable="true" />
+      <Room isEditable={true} />
       <ItemGrid items={decorations} title="Inventory" />
     </Stack>
   );

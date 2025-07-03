@@ -1,8 +1,7 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import mongoose from "mongoose";
 
 // TODO: need to validate that position, rotation, and scale are arrays of exactly 3 numbers
-const roomDecorSchema = new Schema({
+const roomDecorSchema = new mongoose.Schema({
   decorId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Decorations",
@@ -26,7 +25,7 @@ const roomDecorSchema = new Schema({
   },
 });
 
-const roomSchema = new Schema({
+const roomSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -35,4 +34,5 @@ const roomSchema = new Schema({
   decorations: [roomDecorSchema],
 });
 
-module.exports = mongoose.model("Rooms", roomSchema);
+const Rooms = mongoose.model("Rooms", roomSchema);
+export default Rooms;
