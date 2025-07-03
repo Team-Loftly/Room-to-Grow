@@ -6,6 +6,7 @@ import * as THREE from "three";
 import EmptyRoom from "..//models/EmptyRoom";
 import { fetchRoom, updateRoom } from "../features/roomSlice";
 import Snackbar from "@mui/material/Snackbar";
+import Stack from "@mui/material/Stack";
 
 // Dynamically imports a furniture component by model name and loads it lazily
 const loadFurniture = (model) =>
@@ -180,62 +181,104 @@ export default function RoomScene({ isEditable }) {
         onClose={handleClose}
         message="Room changes saved"
       />
-      <Canvas
-        camera={{ position: [-60, 48, 60], fov: 60 }}
-        onPointerMissed={handleBackgroundClick}
+      <Stack
+        direction="row"
+        sx={{
+          height: "100%",
+          width: "100%",
+          boxSizing: "border-box",
+          justifyContent: "center",
+          alignItems: "center",
+          m: 2,
+        }}
       >
-        <ambientLight intensity={0.2} />
-        <directionalLight
-          color="#fff5b6"
-          position={[-60, 48, 60]}
-          intensity={1.5}
-          castShadow
-        />
-        <EmptyRoom scale={roomScale} position={roomPosition} />
+        {isEditable && (
+          <Stack
+            direction="column"
+            sx={{
+              color: "white",
+            }}
+          >
+            <h4 style={{ margin: 0, fontWeight: "bold" }}>Controls</h4>
+            <Stack
+              direction="column"
+              spacing={2}
+              sx={{
+                fontSize: "12px",
+                mt: 1,
+              }}
+            >
+              <div>
+                <strong>Left click:</strong>
+                <br />
+                select/deselect item
+              </div>
+              <div>
+                <strong>Move cursor:</strong>
+                <br />
+                reposition selected item
+              </div>
+              <div>
+                <strong>← & → key:</strong>
+                <br />
+                rotate selected item
+              </div>
+            </Stack>
 
-        <group position={[0, -12, 0]}>
-          {furnitureList.map((item, index) => (
-            <MovableFurniture
-              key={index}
-              item={item}
-              index={index}
-              isSelected={selectedDecor === index}
-              onSelect={handleObjectSelection}
-            />
-          ))}
-        </group>
-
-        <OrbitControls
-          target={[0, 0, 0]}
-          minDistance={15}
-          maxDistance={150}
-          makeDefault
-          enablePan={false}
-          enableZoom
-          enableRotate
-        />
-      </Canvas>
-      {isEditable && (
-        <button
-          onClick={handleEditRoom}
-          style={{
-            position: "absolute",
-            bottom: "20px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            padding: "10px 20px",
-            backgroundColor: "#4CAF50",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-            fontSize: "16px",
-            zIndex: 100, // Ensure it's above the canvas
-          }}
+            <button
+              onClick={handleEditRoom}
+              style={{
+                marginTop: "12px",
+                padding: "5px 10px",
+                backgroundColor: "#0a571f",
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                fontSize: "14px",
+                zIndex: 100,
+              }}
+            >
+              Save Changes
+            </button>
+          </Stack>
+        )}
+        <Canvas
+          camera={{ position: [-60, 48, 60], fov: 60 }}
+          onPointerMissed={handleBackgroundClick}
         >
-          Save Changes
-        </button>
-      )}
+          <ambientLight intensity={0.2} />
+          <directionalLight
+            color="#fff5b6"
+            position={[-60, 48, 60]}
+            intensity={1.5}
+            castShadow
+          />
+          <EmptyRoom scale={roomScale} position={roomPosition} />
+
+          <group position={[0, -12, 0]}>
+            {furnitureList.map((item, index) => (
+              <MovableFurniture
+                key={index}
+                item={item}
+                index={index}
+                isSelected={selectedDecor === index}
+                onSelect={handleObjectSelection}
+              />
+            ))}
+          </group>
+
+          <OrbitControls
+            target={[0, 0, 0]}
+            minDistance={15}
+            maxDistance={150}
+            makeDefault
+            enablePan={false}
+            enableZoom
+            enableRotate
+          />
+        </Canvas>
+      </Stack>
     </>
   );
 }
