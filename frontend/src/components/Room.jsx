@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import * as THREE from "three";
 import EmptyRoom from "..//models/EmptyRoom";
 import { fetchRoom, updateRoom } from "../features/roomSlice";
+import Snackbar from "@mui/material/Snackbar";
 
 // Dynamically imports a furniture component by model name and loads it lazily
 const loadFurniture = (model) =>
@@ -130,6 +131,15 @@ export default function RoomScene({ isEditable }) {
   // Track selected item index
   const [selectedDecor, setSelectedDecor] = useState(null);
 
+  // Used in "Changes Saved" toast notification
+  const [saved, setSaved] = useState(false);
+  const handleClose = (event, reason) => {
+    if (reason == "clickaway") {
+      return;
+    }
+    setSaved(false);
+  };
+
   // Toggle selection
   const handleObjectSelection = (index) => {
     if (!isEditable) return;
@@ -155,10 +165,17 @@ export default function RoomScene({ isEditable }) {
       return item;
     });
     dispatch(updateRoom({ decorations: updatedDecorations }));
+    setSaved(true);
   };
 
   return (
     <>
+      <Snackbar
+        open={saved}
+        autoHideDuration={5000}
+        onClose={handleClose}
+        message="Room changes saved"
+      />
       <Canvas camera={{ position: [-60, 48, 60], fov: 60 }}>
         <ambientLight intensity={0.2} />
         <directionalLight
@@ -193,7 +210,6 @@ export default function RoomScene({ isEditable }) {
       </Canvas>
       {isEditable && (
         <button
-          // TODO: Add confirmation dialog before saving changes
           onClick={handleEditRoom}
           style={{
             position: "absolute",
