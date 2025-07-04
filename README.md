@@ -5,11 +5,12 @@
 - Aryan Sonik
 
   
-Introducing Room to Grow, a productivity web app where users can create and complete tasks to build up their very own virtual study room.
+Introducing Room to Grow, a productivity web app where users can build up healthy habits to grow and personalize their very own virtual study room.
 Earn coins and spend them at the Marketplace to buy various decorations for your room! Every minute of focus counts!
 
 ## Build Instructions:
 - go to root directory, where docker-compose.yaml is located
+- docker compose down -v
 - docker compose up --build
 - access the site at: http://localhost:3000.
 
@@ -17,6 +18,7 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 
 ### Test Suite
 - Our test suite is located in backend/test
+- We have created test suites for our API calls and operations, mocking real use-cases and scenarios for our application.
 - Our testing tools:
   - Test env - Mocha + chai
   - Mocking database functions - sinon
@@ -26,24 +28,33 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 - We use mochawesome to generate an html report of the tests in backend/mochawesome-report/mochawesome.html
 - To run the tests:
   - cd backend
+  - npm i
   - npm test
   - open backend/mochawesome-report/mochawesome.html in your browser to view the results
 
 ### Marketplace
 - We've implemented our marketplace backend as follows:
-  - There's a /decor API that returns marketplace items stored in our Decorations collection. These items are stored in a json file initially and seeded to our collection when the server initializes.
+  - There's a /decor API that returns marketplace items stored in our Decorations collection. Items in a seed file will populate the collection, and the API will fetch them from the database.
   - Market items are fetched when you navigate to the marketplace page and then stored in our marketSlice.
 - Five new 3D models have been added that are availble for purchase and can be placed in users' rooms
 
-### Inventory backend
-- We've implemented our user inventory backend as follows:
-  - There's a /inventory API with the following endpoints:
-    - / -> gets the inventory for the user with the user id assoicated with the given JWT token.
-    - /create -> creates a new inventory entry for the user with the user id assoicated with the given JWT token. This is called once when a user registers from the register page.
-    - /update -> updates the inventory entry for the user with the user id assoicated with the given JWT token. This is called each time the user's inventory is updated -- coins added/removed, or items purchased.
-      - The inventorySlice has spendCoinsAndUpdate, addItemsAndUpdate, and addCoinsAndUpdate, which handle updating the redux state as well as sending an updateInventory request to the backend. Our components will call just these update functions.
-  - There's an Inventory collection that maps a user id to coins and decorations - used by our API to track the inventory for each user.
-- With this update, we can now create multiple user accounts and persist each user's inventory data independently.
+### Rooms backend
+- A users Rooms state will store a user's coins and the state of items the user owns in their room.
+- We've implemented our user room state backend as follows:
+  - There's a /rooms API with the following endpoints:
+    - / -> gets the room state and coins for the user with the user id assoicated with the given JWT token.
+    - /create -> creates a new rooms entry for the user with the user id assoicated with the given JWT token. This is called once when a user registers from the register page.
+    - /update -> updates the rooms entry for the user with the user id assoicated with the given JWT token. This is called each time the user's rooms is updated -- coins added/removed, items purchased or placed/removed/modified.
+      - The inventorySlice handles spendCoinsAndUpdate, addItemsAndUpdate, and addCoinsAndUpdate, which handle updating the redux state as well as sending an updateInventory request to the backend. Our components will call just these update functions.
+      - The roomsSlice handles operations like modifying the position or rotation of an item, or placing/removing it from the room.
+  - There's an Rooms collection that maps a user id to coins and decorations - used by our API to track the room state for each user.
+- With this update, we can now create multiple user accounts and persist each user's room data independently.
+
+### Rooms frontend
+- The home page and edit room pages now are fully linked. The frontend has been restructured so both pages use a single component Room.jsx to manage the 3D scene.
+- When the component is passed isEditable = true, controls are enabled to modify the room and change the state of decorations the user owns. After saving to the backend, upon refresh or navigation to home, the changes will persist.
+- Items owned by the user are dynamically imported as seperate jsx asset components based on the modelID passed from the decoration object.
+- Things like OrbitControls and React Three Fibers built in tools allowed us to implement intuitive controls for moving around items and rotation.
 
 ### Security Vulnerability Considerations
 - We've added a number of features to ensure our application is secure.
