@@ -146,6 +146,26 @@ export default function createHabitsRouter(requireAuth) {
     }
   });
 
+  // GET all habits for the authenticated user
+  router.get("/all", requireAuth, async (req, res) => {
+    const user_id = req.userId;
+
+    try {
+      const habits = await Habit.find({
+        userId: user_id,
+      }, {
+        dailyStatuses: 0 
+      }).lean();
+
+      res.status(StatusCodes.OK).json(habits);
+    } catch (err) {
+      console.error("Error retrieving habits:", err);
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ message: "Error retrieving habits" });
+    }
+  });
+
   // CREATE a new habit for the user
   router.post("/", requireAuth, async (req, res) => {
     const user_id = req.userId;
