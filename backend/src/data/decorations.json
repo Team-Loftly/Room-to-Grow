@@ -1,22 +1,68 @@
-[{
-  "_id": {
-    "$oid": "68660edaf079d0ff8d6cc86d"
+[
+  {
+    "_id": {
+      "$oid": "68660edaf079d0ff8d6cc86d"
+    },
+    "name": "Warp Pipe",
+    "description": "A classic warp pipe from the Mushroom Kingdom.",
+    "modelID": "WarpPipe",
+    "price": 100,
+    "category": "Furniture",
+    "image": "./images/warp-pipe.png"
   },
-  "name": "Warp Pipe",
-  "description": "A classic warp pipe from the Mushroom Kingdom.",
-  "modelID": "WarpPipe",
-  "price": 100,
-  "category": "Furniture",
-  "image": "./images/warp-pipe.png"
-},
-{
-  "_id": {
-    "$oid": "68660edaf079d0ff8d6cc86e"
+  {
+    "_id": {
+      "$oid": "68660edaf079d0ff8d6cc86e"
+    },
+    "name": "Modern Desk and Chair",
+    "description": "A modern desk and chair set for your virtual workspace.",
+    "modelID": "DeskChair1",
+    "price": 500,
+    "category": "Furniture",
+    "image": "./images/modern-desk-chair.png"
   },
-  "name": "Modern Desk and Chair",
-  "description": "A modern desk and chair set for your virtual workspace.",
-  "modelID": "DeskChair1",
-  "price": 500,
-  "category": "Furniture",
-  "image": "./images/modern-desk-chair.png"
-}]
+  {
+    "_id": {
+      "$oid": "68660edaf079d0ff8d6cc86f"
+    },
+    "name": "Comfy Bed",
+    "description": "A comfy bed to rest in after a hard day of work.",
+    "modelID": "Bed",
+    "price": 400,
+    "category": "Furniture",
+    "image": "./images/bed.png"
+  },
+  {
+    "_id": {
+      "$oid": "68660edaf079d0ff8d6cc870"
+    },
+    "name": "Electric Fan",
+    "description": "It keeps you cool and roots you on as your biggest fan.",
+    "modelID": "ElectricFan",
+    "price": 200,
+    "category": "Furniture",
+    "image": "./images/fan.png"
+  },
+  {
+    "_id": {
+      "$oid": "68660edaf079d0ff8d6cc871"
+    },
+    "name": "Photo Frame",
+    "description": "This guy looks familiar...",
+    "modelID": "PhotoFrame",
+    "price": 100,
+    "category": "Furniture",
+    "image": "./images/frame.png"
+  },
+  {
+    "_id": {
+      "$oid": "68660edaf079d0ff8d6cc872"
+    },
+    "name": "Pastel Rug",
+    "description": "A super soft and colourful rug",
+    "modelID": "Rug",
+    "price": 300,
+    "category": "Furniture",
+    "image": "./images/Rug.png"
+  }
+]
