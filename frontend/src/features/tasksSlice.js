@@ -3,6 +3,33 @@ import axios from "axios";
 
 const BASE_API_URL = import.meta.env.VITE_APP_API_URL;
 
+export const fetchAllTasks = createAsyncThunk(
+  "tasks/fetchAllTasks",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${BASE_API_URL}/habits/all`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const frontendTask = response.data;
+
+      return frontendTask;
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        return rejectWithValue(error.response.data.message);
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const fetchTasks = createAsyncThunk(
   "tasks/fetchTasks",
   async (_, { rejectWithValue }) => {
@@ -245,6 +272,9 @@ export const fillTaskLists = (state, tasks) => {
 
 const initialState = {
   selectedTaskId: -1,
+  allTaskList: [],
+  allHabitsStatus: "idle",
+  allHabitsError: "idle",
   taskList: [],
   completedTaskList: [],
   failedTaskList: [],
@@ -253,12 +283,16 @@ const initialState = {
   error: null,
   isDeleteSnackbarOpen: false,
   isCompletionSnackbarOpen: false,
+  showAllTasks: false,
 };
 
 const tasksSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
+    setShowAllTasks: (state, action) => {
+      state.showAllTasks = action.payload
+    },
     setSelectedTaskId: (state, action) => {
       const { taskId } = action.payload;
       state.selectedTaskId = taskId;
@@ -282,6 +316,8 @@ const tasksSlice = createSlice({
         state.error = null;
 
         const newTask = action.payload;
+        const { progress, ...restOfPayload } = newTask
+        state.allTaskList.push(restOfPayload);
 
         const dayNames = [
           "Sunday",
@@ -310,8 +346,18 @@ const tasksSlice = createSlice({
       .addCase(updateTask.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.error = null;
+
+        const { progress, ...restOfPayload } = action.payload
+        let index = state.allTaskList.findIndex(
+          (task) => task._id === action.payload._id
+        );
+
+        if (index !== -1) {
+          state.allTaskList[index] = restOfPayload;
+        }
+
         // Find the index of the task to update
-        let index = state.taskList.findIndex(
+        index = state.taskList.findIndex(
           (task) => task._id === action.payload._id
         );
 
@@ -350,6 +396,18 @@ const tasksSlice = createSlice({
       .addCase(updateTask.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+      })
+      .addCase(fetchAllTasks.fulfilled, (state, action) => {
+        state.allHabitsStatus = "succeeded";
+        state.allTaskList = action.payload;
+        state.allHabitsError = null;
+      })
+      .addCase(fetchAllTasks.pending, (state) => {
+        state.allHabitsStatus = "loading";
+      })
+      .addCase(fetchAllTasks.rejected, (state, action) => {
+        state.allHabitsStatus = "failed";
+        state.allHabitsError = action.payload;
       })
       .addCase(fetchTasks.pending, (state) => {
         state.status = "loading";
@@ -422,7 +480,15 @@ const tasksSlice = createSlice({
         state.error = null;
         state.isDeleteSnackbarOpen = true;
 
-        let index = state.taskList.findIndex(
+        let index = state.allTaskList.findIndex(
+          (task) => task._id === action.payload
+        );
+
+        if (index !== -1) {
+          state.allTaskList.splice(index, 1);
+        }
+
+        index = state.taskList.findIndex(
           (task) => task._id === action.payload
         );
 
@@ -497,6 +563,7 @@ const tasksSlice = createSlice({
 });
 
 export const {
+  setShowAllTasks,
   setSelectedTaskId,
   updateCheckmarkProgress,
   setIsDeleteSnackbarOpen,

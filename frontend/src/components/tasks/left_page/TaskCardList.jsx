@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import Stack from "@mui/material/Stack";
 import TaskCard from "./TaskCard";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchTasks } from "../../../features/tasksSlice";
+import { fetchAllTasks, fetchTasks } from "../../../features/tasksSlice";
 import { Typography } from "@mui/material";
 import AccordionTasks from "./AccordionTasks";
 
@@ -15,12 +15,57 @@ export default function TaskCardList() {
   const status = useSelector((state) => state.tasks.status);
   const error = useSelector((state) => state.tasks.error);
 
+  // consts for all habits:
+  const showAllTasks = useSelector((state) => state.tasks.showAllTasks);
+  const allTasks = useSelector((state) => state.tasks.allTaskList)
+  const allHabitsStatus = useSelector((state) => state.tasks.allHabitsStatus);
+  const allHabitsError = useSelector((state) => state.tasks.allHabitsError);
+
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchTasks());
     }
   }, [status, dispatch]);
 
+  useEffect(() => {
+    if (allHabitsStatus === "idle") {
+      dispatch(fetchAllTasks());
+    }
+  }, [allHabitsStatus, dispatch]);
+
+  if (allHabitsError) {
+    return <Typography>Error fetching all habits: {allHabitsError}</Typography>;
+  }
+
+  if (showAllTasks) {
+    return (
+      <>
+        {(allHabitsStatus === "loading") ? (
+          <Typography variant="body2" color="text.secondary" sx={{ p: 2 }}>
+            Loading habits...
+          </Typography>
+        ) : allTasks.length > 0 ? (
+          <Stack
+            direction="column"
+            spacing={2}
+            sx={{
+              p: 2, // Add padding inside the Stack for content spacing
+            }}
+          >
+            {allTasks.map((task) => (
+              <TaskCard key={task._id} task={task} />
+            ))}
+          </Stack>
+        ) : (
+          <Typography variant="body2" color="text.secondary" sx={{ p: 2 }}>
+            Create a habit!
+          </Typography>
+        )}
+      </>
+    );
+  }
+
+  
   if (error) {
     return <Typography>Error fetching habits: {error}</Typography>;
   }

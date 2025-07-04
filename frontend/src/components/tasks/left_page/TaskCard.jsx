@@ -45,6 +45,26 @@ export default function TaskCard({ task, task_status }) {
 
   const [openLogTimeDialog, setOpenLogTimeDialog] = React.useState(false);
 
+  const dayMap = {
+    "Sunday": 'Su',
+    "Monday": 'Mo',
+    "Tuesday": 'Tu',
+    "Wednesday": 'We',
+    "Thursday": 'Th',
+    "Friday": 'Fr',
+    "Saturday": 'Sa',
+  };
+
+  const formatDays = (daysArray) => {
+    if (!daysArray || daysArray.length === 0) {
+      return 'No specific days';
+    }
+    return daysArray
+      .map(dayNum => dayMap[dayNum])
+      .filter(name => name)
+      .join(', ');
+  };
+
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
     handleTaskCardClick();
@@ -128,12 +148,17 @@ export default function TaskCard({ task, task_status }) {
   // Calculations for displaying progress bar for timed tasks
   const isTimedTask = task.type === "timed";
   const goalInMinutes = (task.hours || 0) * 60 + (task.minutes || 0);
-  const progressPercentage = isTimedTask
-    ? (task.progress.value / goalInMinutes) * 100
-    : (task.progress.value / task.checkmarks) * 100;
 
-  const progressHours = Math.floor(task.progress.value / 60);
-  const progressMinutes = task.progress.value % 60; // Use modulo for minutes
+  const progressPercentage = task.progress
+    ? isTimedTask
+      ? (task.progress.value / goalInMinutes) * 100
+      : (task.progress.value / task.checkmarks) * 100
+    : 0;
+
+  const progressHours = task.progress
+    ? Math.floor(task.progress.value / 60)
+    : 0;
+  const progressMinutes = task.progress ? task.progress.value % 60 : 0; // Use modulo for minutes
 
   return (
     <Box>
@@ -182,25 +207,35 @@ export default function TaskCard({ task, task_status }) {
             </Typography>
           )}
 
-          <Box sx={{ width: "100%", mt: 1 }}>
-            <LinearProgress
-              variant="determinate"
-              value={progressPercentage}
-              sx={{ mb: 0.5 }}
-            />
-            {isTimedTask ? (
+          {task.progress && (
+            <Box sx={{ width: "100%", mt: 1 }}>
+              <LinearProgress
+                variant="determinate"
+                value={progressPercentage}
+                sx={{ mb: 0.5 }}
+              />
+              {isTimedTask ? (
+                <Typography variant="caption" color="text.secondary">
+                  {progressHours}h {progressMinutes}m completed out of{" "}
+                  {task.hours}h {task.minutes}m
+                </Typography>
+              ) : (
+                <Typography variant="caption" color="text.secondary">
+                  {task.progress.value} completed out of {task.checkmarks}
+                </Typography>
+              )}
+            </Box>
+          )}
+
+          {!task.progress && (
+            <Box sx={{ width: "100%", mt: 1 }}>
               <Typography variant="caption" color="text.secondary">
-                {progressHours}h {progressMinutes}m completed out of{" "}
-                {task.hours}h {task.minutes}m
+                Scheduled: {formatDays(task.days)}
               </Typography>
-            ) : (
-              <Typography variant="caption" color="text.secondary">
-                {task.progress.value} completed out of {task.checkmarks}
-              </Typography>
-            )}
-          </Box>
+            </Box>
+          )}
         </Stack>
-        {!task_status && !isTimedTask && (
+        {task.progress && !task_status && !isTimedTask && (
           <>
             <IconButton
               aria-label="decrement"
@@ -226,7 +261,7 @@ export default function TaskCard({ task, task_status }) {
           </>
         )}
 
-        {!task_status && isTimedTask && (
+        {task.progress && !task_status && isTimedTask && (
           <IconButton
             aria-label="log_time"
             onClick={(e) => {
@@ -265,10 +300,10 @@ export default function TaskCard({ task, task_status }) {
           <MenuItem onClick={handleEditClick}>Edit</MenuItem>
 
           <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
-          {task_status && (
+          {task.progress && task_status && (
             <MenuItem onClick={handleUndo}>Undo {task_status}</MenuItem>
           )}
-          {!task_status && (
+          {task.progress && !task_status && (
             <>
               <MenuItem onClick={handleSkip}>
                 Mark Skipped {task_status}
