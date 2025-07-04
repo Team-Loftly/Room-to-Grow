@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchStats } from "../../../features/metricsSlice";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import {
   Box,
@@ -24,9 +23,11 @@ const BASE_API_URL = import.meta.env.VITE_APP_API_URL;
 
 export default function SelectedTask() {
   const selectedTaskId = useSelector((state) => state.tasks.selectedTaskId);
+  const taskList = useSelector((state) => state.tasks.taskList);
   const [habitStats, setHabitStats] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [selectedChart, setSelectedChart] = useState("dailyProgress");
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -72,7 +73,11 @@ export default function SelectedTask() {
     };
 
     fetchStats();
-  }, [selectedTaskId]);
+  }, [selectedTaskId, taskList]);
+
+  const handleChartChange = (event) => {
+    setSelectedChart(event.target.value);
+  };
 
   if (selectedTaskId === -1) {
     return (
@@ -135,6 +140,18 @@ export default function SelectedTask() {
         <TasksRightPageToolBar selected_task_name="" />
       </Box>
     );
+  }
+
+  const daysOfWeek = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+  const dailyProgressChartData = {};
+
+  if (
+    habitStats.totalValuePerDayCurrentWeek &&
+    Array.isArray(habitStats.totalValuePerDayCurrentWeek)
+  ) {
+    habitStats.totalValuePerDayCurrentWeek.forEach((value, index) => {
+      dailyProgressChartData[daysOfWeek[index]] = value;
+    });
   }
 
   return (
@@ -214,10 +231,6 @@ export default function SelectedTask() {
           />
         </Paper>
 
-        {/* 
-        
-        ================== METRICS, UPDATE =========================================
-        
         <Paper
           elevation={3}
           sx={{
@@ -241,30 +254,23 @@ export default function SelectedTask() {
               label="View Chart"
               onChange={handleChartChange}
             >
-              <MenuItem value="hours">Hours Spent This Week</MenuItem>
-              <MenuItem value="tasks">Tasks Completed</MenuItem>
+              <MenuItem value="dailyProgress">
+                Daily Progress This Week
+              </MenuItem>
+              {/* Add more MenuItem options in the future */}
             </Select>
           </FormControl>
 
-          {selectedChart === "hours" && (
+          {selectedChart === "dailyProgress" && (
             <VisualInsight
-              title="Hours Spent This Week"
-              chartLabel="Hours"
-              chartData={categoryHours}
+              title="Daily Progress This Week"
+              chartLabel={
+                habitStats.type === "checkmark" ? "Completions" : "Minutes"
+              }
+              chartData={dailyProgressChartData}
             />
           )}
-
-          {selectedChart === "tasks" && (
-            <VisualInsight
-              title="Tasks Completed"
-              chartLabel="Tasks"
-              chartData={{
-                "This Week": tasksCompleted["This Week"],
-                "Last Week": tasksCompleted["Last Week"],
-              }}
-            />
-          )}
-        </Paper> */}
+        </Paper>
       </Box>
     </Box>
   );
