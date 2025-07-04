@@ -279,8 +279,29 @@ const tasksSlice = createSlice({
     builder
       .addCase(addTask.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.taskList.push(action.payload);
         state.error = null;
+
+        const newTask = action.payload;
+
+        const dayNames = [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ];
+
+        const today = dayNames[new Date().getDay()];
+
+        if (
+          newTask.days &&
+          Array.isArray(newTask.days) &&
+          newTask.days.includes(today)
+        ) {
+          state.taskList.push(newTask);
+        }
       })
       .addCase(addTask.rejected, (state, action) => {
         state.status = "failed";
