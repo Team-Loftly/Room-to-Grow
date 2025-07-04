@@ -98,14 +98,13 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
     }
   }, [isSelected, index, dispatch]);
 
-  const DynamicFurniture = loadFurniture(item.model);
+  const DynamicFurniture = loadFurniture(item.decorId.modelID);
 
   return (
     <group
       ref={groupRef}
       position={item.position}
       rotation={item.rotation}
-      scale={item.scale}
       onClick={(e) => {
         e.stopPropagation();
         onSelect(index);
@@ -119,7 +118,7 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
   );
 }
 
-export default function RoomScene({ isEditable }) {
+export default function RoomScene({ isEditable = false }) {
   const dispatch = useDispatch();
 
   useEffect(() => {

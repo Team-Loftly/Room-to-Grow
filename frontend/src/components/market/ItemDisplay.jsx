@@ -35,7 +35,15 @@ export default function ItemDisplay() {
       return;
     }
 
-    if (currentItems.some((item) => item.name === selectedItem.name)) {
+    console.log("Current items:", currentItems);
+    console.log("Selected item:", selectedItem);
+    if (
+      currentItems.some(
+        (item) =>
+          item.decorId === selectedItem._id ||
+          item.decorId._id === selectedItem._id
+      )
+    ) {
       setPurchaseMessage("You already own this item.");
       return;
     }
@@ -57,7 +65,7 @@ export default function ItemDisplay() {
           Loading...
         </Typography>
       </Stack>
-    )
+    );
   }
   return (
     <Card
