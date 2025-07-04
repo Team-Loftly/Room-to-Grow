@@ -14,7 +14,7 @@ export default function createRoomRouter(requireAuth) {
       // TODO: Get check that the roomId belongs to the current user
       const room = await Rooms.findOne({ userId: user_id })
         .populate("decorations")
-        .populate("decorations.decorId");
+        .populate("decorations.decorId"); // populate the decorId so full decoration details are available
 
       if (!room) {
         return res
@@ -34,7 +34,7 @@ export default function createRoomRouter(requireAuth) {
   // create a new room for the user
   router.post("/create", requireAuth, async (req, res) => {
     const user_id = req.userId;
-    const room = req.body.room;
+    const decorations = req.body.decorations;
     const coins = req.body.coins;
     // TODO: Server side input validation
     try {
@@ -48,7 +48,8 @@ export default function createRoomRouter(requireAuth) {
       // create and save a new room
       const newRoom = new Rooms({
         userId: user_id,
-        decorations: room || [],
+        coins: coins || 1000,
+        decorations: decorations || [],
       });
       await newRoom.save();
       // return the populated room
@@ -68,43 +69,18 @@ export default function createRoomRouter(requireAuth) {
   router.post("/update", requireAuth, async (req, res) => {
     const user_id = req.userId;
     // req.body.decorations contains objects with
-    // 'model' (string), 'position', 'rotation', 'scale'
+    // 'model' (string), 'position', 'rotation'
     const clientDecorations = req.body.decorations;
+    const coins = req.body.coins;
     // TODO: Add server side validation
 
     try {
-      // Array to hold the transformed decorations with actual decorId (ObjectId)
-      const decorationsToSave = [];
-
-      // Iterate through client-provided decorations and find their corresponding decorId
-      for (const clientDecor of clientDecorations) {
-        // Find the decoration document by its modelID to get its _id (decorId)
-        const decorationDoc = await Decorations.findOne({
-          modelID: clientDecor.model,
-        });
-
-        if (!decorationDoc) {
-          // If a modelID doesn't exist, skip it
-          console.warn(
-            `Decoration with modelID '${clientDecor.model}' not found. Skipping.`
-          );
-          continue;
-        }
-
-        decorationsToSave.push({
-          decorId: decorationDoc._id, // Use actual ObjectId from the Decorations collection
-          placed: clientDecor.placed,
-          position: clientDecor.position,
-          rotation: clientDecor.rotation,
-          scale: clientDecor.scale,
-        });
-      }
-
       const updatedRoom = await Rooms.findOneAndUpdate(
         { userId: user_id },
         {
           $set: {
-            decorations: decorationsToSave, // Use the transformed array with ObjectIds
+            coins: coins,
+            decorations: clientDecorations, // Use the transformed array with ObjectIds
           },
         },
         { new: true } // return the updated document

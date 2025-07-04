@@ -2,15 +2,19 @@ import { Box, Grid, Typography } from "@mui/material";
 import { useState } from "react";
 import ItemTile from "./ItemTile";
 import { setSelectedItem } from "../../features/marketSlice";
+import { toggleDecorationPlacement } from "../../features/roomSlice";
 import { useDispatch } from "react-redux";
 
-export default function ItemGrid({ items, title }) {
+export default function ItemGrid({ items, title, isEditable = false }) {
   const [selectedId, setSelectedId] = useState(null);
   const dispatch = useDispatch();
 
   const handleSelect = (index, item) => {
     setSelectedId(index);
     dispatch(setSelectedItem(item));
+  };
+  const handleToggle = (index, item) => {
+    dispatch(toggleDecorationPlacement(index));
   };
 
   return (
@@ -44,11 +48,19 @@ export default function ItemGrid({ items, title }) {
       >
         {items.map((item, index) => (
           <Grid key={index} item xs={2} sm={4} md={4}>
-            <ItemTile
-              item={item}
-              selected={selectedId === index}
-              onSelect={() => handleSelect(index, item)}
-            />
+            {isEditable ? (
+              <ItemTile
+                item={item.decorId || item}
+                selected={selectedId === index}
+                onSelect={() => handleToggle(index, item)}
+              />
+            ) : (
+              <ItemTile
+                item={item.decorId || item}
+                selected={selectedId === index}
+                onSelect={() => handleSelect(index, item)}
+              />
+            )}
           </Grid>
         ))}
       </Grid>
