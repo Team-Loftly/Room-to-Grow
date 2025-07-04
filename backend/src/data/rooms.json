@@ -5,22 +5,146 @@
   "userId": {
     "$oid": "68660ef56fd728291e7ef8be"
   },
-  "coins": 400,
-  "decorations": [{
+  "coins": 800,
+  "decorations": [
+    {
       "decorId": {
         "$oid": "68660edaf079d0ff8d6cc86d"
       },
       "placed": true,
-      "position": [-10, 0, 10],
-      "rotation": [0, 3.141592653589793, 0]
+      "position": [
+        -10,
+        0,
+        10
+      ],
+      "rotation": [
+        0,
+        3.141592653589793,
+        0
+      ]
     },
     {
       "decorId": {
         "$oid": "68660edaf079d0ff8d6cc86e"
       },
       "placed": true,
-      "position": [-5, 0, -5],
-      "rotation": [0, 3.141592653589793, 0]
+      "position": [
+        -5,
+        0,
+        -5
+      ],
+      "rotation": [
+        0,
+        3.141592653589793,
+        0
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "6867544f9726722b96834d96"
+  },
+  "userId": {
+    "$oid": "6867544f9726722b96834d93"
+  },
+  "coins": 3400,
+  "decorations": [
+    {
+      "decorId": {
+        "$oid": "68660edaf079d0ff8d6cc86d"
+      },
+      "placed": true,
+      "position": [
+        20.361896059711235,
+        0,
+        24.436158236409995
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "decorId": {
+        "$oid": "68660edaf079d0ff8d6cc86e"
+      },
+      "placed": true,
+      "position": [
+        11.991325521285567,
+        0,
+        -2.6572974812205885
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ]
+    },
+    {
+      "decorId": {
+        "$oid": "68660edaf079d0ff8d6cc86f"
+      },
+      "placed": true,
+      "position": [
+        -19.482668133858482,
+        0,
+        -11.528593193563701
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "decorId": {
+        "$oid": "68660edaf079d0ff8d6cc871"
+      },
+      "placed": true,
+      "position": [
+        -6.2304799826064965,
+        9,
+        -20.243115106544515
+      ],
+      "rotation": [
+        0,
+        0.5890486225480862,
+        0
+      ]
+    },
+    {
+      "decorId": {
+        "$oid": "68660edaf079d0ff8d6cc870"
+      },
+      "placed": true,
+      "position": [
+        22.053697313266035,
+        2,
+        -6.2295763670993125
+      ],
+      "rotation": [
+        0,
+        -0.5890486225480862,
+        0
+      ]
+    },
+    {
+      "decorId": {
+        "$oid": "68660edaf079d0ff8d6cc872"
+      },
+      "placed": true,
+      "position": [
+        -11.197064558364715,
+        2,
+        16.367243719056276
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
     }
   ]
 }]

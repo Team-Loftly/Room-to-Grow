@@ -48,7 +48,7 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
         if (groupRef.current) {
           groupRef.current.position.set(
             intersectPoint.x,
-            item.position[1],
+            groupRef.current.position.y, // Keep original Y position
             intersectPoint.z
           );
         }
@@ -67,16 +67,21 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
       if (!groupRef.current) return;
       // Rotate around Y-axis in 11.25 degree increments
       const rotationStep = Math.PI / 16;
+      const positionStep = 0.5;
       if (event.key === "ArrowLeft") {
         groupRef.current.rotation.y += rotationStep;
       } else if (event.key === "ArrowRight") {
         groupRef.current.rotation.y -= rotationStep;
+      } else if (event.key === "ArrowUp") {
+        groupRef.current.position.y += positionStep;
+      } else if (event.key === "ArrowDown") {
+        groupRef.current.position.y -= positionStep;
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isSelected, camera, gl.domElement, item.rotation]);
+  }, [isSelected]);
 
   // When deselected, commit the final position and rotation to Redux
   useEffect(() => {
@@ -212,6 +217,11 @@ export default function RoomScene({ isEditable = false }) {
                 <strong>Move cursor:</strong>
                 <br />
                 reposition selected item
+              </div>
+              <div>
+                <strong> ↑ & ↓ key:</strong>
+                <br />
+                raise/lower selected item
               </div>
               <div>
                 <strong>← & → key:</strong>

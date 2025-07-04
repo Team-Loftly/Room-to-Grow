@@ -48,7 +48,7 @@ export default function createRoomRouter(requireAuth) {
       // create and save a new room
       const newRoom = new Rooms({
         userId: user_id,
-        coins: coins || 1000,
+        coins: coins || 2000,
         decorations: decorations || [],
       });
       await newRoom.save();
