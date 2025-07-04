@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import BookPage from "../components/tasks/BookPage";
-import StatPage from "./Stats";
-import MyTasks from "../components/tasks/MyTasks";
+import StatPage from "../components/tasks/right_page/SelectedTask";
+import MyTasks from "../components/tasks/left_page/MyTasks";
 import Book from "../assets/Book.png";
 
 export default function Tasks() {

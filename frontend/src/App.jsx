@@ -10,8 +10,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
 import { useEffect } from "react";
 import { isTokenExpired } from "./util";
-import { useNavigate
- } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 function App() {
   const navigate = useNavigate();
   // check the user's token each time they attempt to navigate away
