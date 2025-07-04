@@ -23,6 +23,7 @@ services:
       - /app/node_modules
     environment:
       - MONGO_URL=mongodb://mongo:27017/mydatabase
+      - TZ=America/Vancouver
     develop:
       watch:
         - path: ./backend/src

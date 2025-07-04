@@ -1,7 +1,11 @@
 import { Box, AppBar, Toolbar, Button, Typography, Stack } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { selectInventoryCoins, selectInventoryError, selectInventoryStatus } from "../features/inventorySlice";
+import {
+  selectInventoryCoins,
+  selectInventoryError,
+  selectInventoryStatus,
+} from "../features/inventorySlice";
 import { fetchInventory } from "../features/inventorySlice";
 import { useEffect } from "react";
 // nav bar that includes common functionality like log out, go to home, etc
@@ -34,6 +38,7 @@ export default function NavBar() {
   const logoutUser = () => {
     localStorage.removeItem("token");
     navigate("/");
+    window.location.reload();
   };
   return (
     <AppBar position="static" sx={{ backgroundColor: "#0a571f" }}>
@@ -48,10 +53,13 @@ export default function NavBar() {
           Room to Grow
         </Typography>
 
-        {status === "failed" ? <Typography color="error">Error: {error}</Typography>
-     : <Box sx={{ mr: 2 }}>
-          <Typography variant="body1">{coins} coins</Typography>
-        </Box>}
+        {status === "failed" ? (
+          <Typography color="error">Error: {error}</Typography>
+        ) : (
+          <Box sx={{ mr: 2 }}>
+            <Typography variant="body1">{coins} coins</Typography>
+          </Box>
+        )}
         <Button onClick={logoutUser} color="inherit">
           Logout
         </Button>
