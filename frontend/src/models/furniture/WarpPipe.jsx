@@ -12,7 +12,7 @@ const warpPipe = (props) => {
   const { nodes, materials } = useGLTF(warpPipeScene);
 
   // Set overall model scale here
-  const overallScale = [6, 6, 6];
+  const overallScale = [5, 5, 5];
 
   return (
     <group ref={groupRef} {...props} scale={overallScale}>

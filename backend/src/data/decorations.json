@@ -19,7 +19,7 @@
     "modelID": "DeskChair1",
     "price": 500,
     "category": "Furniture",
-    "image": "./images/modern-desk-chair.png"
+    "image": "./images/deskChair1.png"
   },
   {
     "_id": {
@@ -27,10 +27,10 @@
     },
     "name": "Comfy Bed",
     "description": "A comfy bed to rest in after a hard day of work.",
-    "modelID": "Bed",
+    "modelID": "Bed1",
     "price": 400,
     "category": "Furniture",
-    "image": "./images/bed.png"
+    "image": "./images/bed1.png"
   },
   {
     "_id": {
@@ -38,10 +38,10 @@
     },
     "name": "Electric Fan",
     "description": "It keeps you cool and roots you on as your biggest fan.",
-    "modelID": "ElectricFan",
+    "modelID": "Fan1",
     "price": 200,
     "category": "Furniture",
-    "image": "./images/fan.png"
+    "image": "./images/fan1.png"
   },
   {
     "_id": {
@@ -49,10 +49,10 @@
     },
     "name": "Photo Frame",
     "description": "This guy looks familiar...",
-    "modelID": "PhotoFrame",
+    "modelID": "Frame1",
     "price": 100,
     "category": "Furniture",
-    "image": "./images/frame.png"
+    "image": "./images/frame1.png"
   },
   {
     "_id": {
@@ -60,9 +60,9 @@
     },
     "name": "Pastel Rug",
     "description": "A super soft and colourful rug",
-    "modelID": "Rug",
+    "modelID": "Rug1",
     "price": 300,
     "category": "Furniture",
-    "image": "./images/rug.png"
+    "image": "./images/rug1.png"
   }
 ]

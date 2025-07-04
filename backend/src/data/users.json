@@ -4,4 +4,11 @@
   },
   "email": "test@test.com",
   "hashedPassword": "$2b$10$We3MOoXWHEdbX6WYDI9tV.eflEf/ngvMc8Vgw9Ut7lDPBtaINPJ/m"
+},
+{
+  "_id": {
+    "$oid": "6867544f9726722b96834d93"
+  },
+  "email": "test1@test.com",
+  "hashedPassword": "$2b$10$We3MOoXWHEdbX6WYDI9tV.eflEf/ngvMc8Vgw9Ut7lDPBtaINPJ/m"
 }]

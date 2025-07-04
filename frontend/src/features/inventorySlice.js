@@ -165,7 +165,6 @@ const inventorySlice = createSlice({
         placed: false,
         position: [0, 0, 0],
         rotation: [0, 0, 0],
-        scale: [1, 1, 1],
       });
     },
     removeItem: (state, action) => {
