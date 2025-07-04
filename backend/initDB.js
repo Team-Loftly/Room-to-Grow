@@ -1,11 +1,10 @@
 import fs from "fs";
 import path from "path";
+import mongoose from "mongoose";
 import User from "./src/models/Users.js";
 import Decorations from "./src/models/Decorations.js";
-import Inventory from "./src/models/Inventory.js";
 import Rooms from "./src/models/Rooms.js";
 import connectDB from "./src/connectDB.js";
-import mongoose from "mongoose";
 
 // converts {$oid: "..."} into mongoose.Types.ObjectId
 const mongoReviver = (key, value) => {
@@ -22,11 +21,33 @@ const mongoReviver = (key, value) => {
 
 const clearCollection = async (Model, collectionName) => {
   await Model.deleteMany();
-  console.log(`Cleared saved ${collectionName}`);
+  console.log(`Cleared ${collectionName}`);
 };
 
-// populates database with data from JSON files
-const loadAndInsertData = async (filePath, Model, collectionName) => {
+// Drop any index that matches a nested field path (e.g., "decorations.decorId")
+const dropIndexesMatching = async (Model, fieldPath) => {
+  const indexes = await Model.collection.indexes();
+  for (const index of indexes) {
+    const keys = Object.keys(index.key);
+    if (keys.includes(fieldPath)) {
+      await Model.collection.dropIndex(index.name);
+      console.log(`Dropped index on "${fieldPath}": ${index.name}`);
+    }
+  }
+};
+
+// Optional check for duplicate decorIds inside a single room
+const hasDuplicateDecorIds = (decorations) => {
+  const ids = decorations.map((d) => d.decorId.toString());
+  return new Set(ids).size !== ids.length;
+};
+
+const loadAndInsertData = async (
+  filePath,
+  Model,
+  collectionName,
+  checkDuplicates = false
+) => {
   try {
     const absolutePath = path.resolve(filePath);
     const rawData = fs.readFileSync(absolutePath, "utf8");
@@ -41,11 +62,18 @@ const loadAndInsertData = async (filePath, Model, collectionName) => {
       return;
     }
 
-    // insertMany for arrays, create for single objects
+    if (checkDuplicates && Array.isArray(dataToInsert)) {
+      for (const item of dataToInsert) {
+        if (hasDuplicateDecorIds(item.decorations)) {
+          console.warn(`Duplicate decorId found in room ${item._id}`);
+        }
+      }
+    }
+
     if (Array.isArray(dataToInsert)) {
       await Model.insertMany(dataToInsert);
     } else {
-      await Model.create(dataToInsert); // single object insertion
+      await Model.create(dataToInsert);
     }
     console.log(`Seeded ${collectionName}`);
   } catch (error) {
@@ -58,25 +86,22 @@ const seed = async () => {
   await connectDB();
 
   try {
-    // clear collections
-    await clearCollection(User, "registered users");
-    await clearCollection(Inventory, "created inventories");
-    await clearCollection(Decorations, "saved decorations");
-    await clearCollection(Rooms, "saved rooms");
+    // Clear collections
+    await clearCollection(User, "users");
+    await clearCollection(Decorations, "decorations");
+    await clearCollection(Rooms, "rooms");
 
-    // load and insert data
+    // Drop any index on decorations.decorId to prevent conflicts
+    await dropIndexesMatching(Rooms, "decorations.decorId");
+
+    // Seed data
     await loadAndInsertData(
       "./src/data/decorations.json",
       Decorations,
       "decorations"
     );
     await loadAndInsertData("./src/data/users.json", User, "users");
-    await loadAndInsertData(
-      "./src/data/inventories.json",
-      Inventory,
-      "inventories"
-    );
-    await loadAndInsertData("./src/data/rooms.json", Rooms, "rooms");
+    await loadAndInsertData("./src/data/rooms.json", Rooms, "rooms", true); // check for duplicates
   } catch (error) {
     console.error("An error occurred during the seeding process:", error);
   } finally {

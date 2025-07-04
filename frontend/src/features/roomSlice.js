@@ -45,13 +45,7 @@ export const updateRoom = createAsyncThunk(
       const response = await axios.post(
         `${BASE_API_URL}/rooms/update`,
         {
-          decorations: state.decorations.map((decoration) => ({
-            model: decoration.model,
-            placed: decoration.placed,
-            position: decoration.position,
-            rotation: decoration.rotation,
-            scale: decoration.scale,
-          })),
+          decorations: state.decorations,
         },
         {
           headers: {
@@ -143,6 +137,12 @@ const roomSlice = createSlice({
         state.decorations[index].rotation = rotation;
       }
     },
+    toggleDecorationPlacement(state, action) {
+      const index = action.payload;
+      if (state.decorations[index]) {
+        state.decorations[index].placed = !state.decorations[index].placed;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -151,13 +151,7 @@ const roomSlice = createSlice({
       })
       .addCase(fetchRoom.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.decorations = action.payload.decorations.map((decoration) => ({
-          model: decoration.decorId.modelID, // Extract modelID from decorId object
-          placed: decoration.placed,
-          position: decoration.position,
-          rotation: decoration.rotation,
-          scale: decoration.scale,
-        }));
+        state.decorations = action.payload.decorations;
       })
       .addCase(fetchRoom.rejected, (state, action) => {
         state.status = "failed";
@@ -166,6 +160,9 @@ const roomSlice = createSlice({
   },
 });
 
-export const { updateDecorationPosition, updateDecorationRotation } =
-  roomSlice.actions;
+export const {
+  updateDecorationPosition,
+  updateDecorationRotation,
+  toggleDecorationPlacement,
+} = roomSlice.actions;
 export default roomSlice.reducer;

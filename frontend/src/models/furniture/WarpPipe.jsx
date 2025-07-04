@@ -8,10 +8,14 @@ import { useGLTF } from "@react-three/drei";
 import warpPipeScene from "../../assets/3d/furniture/warpPipe.glb";
 
 const warpPipe = (props) => {
-  const roomRef = useRef();
+  const groupRef = useRef();
   const { nodes, materials } = useGLTF(warpPipeScene);
+
+  // Set overall model scale here
+  const overallScale = [6, 6, 6];
+
   return (
-    <group {...props} ref={roomRef}>
+    <group ref={groupRef} {...props} scale={overallScale}>
       <mesh
         castShadow
         receiveShadow

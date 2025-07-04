@@ -63,7 +63,7 @@ function EditRoom() {
       }}
     >
       <Room isEditable={true} />
-      <ItemGrid items={decorations} title="Inventory" />
+      <ItemGrid items={decorations} title="Inventory" isEditable={true} />
     </Stack>
   );
 }

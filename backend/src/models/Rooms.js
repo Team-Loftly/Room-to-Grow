@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-// TODO: need to validate that position, rotation, and scale are arrays of exactly 3 numbers
+// TODO: need to validate that position and rotation are arrays of exactly 3 numbers
 const roomDecorSchema = new mongoose.Schema({
   decorId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -20,10 +20,6 @@ const roomDecorSchema = new mongoose.Schema({
     type: [Number],
     required: true,
   },
-  scale: {
-    type: [Number],
-    required: false, // scale is optional
-  },
 });
 
 const roomSchema = new mongoose.Schema({
@@ -32,6 +28,7 @@ const roomSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  coins: Number,
   decorations: [roomDecorSchema],
 });
 
