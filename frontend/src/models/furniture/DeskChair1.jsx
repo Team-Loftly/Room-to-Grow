@@ -21,15 +21,10 @@ const deskChair1 = (props) => {
         receiveShadow
         geometry={nodes.pCube101.geometry}
         material={materials.blanc}
-        position={[0, 0, -0.116]}
         rotation={[-Math.PI / 2, 0, -Math.PI]}
         scale={-0.01}
       />
-      <group
-        position={[0, 0, -0.116]}
-        rotation={[-Math.PI / 2, 0, -Math.PI]}
-        scale={-0.01}
-      >
+      <group rotation={[-Math.PI / 2, 0, -Math.PI]} scale={-0.01}>
         <mesh
           castShadow
           receiveShadow
@@ -54,16 +49,14 @@ const deskChair1 = (props) => {
         receiveShadow
         geometry={nodes.pCube104.geometry}
         material={materials.noir}
-        position={[0, 0, -0.116]}
         rotation={[-Math.PI / 2, 0, -Math.PI]}
-        scale={-0.01}
+        scale={-0.012}
       />
       <mesh
         castShadow
         receiveShadow
         geometry={nodes.pCube125.geometry}
         material={materials.blanc}
-        position={[0, 0, -0.116]}
         rotation={[-Math.PI / 2, 0, -Math.PI]}
         scale={-0.01}
       />
@@ -72,7 +65,6 @@ const deskChair1 = (props) => {
         receiveShadow
         geometry={nodes.pCube126.geometry}
         material={materials.blanc}
-        position={[0, 0, -0.116]}
         rotation={[-Math.PI / 2, 0, -Math.PI]}
         scale={-0.01}
       />
@@ -81,7 +73,6 @@ const deskChair1 = (props) => {
         receiveShadow
         geometry={nodes.pCube138.geometry}
         material={materials.blanc}
-        position={[0, 0, -0.116]}
         rotation={[-Math.PI / 2, 0, -Math.PI]}
         scale={-0.01}
       />
@@ -90,7 +81,6 @@ const deskChair1 = (props) => {
         receiveShadow
         geometry={nodes.pCube139.geometry}
         material={materials.turquoise}
-        position={[0, 0, -0.116]}
         rotation={[-Math.PI / 2, 0, -Math.PI]}
         scale={-0.01}
       />
@@ -99,7 +89,6 @@ const deskChair1 = (props) => {
         receiveShadow
         geometry={nodes.pCube140.geometry}
         material={materials.bleu}
-        position={[0, 0, -0.116]}
         rotation={[-Math.PI / 2, 0, -Math.PI]}
         scale={-0.01}
       />
@@ -108,7 +97,6 @@ const deskChair1 = (props) => {
         receiveShadow
         geometry={nodes.pCylinder66.geometry}
         material={materials.noir}
-        position={[0, 0, -0.116]}
         rotation={[-Math.PI / 2, 0, -Math.PI]}
         scale={-0.01}
       />
@@ -117,7 +105,6 @@ const deskChair1 = (props) => {
         receiveShadow
         geometry={nodes.pCylinder67.geometry}
         material={materials.noir}
-        position={[0, 0, -0.116]}
         rotation={[-Math.PI / 2, 0, -Math.PI]}
         scale={-0.01}
       />
@@ -126,7 +113,6 @@ const deskChair1 = (props) => {
         receiveShadow
         geometry={nodes.pCylinder70.geometry}
         material={materials.turquoise}
-        position={[0.006, -0.003, -0.129]}
         rotation={[-Math.PI / 2, 0, -Math.PI]}
         scale={-0.01}
       />
@@ -135,15 +121,10 @@ const deskChair1 = (props) => {
         receiveShadow
         geometry={nodes.pSphere137.geometry}
         material={materials.light}
-        position={[-0.359, 0.355, -0.089]}
         rotation={[-Math.PI / 2, 0, -Math.PI]}
         scale={-0.012}
       />
-      <group
-        position={[0, 0, -0.116]}
-        rotation={[-Math.PI / 2, 0, -Math.PI]}
-        scale={-0.01}
-      >
+      <group rotation={[-Math.PI / 2, 0, -Math.PI]} scale={-0.01}>
         <mesh
           castShadow
           receiveShadow
@@ -162,25 +143,24 @@ const deskChair1 = (props) => {
         receiveShadow
         geometry={nodes.Mesh12.geometry}
         material={materials.beige}
-        position={[-0.166, 0, -0.132]}
+        position={[-0.006, -0.003, -0.004]}
         rotation={[-Math.PI / 2, 0, -2.324]}
-        scale={-0.01}
+        scale={-0.011}
       />
       <mesh
         castShadow
         receiveShadow
         geometry={nodes.pCube163.geometry}
         material={materials.beige}
-        position={[-0.098, 0.243, 0.098]}
+        position={[-0.006, -0.003, -0.004]}
         rotation={[-1.569, 0.184, -1.58]}
-        scale={[-0.118, -0.006, -0.03]}
+        scale={[-0.128, -0.007, -0.032]}
       />
       <mesh
         castShadow
         receiveShadow
         geometry={nodes.pCube167.geometry}
         material={materials.noir}
-        position={[-0.294, 0.241, 0.045]}
         rotation={[-Math.PI / 2, 0, 3.06]}
         scale={[-0.045, -0.153, -0.025]}
       />
@@ -189,7 +169,6 @@ const deskChair1 = (props) => {
         receiveShadow
         geometry={nodes.pCube168.geometry}
         material={materials.turquoise}
-        position={[-0.29, 0.229, 0.181]}
         rotation={[-Math.PI / 2, 0, -2.993]}
         scale={[-0.055, -0.055, -0.001]}
       />
