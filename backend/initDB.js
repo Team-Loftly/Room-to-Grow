@@ -26,6 +26,18 @@ const clearCollection = async (Model, collectionName) => {
 
 // Drop any index that matches a nested field path (e.g., "decorations.decorId")
 const dropIndexesMatching = async (Model, fieldPath) => {
+  const collections = await mongoose.connection.db.listCollections().toArray();
+  const collectionExists = collections.some(
+    (col) => col.name === Model.collection.name
+  );
+
+  if (!collectionExists) {
+    console.warn(
+      `Collection "${Model.collection.name}" does not exist. Skipping index drop.`
+    );
+    return;
+  }
+
   const indexes = await Model.collection.indexes();
   for (const index of indexes) {
     const keys = Object.keys(index.key);
