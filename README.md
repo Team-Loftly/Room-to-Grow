@@ -29,10 +29,11 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
   - npm test
   - open backend/mochawesome-report/mochawesome.html in your browser to view the results
 
-### Marketplace backend
+### Marketplace
 - We've implemented our marketplace backend as follows:
   - There's a /decor API that returns marketplace items stored in our Decorations collection. These items are stored in a json file initially and seeded to our collection when the server initializes.
   - Market items are fetched when you navigate to the marketplace page and then stored in our marketSlice.
+- Five new 3D models have been added that are availble for purchase and can be placed in users' rooms
 
 ### Inventory backend
 - We've implemented our user inventory backend as follows:
@@ -63,6 +64,17 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
   - Add a timeout feature if an incorrect password is entered too many times
   - The isTokenExpired check is stored in the frontend- so maybe it could be disabled by by a malicious person to get by with an invalid token. Even then, the backend API endpoints would be protected as that does its own validation, but there's room for improvement here.
   - As we add more API endpoints, we need to take care to prevent against SQL injection attacks for any endpoints accepting user inputs - especially the tasks page.
+
+### Edit Room Page
+- The user's personalized room model now displays on the left side of the Edit Room page, beside their inventory
+- Furniture is dynamically and lazily loaded
+- Users can now interact with the items in their room
+  - Left clicking on an object picks it up, and clicking a second time places it
+  - A selected object can be rotated using the left and right arrow keys
+  - Moving the cursor while an object is selected repositions it in the room
+  - Users can add or remove an item from the room by clicking on the corresponding item card in their inventory
+  - Deselecting an object updates its position and rotation in the redux store
+  - When the "Save Changes" button is clicked, the updated list of rooms decorations is sent to the backend
 
 ## M2
 ### Home Page
