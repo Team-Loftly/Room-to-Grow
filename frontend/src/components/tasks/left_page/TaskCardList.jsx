@@ -10,8 +10,8 @@ export default function TaskCardList() {
   const dispatch = useDispatch();
   const tasks = useSelector((state) => state.tasks.taskList);
   const completed_tasks = useSelector((state) => state.tasks.completedTaskList);
-  const skipped_tasks = useSelector((state) => state.tasks.completedTaskList);
-  const failed_tasks = useSelector((state) => state.tasks.completedTaskList);
+  const skipped_tasks = useSelector((state) => state.tasks.skippedTaskList);
+  const failed_tasks = useSelector((state) => state.tasks.failedTaskList);
   const status = useSelector((state) => state.tasks.status);
   const error = useSelector((state) => state.tasks.error);
 

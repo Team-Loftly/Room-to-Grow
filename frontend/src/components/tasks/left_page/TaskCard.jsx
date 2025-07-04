@@ -19,6 +19,8 @@ import {
   updateProgress,
   setIsDeleteSnackbarOpen,
   setIsCompletionSnackbarOpen,
+  markSkipped,
+  markFailed,
 } from "../../../features/tasksSlice";
 import { addCoinsAndUpdate } from "../../../features/inventorySlice";
 import { completeTask } from "../../../features/metricsSlice";
@@ -78,6 +80,16 @@ export default function TaskCard({ task, task_status }) {
   const handleUndo = () => {
     handleMenuClose();
     dispatch(updateProgress({ taskId: task._id, value: -task.progress.value }));
+  };
+
+  const handleSkip = () => {
+    handleMenuClose();
+    dispatch(markSkipped(task._id));
+  };
+
+  const handleFail = () => {
+    handleMenuClose();
+    dispatch(markFailed(task._id));
   };
 
   const handleTaskCardClick = () => {
@@ -251,9 +263,20 @@ export default function TaskCard({ task, task_status }) {
           }}
         >
           <MenuItem onClick={handleEditClick}>Edit</MenuItem>
+
           <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
           {task_status && (
             <MenuItem onClick={handleUndo}>Undo {task_status}</MenuItem>
+          )}
+          {!task_status && (
+            <>
+              <MenuItem onClick={handleSkip}>
+                Mark Skipped {task_status}
+              </MenuItem>
+              <MenuItem onClick={handleFail}>
+                Mark Failed {task_status}
+              </MenuItem>
+            </>
           )}
         </Menu>
       </Paper>

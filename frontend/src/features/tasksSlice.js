@@ -158,6 +158,72 @@ export const updateProgress = createAsyncThunk(
   }
 );
 
+export const markSkipped = createAsyncThunk(
+  "tasks/markSkipped",
+  async (taskId, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `${BASE_API_URL}/habits/${taskId}/skip`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const backendHabit = response.data;
+
+      const frontendTask = { ...backendHabit, ...backendHabit };
+
+      return frontendTask;
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        return rejectWithValue(error.response.data.message);
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const markFailed = createAsyncThunk(
+  "tasks/markFailed",
+  async (taskId, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `${BASE_API_URL}/habits/${taskId}/fail`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const backendHabit = response.data;
+
+      const frontendTask = { ...backendHabit, ...backendHabit };
+
+      return frontendTask;
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        return rejectWithValue(error.response.data.message);
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const fillTaskLists = (state, tasks) => {
   state.taskList = [];
   state.completedTaskList = [];
@@ -369,6 +435,42 @@ const tasksSlice = createSlice({
             state.failedTaskList.splice(index, 1);
           }
         }
+      })
+      .addCase(markSkipped.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(markSkipped.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = null;
+
+        let index = state.taskList.findIndex(
+          (task) => task._id === action.payload._id
+        );
+
+        if (index !== -1) {
+          state.taskList.splice(index, 1);
+        }
+
+        state.skippedTaskList.push(action.payload);
+      })
+      .addCase(markFailed.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(markFailed.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = null;
+
+        let index = state.taskList.findIndex(
+          (task) => task._id === action.payload._id
+        );
+
+        if (index !== -1) {
+          state.taskList.splice(index, 1);
+        }
+
+        state.failedTaskList.push(action.payload);
       });
   },
 });
