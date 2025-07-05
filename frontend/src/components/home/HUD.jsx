@@ -13,7 +13,7 @@ export default function HUD() {
         }}
         className="hover:cursor-pointer hover:transform hover:scale-120 transition-transform duration-200"
       >
-        Tasks
+        Habits
       </button>
       <button
         onClick={() => {
