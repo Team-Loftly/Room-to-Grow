@@ -38,6 +38,32 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
   - Market items are fetched when you navigate to the marketplace page and then stored in our marketSlice.
 - Five new 3D models have been added that are availble for purchase and can be placed in users' rooms
 
+### Habits backend
+- The backend utilizes a dedicated Habit collection in the database. Each document in this collection maps a userId to a specific habit's details. This includes:
+    - userId: Linking the habit to a particular user account.
+    - title, description, days, priority, type, hours, minutes, checkmarks: Defining the habit's core properties and goals.
+    - dailyStatuses: An embedded array of sub-documents that record the daily progress for the habit, including the date, status (complete, incomplete, skipped, failed), and value (e.g., minutes or checkmarks completed).
+    - currentStreak: Tracks the consecutive days a habit has been completed.
+    - lastStreakUpdateDate: Records when the streak was last updated.
+- We've implemented our user habits state backend as follows:
+  - There's a /habits API with the following endpoints:
+      - GET /: This endpoint retrieves a user's habits for a specific date. If no date is provided, it defaults to the current day. It's used to display a user's daily habit list and their progress for that particular day.
+      - GET /all: This endpoint fetches all habits associated with the authenticated user, without including their detailed daily status history. It's useful for displaying a comprehensive list of all habits a user has created.
+      - POST /: This endpoint allows a user to create a new habit. It expects details such as the habit's title, description, scheduled days, priority, type (timed or checkmark), and goal-related values (hours/minutes for timed, checkmarks for checkmark).
+      - PUT /:id: This endpoint updates an existing habit identified by its ID. Users can modify various habit attributes like title, description, scheduled days, priority, and type-specific goals.
+      - DELETE /:id: This endpoint removes a habit from the user's collection, identified by its unique ID.
+      - POST /:id/complete: This endpoint is used to record progress for a specific habit on the current day. For "timed" habits, it updates the minutes/hours completed, and for "checkmark" habits, it updates the count. It also automatically updates the habit's status (incomplete/complete) and streak based on the progress.
+      - POST /:id/skip: This endpoint allows a user to mark a habit as "skipped" for the current day. This action affects the habit's streak calculation, typically preventing a break while not counting as completion.
+      - POST /:id/fail: This endpoint marks a habit as "failed" for the current day. This action explicitly breaks the habit's current streak.
+      - GET /:id/stats: This endpoint retrieves detailed statistics for a specific habit, including its current streak, total completed/failed/skipped days, total accumulated value (e.g., total minutes for timed habits), and daily values for the current week.
+
+### Habits frontend
+- Habits page has been reworked based on user feedback to provide a more streamlined and user-friendly UI.
+- This includes allowing users to manage all the habits they created, not just for the currenty day.
+- Having a view to allow users to see the habits they have scheduled for today.
+- A more intuitive way to log progress (+/- icons for checkmarks, timer icon for timed habits).
+- We replaced the general metrics component on the right half of the page with a habit stats component that shows the details of the habit that the user selected, such as their current streak, total completions, skipped, failed, etc.
+
 ### Rooms backend
 - A users Rooms state will store a user's coins and the state of items the user owns in their room.
 - We've implemented our user room state backend as follows:
