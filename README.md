@@ -17,7 +17,7 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 ## M3
 
 ### Test Suite
-- Our test suite is located in backend/test
+- Our test suite is located in backend/test: https://github.students.cs.ubc.ca/CPSC455-2025S/team02/tree/Milestone3/backend/test
 - We have created test suites for our API calls and operations, mocking real use-cases and scenarios for our application.
 - Our testing tools:
   - Test env - Mocha + chai
@@ -80,7 +80,12 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 - The home page and edit room pages now are fully linked. The frontend has been restructured so both pages use a single component Room.jsx to manage the 3D scene.
 - When the component is passed isEditable = true, controls are enabled to modify the room and change the state of decorations the user owns. After saving to the backend, upon refresh or navigation to home, the changes will persist.
 - Items owned by the user are dynamically imported as seperate jsx asset components based on the modelID passed from the decoration object.
+- The user's personalized room model now displays on the left side of the Edit Room page, beside their inventory
 - Things like OrbitControls and React Three Fibers built in tools allowed us to implement intuitive controls for moving around items and rotation.
+  - Left clicking on an object picks it up, and clicking a second time places it
+  - A selected object can be rotated using the left and right arrow keys
+  - Moving the cursor while an object is selected repositions it in the room
+  - Users can add or remove an item from the room by clicking on the corresponding item card in their inventory
 
 ### Security Vulnerability Considerations
 - We've added a number of features to ensure our application is secure.
@@ -102,16 +107,12 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
   - The isTokenExpired check is stored in the frontend- so maybe it could be disabled by by a malicious person to get by with an invalid token. Even then, the backend API endpoints would be protected as that does its own validation, but there's room for improvement here.
   - As we add more API endpoints, we need to take care to prevent against SQL injection attacks for any endpoints accepting user inputs - especially the tasks page.
 
-### Edit Room Page
-- The user's personalized room model now displays on the left side of the Edit Room page, beside their inventory
-- Furniture is dynamically and lazily loaded
-- Users can now interact with the items in their room
-  - Left clicking on an object picks it up, and clicking a second time places it
-  - A selected object can be rotated using the left and right arrow keys
-  - Moving the cursor while an object is selected repositions it in the room
-  - Users can add or remove an item from the room by clicking on the corresponding item card in their inventory
-  - Deselecting an object updates its position and rotation in the redux store
-  - When the "Save Changes" button is clicked, the updated list of rooms decorations is sent to the backend
+### Bug tracking
+- As part of our development process during Milestone 3, we maintained an active bug tracking workflow using GitHub Issues
+  - Initial Bug Reports: We created GitHub Issues based on bugs identified during the last crossplay session, which provided a solid foundation for our debugging efforts
+  - Ongoing Tracking: Throughout this milestone, we logged the new bugs we encountered during development and testing
+  - Resolution: We closed issues after the successful submission and merging of corresponding pull requests
+- This process ensured we were consistently recording, classifying, and resolving bugs in a timely and organized manner, contributing to overall application stability and progress
 
 ## M2
 ### Home Page
@@ -181,4 +182,3 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 
 ## References
 - The template for backend server logic was referenced from Alex's A2, linked here: https://github.students.cs.ubc.ca/CPSC455-2025S/students-alex602.
- 
