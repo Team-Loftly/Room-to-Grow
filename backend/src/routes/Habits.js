@@ -151,11 +151,14 @@ export default function createHabitsRouter(requireAuth) {
     const user_id = req.userId;
 
     try {
-      const habits = await Habit.find({
-        userId: user_id,
-      }, {
-        dailyStatuses: 0 
-      }).lean();
+      const habits = await Habit.find(
+        {
+          userId: user_id,
+        },
+        {
+          dailyStatuses: 0,
+        }
+      ).lean();
 
       res.status(StatusCodes.OK).json(habits);
     } catch (err) {
@@ -208,7 +211,7 @@ export default function createHabitsRouter(requireAuth) {
           "Hours and minutes are required for timed habits and can't both be 0.",
       });
     }
-    if (type === "checkmark" && checkmarks === null && checkmarks < 1) {
+    if (type === "checkmark" && (checkmarks === null || checkmarks < 1)) {
       return res.status(StatusCodes.BAD_REQUEST).json({
         message:
           "Checkmarks count is required for checkmark habits and can't be less than 1.",
@@ -274,6 +277,12 @@ export default function createHabitsRouter(requireAuth) {
       return res
         .status(StatusCodes.BAD_REQUEST)
         .json({ message: "Missing required habit fields." });
+    }
+
+    if (!["timed", "checkmark"].includes(type)) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "Invalid habit type." });
     }
 
     if (
