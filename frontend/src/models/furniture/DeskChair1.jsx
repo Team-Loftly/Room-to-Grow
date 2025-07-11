@@ -15,7 +15,7 @@ const DeskChair1 = (props) => {
   const overallScale = [50, 50, 50];
 
   return (
-    <group {...props} dispose={null} ref={groupRef} scale={overallScale}>
+    <group {...props} ref={groupRef} scale={overallScale} position={[0, -1, 0]}>
       <mesh
         castShadow
         receiveShadow

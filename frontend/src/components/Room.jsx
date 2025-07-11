@@ -105,7 +105,7 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
   return (
     <group
       ref={groupRef}
-      position={[item.position[0], 0, item.position[2]]}
+      position={item.position}
       rotation={item.rotation}
       onClick={(e) => {
         e.stopPropagation();
