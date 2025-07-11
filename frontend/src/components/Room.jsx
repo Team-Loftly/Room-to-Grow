@@ -1,9 +1,12 @@
+// RoomScene.jsx
+
 import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { lazy, Suspense, useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import * as THREE from "three";
 import EmptyRoom from "../models/EmptyRoom";
+import BaseRoom from "../models/BaseRoom";
 import {
   fetchRoom,
   updateRoom,
@@ -28,11 +31,8 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
   const { camera, gl } = useThree();
   const raycaster = useRef(new THREE.Raycaster());
   const mouse = useRef(new THREE.Vector2());
-  const plane = useRef(
-    new THREE.Plane(new THREE.Vector3(0, 1, 0), -item.position[1])
-  );
+  const plane = useRef(new THREE.Plane(new THREE.Vector3(0, 1, 0), 0));
 
-  // Handle object dragging on mouse move
   useEffect(() => {
     if (!isSelected) return;
 
@@ -48,7 +48,7 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
         if (groupRef.current) {
           groupRef.current.position.set(
             intersectPoint.x,
-            groupRef.current.position.y, // Keep original Y position
+            groupRef.current.position.y,
             intersectPoint.z
           );
         }
@@ -59,13 +59,11 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [isSelected, camera, gl.domElement, item.position]);
 
-  // Handles rotation change
   useEffect(() => {
     if (!isSelected) return;
 
     const handleKeyDown = (event) => {
       if (!groupRef.current) return;
-      // Rotate around Y-axis in 11.25 degree increments
       const rotationStep = Math.PI / 16;
       const positionStep = 0.5;
       if (event.key === "ArrowLeft") {
@@ -83,7 +81,6 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isSelected]);
 
-  // When deselected, commit the final position and rotation to Redux
   useEffect(() => {
     if (!isSelected && groupRef.current) {
       const finalPos = groupRef.current.position.toArray();
@@ -108,7 +105,7 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
   return (
     <group
       ref={groupRef}
-      position={item.position}
+      position={[item.position[0], 0, item.position[2]]}
       rotation={item.rotation}
       onClick={(e) => {
         e.stopPropagation();
@@ -125,6 +122,7 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
 
 export default function RoomScene({ isEditable = false }) {
   const dispatch = useDispatch();
+  const lightTarget = useRef(new THREE.Object3D());
 
   useEffect(() => {
     dispatch(fetchRoom());
@@ -139,35 +137,31 @@ export default function RoomScene({ isEditable = false }) {
   };
 
   const { scale: roomScale, position: roomPosition } = adjustForScreenSize();
-
   const furnitureList = useSelector((state) => state.room.decorations);
   const [selectedDecor, setSelectedDecor] = useState(null);
 
-  // Used in "Changes Saved" toast notification
   const [saved, setSaved] = useState(false);
   const handleClose = (event, reason) => {
-    if (reason == "clickaway") {
+    if (reason === "clickaway") {
       return;
     }
     setSaved(false);
   };
 
-  // Handles the setting of selectedDecor when the mouse is clicked
   const handleObjectSelection = (index) => {
     if (!isEditable) return;
-    //    setSelectedDecor((prev) => (prev === index ? null : index)); !!!
     if (selectedDecor === index) {
       setSelectedDecor(null);
     } else {
       setSelectedDecor(index);
     }
   };
+
   const handleBackgroundClick = () => {
     if (!isEditable) return;
     setSelectedDecor(null);
   };
 
-  // Save transformations to the backend
   const handleEditRoom = () => {
     dispatch(updateRoom({ decorations: furnitureList }));
     setSaved(true);
@@ -251,17 +245,31 @@ export default function RoomScene({ isEditable = false }) {
         <Canvas
           camera={{ position: [-60, 48, 60], fov: 60 }}
           onPointerMissed={handleBackgroundClick}
+          shadows
         >
-          <ambientLight intensity={0.2} />
+          <ambientLight intensity={0.7} />
           <directionalLight
             color="#fff5b6"
-            position={[-60, 48, 60]}
+            position={[20, 60, 0]}
             intensity={1.5}
             castShadow
-          />
-          <EmptyRoom scale={roomScale} position={roomPosition} />
+            shadow-mapSize-width={2048}
+            shadow-mapSize-height={2048}
+            shadow-bias={-0.0005}
+            shadow-camera-near={1}
+            shadow-camera-far={200}
+            shadow-camera-left={-200}
+            shadow-camera-right={200}
+            shadow-camera-top={200}
+            shadow-camera-bottom={-200}
+          >
+            {/* Explicitly target the center of the floor */}
+            <primitive object={lightTarget.current} position={[0, -15, 0]} />
+          </directionalLight>
 
-          <group position={[0, -12, 0]}>
+          <BaseRoom scale={roomScale} position={roomPosition} />
+
+          <group position={[0, -15, 0]}>
             {furnitureList.map(
               (item, index) =>
                 item.placed && (
