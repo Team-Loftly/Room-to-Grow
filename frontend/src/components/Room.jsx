@@ -132,7 +132,7 @@ export default function RoomScene({ isEditable = false }) {
     const isSmallScreen = window.innerWidth < 800;
     return {
       scale: isSmallScreen ? [0.9, 0.9, 0.9] : [30, 30, 30],
-      position: [0, -15, 0],
+      position: [0, -10, 0],
     };
   };
 
@@ -263,13 +263,12 @@ export default function RoomScene({ isEditable = false }) {
             shadow-camera-top={200}
             shadow-camera-bottom={-200}
           >
-            {/* Explicitly target the center of the floor */}
-            <primitive object={lightTarget.current} position={[0, -15, 0]} />
+            <primitive object={lightTarget.current} position={[0, -10, 0]} />
           </directionalLight>
 
           <BaseRoom scale={roomScale} position={roomPosition} />
 
-          <group position={[0, -15, 0]}>
+          <group position={[0, -10, 0]}>
             {furnitureList.map(
               (item, index) =>
                 item.placed && (

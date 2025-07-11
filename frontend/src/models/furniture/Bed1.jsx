@@ -9,7 +9,6 @@ import bedScene from "../../assets/3d/furniture/bed1.glb";
 const Bed1 = (props) => {
   const groupRef = useRef();
   const { nodes, materials } = useGLTF(bedScene);
-  // Set overall model scale here
   const overallScale = [60, 60, 60];
 
   return (
@@ -18,7 +17,8 @@ const Bed1 = (props) => {
         castShadow
         receiveShadow
         geometry={nodes.Right_Pillow.geometry}
-        material={nodes.Right_Pillow.material}
+        material={materials.Blue}
+        position={[0.004, 0, 0.002]}
         rotation={[3.138, -0.046, -3.058]}
         scale={[-0.072, -0.013, -0.072]}
       />
@@ -26,7 +26,7 @@ const Bed1 = (props) => {
         castShadow
         receiveShadow
         geometry={nodes.Left_Pillow.geometry}
-        material={nodes.Left_Pillow.material}
+        material={materials.Blue}
         rotation={[3.138, -0.046, -3.058]}
         scale={[-0.072, -0.013, -0.072]}
       />
@@ -34,7 +34,7 @@ const Bed1 = (props) => {
         castShadow
         receiveShadow
         geometry={nodes.Mattress001.geometry}
-        material={nodes.Mattress001.material}
+        material={materials.White}
         rotation={[3.138, -0.046, -3.058]}
         scale={[-0.072, -0.013, -0.072]}
       />
@@ -42,7 +42,7 @@ const Bed1 = (props) => {
         castShadow
         receiveShadow
         geometry={nodes.Blanket001.geometry}
-        material={materials["Material.001"]}
+        material={materials.Blue}
         rotation={[3.138, -0.046, -3.058]}
         scale={[-0.072, -0.013, -0.072]}
       />
@@ -50,7 +50,7 @@ const Bed1 = (props) => {
         castShadow
         receiveShadow
         geometry={nodes.Bedframe.geometry}
-        material={materials.Material}
+        material={materials.Tan}
         rotation={[3.138, -0.046, -3.058]}
         scale={[-0.072, -0.013, -0.072]}
       />
