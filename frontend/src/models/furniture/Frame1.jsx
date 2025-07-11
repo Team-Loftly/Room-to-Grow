@@ -12,7 +12,7 @@ const Frame1 = (props) => {
   const { nodes, materials } = useGLTF(frameScene);
 
   // Set overall model scale here
-  const overallScale = [1.5, 1.5, 1.5];
+  const overallScale = [5, 5, 5];
 
   return (
     <group ref={groupRef} {...props} scale={overallScale}>
