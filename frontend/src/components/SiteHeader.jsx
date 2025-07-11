@@ -5,7 +5,7 @@ export default function SiteHeader() {
       variant="h2"
       gutterBottom
       sx={{
-        fontFamily: "Georgia",
+        fontFamily: "Caveat",
       }}
     >
       Room to Grow

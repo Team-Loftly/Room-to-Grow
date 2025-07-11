@@ -45,9 +45,9 @@ export default function NavBar() {
       <Toolbar>
         <Typography
           className="hover:cursor-pointer"
-          variant="h6"
+          variant="h4"
           component="div"
-          sx={{ flexGrow: 1 }}
+          sx={{ flexGrow: 1, fontFamily: "Caveat" }}
           onClick={() => navigate("/home")}
         >
           Room to Grow
@@ -57,10 +57,19 @@ export default function NavBar() {
           <Typography color="error">Error: {error}</Typography>
         ) : (
           <Box sx={{ mr: 2 }}>
-            <Typography variant="body1">{coins} coins</Typography>
+            <Typography
+              variant="body1"
+              sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 300 }}
+            >
+              {coins} coins
+            </Typography>
           </Box>
         )}
-        <Button onClick={logoutUser} color="inherit">
+        <Button
+          onClick={logoutUser}
+          color="inherit"
+          sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 400 }}
+        >
           Logout
         </Button>
       </Toolbar>
