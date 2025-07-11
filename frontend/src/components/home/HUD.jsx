@@ -6,7 +6,7 @@ export default function HUD() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   return (
-    <div className="flex top-0 left-0 w-full h-16 bg-gray-800 flex justify-around items-center text-white">
+    <div className="flex top-0 left-0 w-full h-16 flex justify-around items-center text-white text-bold ">
       <button
         onClick={() => {
           navigate("/tasks");
