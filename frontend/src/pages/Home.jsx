@@ -3,7 +3,7 @@ import TimerPopup from "../components/home/timerPopup";
 import Room from "../components/Room.jsx";
 import { useSelector } from "react-redux";
 import { Stack } from "@mui/material";
-import "../css/Home.css";
+import "../styling/Home.css";
 
 export default function Home() {
   const showTimer = useSelector((state) => state.timer.showTimer);

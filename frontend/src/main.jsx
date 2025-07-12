@@ -4,13 +4,17 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 import { store } from "./store";
 import { Provider } from "react-redux";
-import "./css/Home.css";
+import "./styling/Home.css";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "./styling/theme.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <App />
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
       </BrowserRouter>
     </Provider>
   </StrictMode>

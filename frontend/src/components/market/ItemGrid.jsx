@@ -21,21 +21,19 @@ export default function ItemGrid({ items, title, isEditable = false }) {
     <Box
       flexDirection="column"
       sx={{
-        height: "95%",
+        height: "90%",
         width: "60%",
         display: "flex",
-        bgcolor: "grey.200",
-        m: 3,
-        px: 5,
-        py: 2,
-        overflowY: "auto",
+        bgcolor: "rgba(255, 255, 255, 0.8)",
+        m: 4,
+        py: 3,
+
         borderRadius: 4,
       }}
     >
       <Typography
-        variant="h5"
+        variant="h4"
         align="center"
-        fontWeight="bold"
         gutterBottom
         sx={{ width: "100%" }}
       >
@@ -45,6 +43,7 @@ export default function ItemGrid({ items, title, isEditable = false }) {
         container
         spacing={{ xs: 1, md: 1 }}
         columns={{ xs: 4, sm: 8, md: 12 }}
+        sx={{ justifyContent: "space-evenly", overflowY: "auto" }}
       >
         {items.map((item, index) => (
           <Grid key={index} item xs={2} sm={4} md={4}>
@@ -53,12 +52,14 @@ export default function ItemGrid({ items, title, isEditable = false }) {
                 item={item.decorId || item}
                 selected={selectedId === index}
                 onSelect={() => handleToggle(index, item)}
+                isMarketplace={false}
               />
             ) : (
               <ItemTile
                 item={item.decorId || item}
                 selected={selectedId === index}
                 onSelect={() => handleSelect(index, item)}
+                isMarketplace={true}
               />
             )}
           </Grid>

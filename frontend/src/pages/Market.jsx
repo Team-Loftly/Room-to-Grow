@@ -51,13 +51,6 @@ function Market() {
   return (
     <Stack
       direction="row"
-      divider={
-        <Divider
-          orientation="vertical"
-          flexItem
-          sx={{ borderColor: "black", borderWidth: "1px" }}
-        />
-      }
       sx={{
         height: "100%",
         boxSizing: "border-box",
@@ -66,6 +59,10 @@ function Market() {
       }}
     >
       <ItemDisplay />
+      <Divider
+        orientation="vertical"
+        sx={{ borderColor: "white", borderWidth: "1px", height: "90%" }}
+      />
       <ItemGrid items={items} title="Marketplace" />
     </Stack>
   );
