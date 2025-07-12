@@ -9,6 +9,7 @@ import {
 import { fetchInventory } from "../features/inventorySlice";
 import { useEffect } from "react";
 import Room from "../components/Room.jsx";
+import Controls from "../components/edit/Controls.jsx";
 
 function EditRoom() {
   const dispatch = useDispatch();
@@ -48,13 +49,6 @@ function EditRoom() {
   return (
     <Stack
       direction="row"
-      divider={
-        <Divider
-          orientation="vertical"
-          flexItem
-          sx={{ borderColor: "black", borderWidth: "1px" }}
-        />
-      }
       sx={{
         height: "100%",
         boxSizing: "border-box",
@@ -62,6 +56,7 @@ function EditRoom() {
         alignItems: "center",
       }}
     >
+      <Controls />
       <Room isEditable={true} />
       <ItemGrid items={decorations} title="Inventory" isEditable={true} />
     </Stack>

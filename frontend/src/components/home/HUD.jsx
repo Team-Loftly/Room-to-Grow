@@ -9,6 +9,7 @@ import MarketplaceIcon from "@mui/icons-material/Storefront";
 import EditRoomIcon from "@mui/icons-material/Construction";
 import TimerIcon from "@mui/icons-material/AccessAlarm";
 
+// Formatting for the popups when hovering over an icon
 const CustomTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} placement="right" classes={{ popper: className }} />
 ))(({ theme }) => ({
@@ -16,14 +17,13 @@ const CustomTooltip = styled(({ className, ...props }) => (
     backgroundColor: "white",
     color: "black",
     fontSize: 18,
-    fontFamily: "Be Vietnam Pro",
-    fontWeight: 300,
   },
 }));
 
 export default function HUD() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const iconStyle = { color: "white", fontSize: 40 };
   return (
     <Stack
       spacing={4}
@@ -38,7 +38,7 @@ export default function HUD() {
             navigate("/tasks");
           }}
         >
-          <HabitsIcon sx={{ color: "white", fontSize: 40 }} />
+          <HabitsIcon sx={iconStyle} />
         </IconButton>
       </CustomTooltip>
       <CustomTooltip title="Marketplace">
@@ -47,7 +47,7 @@ export default function HUD() {
             navigate("/marketplace");
           }}
         >
-          <MarketplaceIcon sx={{ color: "white", fontSize: 40 }} />
+          <MarketplaceIcon sx={iconStyle} />
         </IconButton>
       </CustomTooltip>
       <CustomTooltip title="Edit Room">
@@ -56,7 +56,7 @@ export default function HUD() {
             navigate("/edit");
           }}
         >
-          <EditRoomIcon sx={{ color: "white", fontSize: 40 }} />
+          <EditRoomIcon sx={iconStyle} />
         </IconButton>
       </CustomTooltip>
       <CustomTooltip title="Timer">
@@ -65,7 +65,7 @@ export default function HUD() {
             dispatch(openTimer());
           }}
         >
-          <TimerIcon sx={{ color: "white", fontSize: 40 }} />
+          <TimerIcon sx={iconStyle} />
         </IconButton>
       </CustomTooltip>
     </Stack>

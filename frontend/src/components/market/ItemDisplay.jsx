@@ -3,6 +3,7 @@ import {
   CardContent,
   CardMedia,
   CardActions,
+  CardHeader,
   Typography,
   Button,
   Alert,
@@ -72,21 +73,22 @@ export default function ItemDisplay() {
       sx={{
         display: "flex",
         alignItems: "center",
+        justifyContent: "center",
         flexDirection: "column",
-        bgcolor: "grey.100",
-        borderRadius: 10,
-        width: "28%",
-        height: "80%",
-        marginLeft: 14,
-        marginRight: 14,
+        m: 4,
+        p: 2,
+        borderRadius: 4,
+        width: "40%",
+        height: "90%",
+        bgcolor: "rgba(255,255,255,0.8)",
+        overflowY: "auto",
       }}
     >
       <Typography
         variant="h4"
-        sx={{
-          marginTop: 1,
-          wordBreak: "break-word",
-        }}
+        align="center"
+        gutterBottom
+        sx={{ width: "100%" }}
       >
         {selectedItem.name}
       </Typography>
@@ -95,16 +97,16 @@ export default function ItemDisplay() {
         image={selectedItem.image}
         alt={selectedItem.category}
         sx={{
-          maxHeight: 400,
-          maxWidth: 400,
+          maxHeight: 300,
+          maxWidth: 300,
           objectFit: "contain",
-          borderRadius: 2,
+          borderRadius: 4,
         }}
       />
       <CardContent>
         <Typography
           sx={{
-            fontSize: 20,
+            fontSize: 15,
           }}
         >
           {selectedItem.description}
@@ -120,10 +122,11 @@ export default function ItemDisplay() {
           variant="contained"
           size="large"
           sx={{
-            fontSize: 25,
+            fontSize: 20,
+            bgcolor: "#0a571f",
           }}
         >
-          Buy for {selectedItem.price} coins!
+          Buy for {selectedItem.price} coins
         </Button>
       </CardActions>
       {purchaseMessage && (

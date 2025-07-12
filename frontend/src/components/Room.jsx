@@ -5,7 +5,6 @@ import { OrbitControls } from "@react-three/drei";
 import { lazy, Suspense, useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import * as THREE from "three";
-import EmptyRoom from "../models/EmptyRoom";
 import BaseRoom from "../models/BaseRoom";
 import {
   fetchRoom,
@@ -13,6 +12,7 @@ import {
   updateDecorationPosition,
   updateDecorationRotation,
 } from "../features/roomSlice";
+import Fab from "@mui/material/Fab";
 import Snackbar from "@mui/material/Snackbar";
 import Stack from "@mui/material/Stack";
 
@@ -187,60 +187,23 @@ export default function RoomScene({ isEditable = false }) {
         }}
       >
         {isEditable && (
-          <Stack
-            direction="column"
-            sx={{
+          <Fab
+            variant="extended"
+            onClick={handleEditRoom}
+            style={{
+              marginTop: "12px",
+              padding: "5px 10px",
+              backgroundColor: "#0a571f",
               color: "white",
+              borderRadius: "5px",
+              fontSize: "14px",
+              position: "fixed",
+              bottom: 20,
+              left: 20,
             }}
           >
-            <h4 style={{ margin: 0, fontWeight: "bold" }}>Controls</h4>
-            <Stack
-              direction="column"
-              spacing={2}
-              sx={{
-                fontSize: "12px",
-                mt: 1,
-              }}
-            >
-              <div>
-                <strong>Left click:</strong>
-                <br />
-                select/deselect item
-              </div>
-              <div>
-                <strong>Move cursor:</strong>
-                <br />
-                reposition selected item
-              </div>
-              <div>
-                <strong> ↑ & ↓ key:</strong>
-                <br />
-                raise/lower selected item
-              </div>
-              <div>
-                <strong>← & → key:</strong>
-                <br />
-                rotate selected item
-              </div>
-            </Stack>
-
-            <button
-              onClick={handleEditRoom}
-              style={{
-                marginTop: "12px",
-                padding: "5px 10px",
-                backgroundColor: "#0a571f",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                fontSize: "14px",
-                zIndex: 100,
-              }}
-            >
-              Save Changes
-            </button>
-          </Stack>
+            Save Changes
+          </Fab>
         )}
         <Canvas
           camera={{ position: [-60, 48, 60], fov: 60 }}
