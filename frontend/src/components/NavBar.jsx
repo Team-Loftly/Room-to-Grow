@@ -59,7 +59,7 @@ export default function NavBar() {
           <Button
             color="inherit"
             onClick={() => {
-              console.log("Quest button pressed");
+              navigate("/missions");
             }}
             sx={{ textTransform: "none" }}
           >
@@ -67,27 +67,28 @@ export default function NavBar() {
               variant="body1"
               sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 300 }}
             >
-              Quests <EmojiEventsIcon className="mb-1" />
+              Quests <EmojiEventsIcon fontSize="large" className="mb-1" />
             </Typography>
           </Button>
 
           {status === "failed" ? (
             <Typography color="error">Error: {error}</Typography>
           ) : (
-          <Button
-            color="inherit"
-            onClick={() => {
-              navigate("/marketplace");
-            }}
-            sx={{ textTransform: "none" }}
-          >
-            <Typography
-              variant="body1"
-              sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 300 }}
+            <Button
+              color="inherit"
+              onClick={() => {
+                navigate("/marketplace");
+              }}
+              sx={{ textTransform: "none" }}
             >
-              {coins} <PaidIcon className="text-yellow-500" />
-            </Typography>
-          </Button>
+              <Typography
+                variant="body1"
+                sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 300 }}
+              >
+                {coins}{" "}
+                <PaidIcon fontSize="large" className="text-yellow-500" />
+              </Typography>
+            </Button>
           )}
           <ProfileDropdown />
         </Stack>

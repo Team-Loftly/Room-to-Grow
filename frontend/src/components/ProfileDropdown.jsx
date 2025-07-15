@@ -45,7 +45,7 @@ export default function ProfileDropdown() {
         onClick={handleClick}
         color="inherit"
       >
-        <AccountCircle className="text-3xl mr-1.5" />
+        <AccountCircle fontSize="large" className="text-3xl mr-2" />
       </IconButton>
       <Menu
         id="menu-appbar"
