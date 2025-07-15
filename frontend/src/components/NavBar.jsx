@@ -1,4 +1,12 @@
-import { Box, AppBar, Toolbar, Button, Typography, Stack } from "@mui/material";
+import {
+  Box,
+  Tooltip,
+  AppBar,
+  Toolbar,
+  Button,
+  Typography,
+  Stack,
+} from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -45,39 +53,24 @@ export default function NavBar() {
           minHeight: { xs: "64px", sm: "80px" },
         }}
       >
-        <Typography
-          className="hover:cursor-pointer"
-          variant="h4"
-          component="div"
-          sx={{ flexGrow: 1, fontFamily: "Caveat" }}
-          onClick={() => navigate("/home")}
-        >
-          Room to Grow
-        </Typography>
+        <Box sx={{ flexGrow: 1, fontFamily: "Caveat" }}>
+          <Typography
+            className="hover:cursor-pointer"
+            variant="h4"
+            component="div"
+            sx={{ width: 180, fontFamily: "Caveat" }}
+            onClick={() => navigate("/home")}
+          >
+            Room to Grow
+          </Typography>
+        </Box>
 
         <Stack direction="row" spacing={3} alignItems="center">
-          <Button
-            color="inherit"
-            onClick={() => {
-              navigate("/missions");
-            }}
-            sx={{ textTransform: "none" }}
-          >
-            <Typography
-              variant="body1"
-              sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 300 }}
-            >
-              Quests <EmojiEventsIcon fontSize="large" className="mb-1" />
-            </Typography>
-          </Button>
-
-          {status === "failed" ? (
-            <Typography color="error">Error: {error}</Typography>
-          ) : (
+          <Tooltip title="Go to Quests" arrow>
             <Button
               color="inherit"
               onClick={() => {
-                navigate("/marketplace");
+                navigate("/missions");
               }}
               sx={{ textTransform: "none" }}
             >
@@ -85,10 +78,31 @@ export default function NavBar() {
                 variant="body1"
                 sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 300 }}
               >
-                {coins}{" "}
-                <PaidIcon fontSize="large" className="text-yellow-500" />
+                Quests <EmojiEventsIcon fontSize="large" className="mb-1" />
               </Typography>
             </Button>
+          </Tooltip>
+
+          {status === "failed" ? (
+            <Typography color="error">Error: {error}</Typography>
+          ) : (
+            <Tooltip title="Go to Marketplace" arrow>
+              <Button
+                color="inherit"
+                onClick={() => {
+                  navigate("/marketplace");
+                }}
+                sx={{ textTransform: "none" }}
+              >
+                <Typography
+                  variant="body1"
+                  sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 300 }}
+                >
+                  {coins}{" "}
+                  <PaidIcon fontSize="large" className="text-yellow-500" />
+                </Typography>
+              </Button>
+            </Tooltip>
           )}
           <ProfileDropdown />
         </Stack>
