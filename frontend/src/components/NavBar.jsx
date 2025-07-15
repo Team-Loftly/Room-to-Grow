@@ -8,6 +8,9 @@ import {
 } from "../features/inventorySlice";
 import { fetchInventory } from "../features/inventorySlice";
 import { useEffect } from "react";
+import ProfileDropdown from "./ProfileDropdown";
+import PaidIcon from "@mui/icons-material/Paid";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 // nav bar that includes common functionality like log out, go to home, etc
 // should be included on every page except login/register
 export default function NavBar() {
@@ -35,14 +38,13 @@ export default function NavBar() {
     );
   }
 
-  const logoutUser = () => {
-    localStorage.removeItem("token");
-    navigate("/");
-    window.location.reload();
-  };
   return (
     <AppBar position="static" sx={{ backgroundColor: "#0a571f" }}>
-      <Toolbar>
+      <Toolbar
+        sx={{
+          minHeight: { xs: "64px", sm: "80px" },
+        }}
+      >
         <Typography
           className="hover:cursor-pointer"
           variant="h4"
@@ -53,25 +55,35 @@ export default function NavBar() {
           Room to Grow
         </Typography>
 
-        {status === "failed" ? (
-          <Typography color="error">Error: {error}</Typography>
-        ) : (
-          <Box sx={{ mr: 2 }}>
+        <Stack direction="row" spacing={3} alignItems="center">
+          <Button
+            color="inherit"
+            onClick={() => {
+              console.log("Quest button pressed");
+            }}
+            sx={{ textTransform: "none" }}
+          >
             <Typography
               variant="body1"
               sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 300 }}
             >
-              {coins} coins
+              Quests <EmojiEventsIcon className="mb-1" />
             </Typography>
-          </Box>
-        )}
-        <Button
-          onClick={logoutUser}
-          color="inherit"
-          sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 400 }}
-        >
-          Logout
-        </Button>
+          </Button>
+          {status === "failed" ? (
+            <Typography color="error">Error: {error}</Typography>
+          ) : (
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Typography
+                variant="body1"
+                sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 300 }}
+              >
+                {coins} <PaidIcon className="text-yellow-500" />{" "}
+              </Typography>
+            </Box>
+          )}
+          <ProfileDropdown />
+        </Stack>
       </Toolbar>
     </AppBar>
   );
