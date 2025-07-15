@@ -70,17 +70,24 @@ export default function NavBar() {
               Quests <EmojiEventsIcon className="mb-1" />
             </Typography>
           </Button>
+
           {status === "failed" ? (
             <Typography color="error">Error: {error}</Typography>
           ) : (
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography
-                variant="body1"
-                sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 300 }}
-              >
-                {coins} <PaidIcon className="text-yellow-500" />{" "}
-              </Typography>
-            </Box>
+          <Button
+            color="inherit"
+            onClick={() => {
+              navigate("/marketplace");
+            }}
+            sx={{ textTransform: "none" }}
+          >
+            <Typography
+              variant="body1"
+              sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 300 }}
+            >
+              {coins} <PaidIcon className="text-yellow-500" />
+            </Typography>
+          </Button>
           )}
           <ProfileDropdown />
         </Stack>
