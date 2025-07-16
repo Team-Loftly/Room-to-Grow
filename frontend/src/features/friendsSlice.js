@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-const BASE_API_URL = import.meta.env.VITE_APP_API_URL
+const BASE_API_URL = import.meta.env.VITE_APP_API_URL;
 
 // fetch friends
 export const fetchFriends = createAsyncThunk(
@@ -38,46 +38,46 @@ export const fetchFriends = createAsyncThunk(
 );
 
 export const addFriend = createAsyncThunk(
-    "market/addFriend",
-    async (username, { rejectWithValue }) => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await axios.post(
-          `${BASE_API_URL}/friends/add`,
-          { username },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-  
-        return response.data.friends;
-      } catch (error) {
-        console.error("Error adding friend with Axios:", error);
-  
-        if (axios.isAxiosError(error) && error.response) {
-          console.error("Response data:", error.response.data);
-          console.error("Response status:", error.response.status);
-          return rejectWithValue(
-            error.response.data.message ||
-              `Request failed with status ${error.response.status}`
-          );
-        } else if (axios.isAxiosError(error) && error.request) {
-          console.error("No response received:", error.request);
-          return rejectWithValue("Network error: No response from server.");
-        } else {
-          console.error("Error message:", error.message);
-          return rejectWithValue(error.message || "An unknown error occurred.");
+  "market/addFriend",
+  async (username, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `${BASE_API_URL}/friends/add`,
+        { username },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
+      );
+
+      return response.data.friends;
+    } catch (error) {
+      console.error("Error adding friend with Axios:", error);
+
+      if (axios.isAxiosError(error) && error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+        return rejectWithValue(
+          error.response.data.message ||
+            `Request failed with status ${error.response.status}`
+        );
+      } else if (axios.isAxiosError(error) && error.request) {
+        console.error("No response received:", error.request);
+        return rejectWithValue("Network error: No response from server.");
+      } else {
+        console.error("Error message:", error.message);
+        return rejectWithValue(error.message || "An unknown error occurred.");
       }
     }
-  );  
+  }
+);
 
 const initialState = {
-    friends: [], // list of friends (usernames)
-    status: "idle",
-    error: null,
+  friends: [], // list of friends (usernames)
+  status: "idle",
+  error: null,
 };
 
 const friendsSlice = createSlice({
@@ -85,8 +85,8 @@ const friendsSlice = createSlice({
   initialState,
   reducers: {
     clearError: (state) => {
-        state.error = null;
-      },
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -97,7 +97,6 @@ const friendsSlice = createSlice({
         state.status = "succeeded";
         state.friends = action.payload;
         state.error = null;
-
       })
       .addCase(fetchFriends.rejected, (state, action) => {
         state.status = "failed";

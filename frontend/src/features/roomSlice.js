@@ -5,23 +5,23 @@ const BASE_API_URL = import.meta.env.VITE_APP_API_URL;
 export const fetchRoom = createAsyncThunk(
   "room/fetchRoom",
   async (friendUsername, { rejectWithValue }) => {
-
     try {
-      if (friendUsername) { // fetch the friend's room
+      if (friendUsername) {
+        // fetch the friend's room
         const response = await axios.get(`${BASE_API_URL}/rooms/friend`, {
-          params: { friendUsername }
+          params: { friendUsername },
         });
         return response.data;
-      } else { // fetch the current user's room
+      } else {
+        // fetch the current user's room
         const token = localStorage.getItem("token");
         const response = await axios.get(`${BASE_API_URL}/rooms`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        return response.data;
       }
-
     } catch (error) {
       console.error("Error fetching data with Axios:", error);
 

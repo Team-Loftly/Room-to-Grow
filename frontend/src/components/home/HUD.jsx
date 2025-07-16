@@ -8,7 +8,7 @@ import HabitsIcon from "@mui/icons-material/ChecklistRtl";
 import MarketplaceIcon from "@mui/icons-material/Storefront";
 import EditRoomIcon from "@mui/icons-material/Construction";
 import TimerIcon from "@mui/icons-material/AccessAlarm";
-import GroupIcon from '@mui/icons-material/Group';
+import GroupIcon from "@mui/icons-material/Group";
 
 // Formatting for the popups when hovering over an icon
 const CustomTooltip = styled(({ className, ...props }) => (

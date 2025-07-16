@@ -46,23 +46,23 @@ export default function TaskCard({ task, task_status }) {
   const [openLogTimeDialog, setOpenLogTimeDialog] = React.useState(false);
 
   const dayMap = {
-    "Sunday": 'Su',
-    "Monday": 'Mo',
-    "Tuesday": 'Tu',
-    "Wednesday": 'We',
-    "Thursday": 'Th',
-    "Friday": 'Fr',
-    "Saturday": 'Sa',
+    Sunday: "Su",
+    Monday: "Mo",
+    Tuesday: "Tu",
+    Wednesday: "We",
+    Thursday: "Th",
+    Friday: "Fr",
+    Saturday: "Sa",
   };
 
   const formatDays = (daysArray) => {
     if (!daysArray || daysArray.length === 0) {
-      return 'No specific days';
+      return "No specific days";
     }
     return daysArray
-      .map(dayNum => dayMap[dayNum])
-      .filter(name => name)
-      .join(', ');
+      .map((dayNum) => dayMap[dayNum])
+      .filter((name) => name)
+      .join(", ");
   };
 
   const handleMenuClick = (event) => {

@@ -120,7 +120,10 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
   );
 }
 
-export default function RoomScene({ isEditable = false, friendUsername = null }) {
+export default function RoomScene({
+  isEditable = false,
+  friendUsername = null,
+}) {
   const dispatch = useDispatch();
   const lightTarget = useRef(new THREE.Object3D());
 

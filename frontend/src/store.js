@@ -15,6 +15,6 @@ export const store = configureStore({
     inventory: inventorySlice,
     timer: timerSlice,
     room: roomSlice,
-    friends: friendsSlice
+    friends: friendsSlice,
   },
 });
