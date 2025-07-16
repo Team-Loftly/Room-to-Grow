@@ -1,11 +1,10 @@
 import express from "express";
 import StatusCodes from "http-status-codes";
 import DailyQuestSet from "../models/DailyQuestSet.js";
-import Quest from "../models/Quests.js";
+import Quest from "../models/Quest.js";
 import Rooms from "../models/Rooms.js";
 import { requireAuth } from "../util/AuthHelper.js";
-import { startOfDay } from "date-fns"; // Helper for date comparison
-import createRoomRouter from "./rooms.js";
+import { startOfDay } from "date-fns";
 
 export default function createDailyQuestSetRouter(requireAuth) {
   const router = express.Router();
@@ -44,6 +43,12 @@ export default function createDailyQuestSetRouter(requireAuth) {
 
         await dailyQuestSet.save();
       }
+
+      dailyQuestSet = await dailyQuestSet.populate({
+        path: "quests.questId",
+        model: "Quest",
+        select: "name description reward image",
+      });
 
       res.status(StatusCodes.OK).json(dailyQuestSet);
     } catch (err) {

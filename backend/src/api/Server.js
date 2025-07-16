@@ -8,7 +8,7 @@ import createAuthRouter from "../routes/auth.js";
 import decorRouter from "../routes/decorations.js";
 import questsRouter from "../routes/quests.js";
 import createRoomRouter from "../routes/rooms.js";
-import createDailyQuestSetRouter from "../routes/rooms.js";
+import createDailyQuestSetRouter from "../routes/dailyQuestSet.js";
 
 import * as AuthHelper from "../util/AuthHelper.js";
 import createHabitsRouter from "../routes/Habits.js";

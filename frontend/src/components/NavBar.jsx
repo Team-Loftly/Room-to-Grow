@@ -70,7 +70,7 @@ export default function NavBar() {
             <Button
               color="inherit"
               onClick={() => {
-                navigate("/missions");
+                navigate("/quests");
               }}
               sx={{ textTransform: "none" }}
             >
