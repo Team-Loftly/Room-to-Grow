@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   Stack,
-  Divider,
-  Paper,
   Typography,
-  List,
-  ListItem,
-  ListItemText,
-  TextField,
-  Button,
   Alert,
   Box,
 } from "@mui/material";
@@ -22,6 +15,7 @@ import {
   clearError,
 } from "../features/friendsSlice";
 import Room from "../components/Room.jsx";
+import FriendsComponent from "../components/Friends.jsx";
 
 function Friends() {
   const dispatch = useDispatch();
@@ -79,57 +73,7 @@ function Friends() {
       }}
     >
     <Room friendUsername={currentRoomUsername}></Room>
-      <Box
-      flexDirection="column"
-      sx={{
-        width: "40%",
-        display: "flex",
-        bgcolor: "rgba(255, 255, 255, 0.8)",
-        m: 4,
-        py: 3,
-        padding: 4,
-        borderRadius: 4,
-      }}
-      >
-        <Typography variant="h5">Friends</Typography>
-        <Typography>Now viewing {currentRoomUsername}'s room.</Typography>
-        <List>
-          {friends.length === 0 ? (
-            <Typography>No friends yet.</Typography>
-          ) : (
-            friends.map((friend, index) => (
-              <ListItem key={index} disablePadding>
-                <ListItemText primary={friend} />
-                <Button
-                  onClick={() => {
-                    switchRoom(friend);
-                  }}
-                >
-                  View
-                </Button>
-              </ListItem>
-            ))
-          )}
-        </List>
-
-        <Stack direction="row" spacinga={2}>
-          <TextField
-            fullWidth
-            label="Friend's Username"
-            value={friendUsername}
-            onChange={(e) => setFriendUsername(e.target.value)}
-            variant="outlined"
-          />
-          <Button variant="contained" onClick={handleAddFriend}>
-            Add
-          </Button>
-        </Stack>
-        {error && (
-          <Alert severity="error" onClose={() => dispatch(clearError())}>
-            {error}
-          </Alert>
-        )}
-      </Box>
+    <FriendsComponent />
     </Stack>
   );
 }
