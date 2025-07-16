@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   Stack,
   Divider,
+  Paper,
   Typography,
   List,
   ListItem,
@@ -9,6 +10,7 @@ import {
   TextField,
   Button,
   Alert,
+  Box,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -76,17 +78,20 @@ function Friends() {
         alignItems: "center",
       }}
     >
-      <Room friendUsername={currentRoomUsername}></Room>
-      <Stack
-        direction="column"
-        sx={{
-          height: "100%",
-          width: "40%",
-          boxSizing: "border-box",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+    <Room friendUsername={currentRoomUsername}></Room>
+      <Box
+      flexDirection="column"
+      sx={{
+        width: "40%",
+        display: "flex",
+        bgcolor: "rgba(255, 255, 255, 0.8)",
+        m: 4,
+        py: 3,
+        padding: 4,
+        borderRadius: 4,
+      }}
       >
+        <Typography variant="h5">Friends</Typography>
         <Typography>Now viewing {currentRoomUsername}'s room.</Typography>
         <List>
           {friends.length === 0 ? (
@@ -124,7 +129,7 @@ function Friends() {
             {error}
           </Alert>
         )}
-      </Stack>
+      </Box>
     </Stack>
   );
 }
