@@ -14,6 +14,26 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 - docker compose up --build
 - access the site at: http://localhost:3000.
 
+## M4
+
+### App Summary
+Introducing Room to Grow, a productivity web app where users can build up healthy habits to grow and personalize their very own virtual study room.
+Earn coins and spend them at the Marketplace to buy various decorations for your room! Every minute of focus counts!
+### Standard Goals
+TODO
+### Stretch Goals
+TODO
+### Non-Trivial Elements
+TODO
+### XSS Security Assessment
+TODO
+### M4 highlights
+- Usernames
+  - User objects now must have a username in addition to an email and password.
+  - This helps with the add friends feature as friends can be added by their username.
+- Add friends and view their room!
+  - Implemented a friends API to allow users to add each other as friends. Then, from the friends page they can view their friends' rooms using a new rooms API endpoint that fetches the room for a given username
+
 ## M3
 
 ### Test Suite

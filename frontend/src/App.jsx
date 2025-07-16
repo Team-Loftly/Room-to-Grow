@@ -6,6 +6,7 @@ import Stats from "./pages/Stats";
 import Market from "./pages/Market";
 import EditRoom from "./pages/EditRoom";
 import Tasks from "./pages/Tasks";
+import Friends from "./pages/Friends";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
 import { useEffect } from "react";
@@ -18,6 +19,7 @@ function App() {
     const token = localStorage.getItem("token");
     if (token && isTokenExpired(token)) {
       localStorage.removeItem("token");
+      localStorage.removeItem("username");
       navigate("/");
     }
   }, [navigate]);
@@ -43,6 +45,7 @@ function App() {
             <Route path="/stats" element={<Stats />} />
             <Route path="/marketplace" element={<Market />} />
             <Route path="/edit" element={<EditRoom />} />
+            <Route path="/friends" element={<Friends/>}/>
           </Route>
         </Routes>
       </main>

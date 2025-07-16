@@ -11,6 +11,7 @@ export default function createAuthRouter(authHelper) {
     hashPassword,
     compareHashedPassword,
     getJWT,
+    validateUsername,
   } = authHelper;
 
   const router = express.Router();
@@ -18,7 +19,12 @@ export default function createAuthRouter(authHelper) {
   router.post("/register", async (req, res) => {
     try {
       // server side input validation
-      const { email, password } = req.body;
+      const { username, email, password } = req.body;
+      if (!validateUsername(username)) {
+        return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "Invalid Username" });
+      }
       if (!validateEmail(email)) {
         return res
           .status(StatusCodes.BAD_REQUEST)
@@ -30,15 +36,17 @@ export default function createAuthRouter(authHelper) {
           .json({ message: "Invalid Password" });
       }
       // check if user already exists
-      const user = await User.findOne({ email });
-      if (user) {
+      const user_em = await User.findOne({ email });
+      const user_nm = await User.findOne({username});
+      if (user_em || user_nm) {
         return res
           .status(StatusCodes.BAD_REQUEST)
           .json({ message: "User already exists" });
       }
       // hash password and register user
       const hashedPassword = await hashPassword(password);
-      const newUser = new User({ email, hashedPassword });
+      const friends = []; // initalize empty array for friends
+      const newUser = new User({username, email, hashedPassword, friends });
       await newUser.save();
       // get a JWT token and return it
       const token = getJWT(newUser._id);
@@ -79,7 +87,7 @@ export default function createAuthRouter(authHelper) {
       }
       // return a jwt token
       const token = getJWT(user._id);
-      res.status(StatusCodes.OK).json({ token });
+      res.status(StatusCodes.OK).json({ token, username: user.username });
     } catch (err) {
       console.error(err);
       res

@@ -3,7 +3,7 @@ import StatusCodes from "http-status-codes";
 import { requireAuth } from "../util/AuthHelper.js";
 import Rooms from "../models/Rooms.js";
 import Decorations from "../models/Decorations.js";
-
+import User from "../models/Users.js";
 const router = express.Router();
 
 export default function createRoomRouter(requireAuth) {
@@ -13,6 +13,36 @@ export default function createRoomRouter(requireAuth) {
     try {
       // TODO: Get check that the roomId belongs to the current user
       const room = await Rooms.findOne({ userId: user_id })
+        .populate("decorations")
+        .populate("decorations.decorId"); // populate the decorId so full decoration details are available
+
+      if (!room) {
+        return res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ message: "Room not found for this user" });
+      }
+
+      res.status(StatusCodes.OK).json(room);
+    } catch (err) {
+      console.log(err);
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ message: "Error retrieving room" });
+    }
+  });
+
+  // get room by friend's username (unauthenticated)
+  router.get("/friend", async (req, res) => {
+    const username = req.query.friendUsername;
+    try {
+      const user = await User.findOne({username: username});
+      if (!user) {
+        return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "User not found" });
+      }
+      // TODO: Get check that the roomId belongs to the current user
+      const room = await Rooms.findOne({ userId: user._id })
         .populate("decorations")
         .populate("decorations.decorId"); // populate the decorId so full decoration details are available
 

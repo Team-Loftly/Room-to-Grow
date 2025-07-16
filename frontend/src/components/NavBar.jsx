@@ -16,6 +16,7 @@ export default function NavBar() {
   const coins = useSelector(selectInventoryCoins);
   const status = useSelector(selectInventoryStatus);
   const error = useSelector(selectInventoryError);
+  const currentUserName = localStorage.getItem("username");
 
   // fetch items on mount
   useEffect(() => {
@@ -37,6 +38,7 @@ export default function NavBar() {
 
   const logoutUser = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("username");
     navigate("/");
     window.location.reload();
   };
@@ -52,7 +54,14 @@ export default function NavBar() {
         >
           Room to Grow
         </Typography>
-
+        <Box sx={{ mr: 2 }}>
+            <Typography
+              variant="body1"
+              sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 300 }}
+            >
+              Welcome {currentUserName}
+            </Typography>
+          </Box>
         {status === "failed" ? (
           <Typography color="error">Error: {error}</Typography>
         ) : (
