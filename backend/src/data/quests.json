@@ -1,0 +1,29 @@
+[
+  {
+    "_id": {
+      "$oid": "6876cd38b5c15df97d0865e9"
+    },
+    "name": "Timed Task Titan",
+    "description": "Log 30 minutes towards a timed task today.",
+    "reward": 50,
+    "image": "./images/warp-pipe.png"
+  },
+  {
+    "_id": {
+      "$oid": "6876cd45b5c15df97d0865ea"
+    },
+    "name": "Habit Hero",
+    "description": "Complete one habit today.",
+    "reward": 50,
+    "image": "./images/warp-pipe.png"
+  },
+ {
+    "_id": {
+      "$oid": "6876cd57b5c15df97d0865eb"
+    },
+    "name": "Checkmark Champion",
+    "description": "Log three checkmarks towards habits today.",
+    "reward": 50,
+    "image": "./images/warp-pipe.png"
+  }
+]
