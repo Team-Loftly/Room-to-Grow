@@ -11,6 +11,7 @@ import Layout from "./components/Layout";
 import { useEffect } from "react";
 import { isTokenExpired } from "./util";
 import { useNavigate } from "react-router-dom";
+import Missions from "./pages/Missions";
 function App() {
   const navigate = useNavigate();
   // check the user's token each time they attempt to navigate away
@@ -43,6 +44,7 @@ function App() {
             <Route path="/stats" element={<Stats />} />
             <Route path="/marketplace" element={<Market />} />
             <Route path="/edit" element={<EditRoom />} />
+            <Route path="/missions" element={<Missions />} />
           </Route>
         </Routes>
       </main>

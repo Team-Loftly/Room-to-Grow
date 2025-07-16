@@ -1,4 +1,12 @@
-import { Box, AppBar, Toolbar, Button, Typography, Stack } from "@mui/material";
+import {
+  Box,
+  Tooltip,
+  AppBar,
+  Toolbar,
+  Button,
+  Typography,
+  Stack,
+} from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -8,6 +16,9 @@ import {
 } from "../features/inventorySlice";
 import { fetchInventory } from "../features/inventorySlice";
 import { useEffect } from "react";
+import ProfileDropdown from "./ProfileDropdown";
+import PaidIcon from "@mui/icons-material/Paid";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 // nav bar that includes common functionality like log out, go to home, etc
 // should be included on every page except login/register
 export default function NavBar() {
@@ -35,43 +46,66 @@ export default function NavBar() {
     );
   }
 
-  const logoutUser = () => {
-    localStorage.removeItem("token");
-    navigate("/");
-    window.location.reload();
-  };
   return (
     <AppBar position="static" sx={{ backgroundColor: "#0a571f" }}>
-      <Toolbar>
-        <Typography
-          className="hover:cursor-pointer"
-          variant="h4"
-          component="div"
-          sx={{ flexGrow: 1, fontFamily: "Caveat" }}
-          onClick={() => navigate("/home")}
-        >
-          Room to Grow
-        </Typography>
+      <Toolbar
+        sx={{
+          minHeight: { xs: "64px", sm: "80px" },
+        }}
+      >
+        <Box sx={{ flexGrow: 1, fontFamily: "Caveat" }}>
+          <Typography
+            className="hover:cursor-pointer"
+            variant="h4"
+            component="div"
+            sx={{ width: 180, fontFamily: "Caveat" }}
+            onClick={() => navigate("/home")}
+          >
+            Room to Grow
+          </Typography>
+        </Box>
 
-        {status === "failed" ? (
-          <Typography color="error">Error: {error}</Typography>
-        ) : (
-          <Box sx={{ mr: 2 }}>
-            <Typography
-              variant="body1"
-              sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 300 }}
+        <Stack direction="row" spacing={3} alignItems="center">
+          <Tooltip title="Go to Quests" arrow>
+            <Button
+              color="inherit"
+              onClick={() => {
+                navigate("/missions");
+              }}
+              sx={{ textTransform: "none" }}
             >
-              {coins} coins
-            </Typography>
-          </Box>
-        )}
-        <Button
-          onClick={logoutUser}
-          color="inherit"
-          sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 400 }}
-        >
-          Logout
-        </Button>
+              <Typography
+                variant="body1"
+                sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 300 }}
+              >
+                Quests <EmojiEventsIcon fontSize="large" className="mb-1" />
+              </Typography>
+            </Button>
+          </Tooltip>
+
+          {status === "failed" ? (
+            <Typography color="error">Error: {error}</Typography>
+          ) : (
+            <Tooltip title="Go to Marketplace" arrow>
+              <Button
+                color="inherit"
+                onClick={() => {
+                  navigate("/marketplace");
+                }}
+                sx={{ textTransform: "none" }}
+              >
+                <Typography
+                  variant="body1"
+                  sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 300 }}
+                >
+                  {coins}{" "}
+                  <PaidIcon fontSize="large" className="text-yellow-500" />
+                </Typography>
+              </Button>
+            </Tooltip>
+          )}
+          <ProfileDropdown />
+        </Stack>
       </Toolbar>
     </AppBar>
   );
