@@ -18,6 +18,8 @@ import {
   selectFriendsError,
   selectFriends,
   clearError,
+  setCurrentFriend,
+  selectCurrentFriend
 } from "../features/friendsSlice";
 
 function FriendsComponent() {
@@ -26,11 +28,8 @@ function FriendsComponent() {
   const status = useSelector(selectFriendsStatus);
   const error = useSelector(selectFriendsError);
 
-  const [friendUsername, setFriendUsername] = useState("");
-  // start off with viewing your room
-  const [currentRoomUsername, setCurrentRoomUsername] = useState(
-    localStorage.getItem("username")
-  );
+  const friendUsername = useSelector(selectCurrentFriend);
+  const [searchFriend, setSearchFriend] = useState("");
 
   // fetch items on mount
   useEffect(() => {
@@ -40,16 +39,15 @@ function FriendsComponent() {
   }, [dispatch, status]);
 
   const handleAddFriend = () => {
-    if (friendUsername.trim()) {
-      dispatch(addFriend(friendUsername));
-      setFriendUsername("");
+    if (searchFriend.trim()) {
+      dispatch(addFriend(searchFriend));
     }
   };
 
   // switch currentRoomUsername to given name
   // fetch and display the friend's room
   const switchRoom = function (name) {
-    setCurrentRoomUsername(name);
+    dispatch(setCurrentFriend(name));
   };
 
   // handle loading and error
@@ -79,7 +77,7 @@ function FriendsComponent() {
       }}
       >
         <Typography variant="h5">Friends</Typography>
-        <Typography>Now viewing {currentRoomUsername}'s room.</Typography>
+        {friendUsername && <Typography>Now viewing {friendUsername}'s room.</Typography>}
         <List>
           {friends.length === 0 ? (
             <Typography>No friends yet.</Typography>
@@ -103,8 +101,8 @@ function FriendsComponent() {
           <TextField
             fullWidth
             label="Friend's Username"
-            value={friendUsername}
-            onChange={(e) => setFriendUsername(e.target.value)}
+            value={searchFriend}
+            onChange={(e) => setSearchFriend(e.target.value)}
             variant="outlined"
           />
           <Button variant="contained" onClick={handleAddFriend}>
