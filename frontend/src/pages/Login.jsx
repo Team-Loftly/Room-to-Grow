@@ -4,7 +4,6 @@ import { TextField, Button, Box, Paper, Alert } from "@mui/material";
 import SiteHeader from "../components/SiteHeader";
 import { fetchInventory } from "../features/inventorySlice";
 import { useDispatch } from "react-redux";
-
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -37,6 +36,8 @@ export default function Login() {
       }
       // login was successful
       localStorage.setItem("token", data.token);
+      // set username from response body
+      localStorage.setItem("username", data.username);
       // fetch the user's inventory and store it in the slice
       dispatch(fetchInventory());
       // navigate to home

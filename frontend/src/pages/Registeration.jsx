@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 export default function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -26,7 +27,7 @@ export default function Register() {
       const response = await fetch("http://localhost:3001/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, email, password }),
       });
 
       const data = await response.json();
@@ -39,6 +40,8 @@ export default function Register() {
       localStorage.setItem("token", data.token);
       // create a new inventory for the user
       dispatch(createInventory());
+      // set the current user's username
+      localStorage.setItem("username", username);
       // nav to home
       navigate("/home");
     } catch (err) {
@@ -79,6 +82,14 @@ export default function Register() {
           flexDirection="column"
           gap={2}
         >
+          <TextField
+            label="Username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            fullWidth
+          />
           <TextField
             label="Email"
             type="email"

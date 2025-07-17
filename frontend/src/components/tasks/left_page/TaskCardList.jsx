@@ -17,7 +17,7 @@ export default function TaskCardList() {
 
   // consts for all habits:
   const showAllTasks = useSelector((state) => state.tasks.showAllTasks);
-  const allTasks = useSelector((state) => state.tasks.allTaskList)
+  const allTasks = useSelector((state) => state.tasks.allTaskList);
   const allHabitsStatus = useSelector((state) => state.tasks.allHabitsStatus);
   const allHabitsError = useSelector((state) => state.tasks.allHabitsError);
 
@@ -40,7 +40,7 @@ export default function TaskCardList() {
   if (showAllTasks) {
     return (
       <>
-        {(allHabitsStatus === "loading") ? (
+        {allHabitsStatus === "loading" ? (
           <Typography variant="body2" color="text.secondary" sx={{ p: 2 }}>
             Loading habits...
           </Typography>
@@ -65,7 +65,6 @@ export default function TaskCardList() {
     );
   }
 
-  
   if (error) {
     return <Typography>Error fetching habits: {error}</Typography>;
   }

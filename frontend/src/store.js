@@ -5,6 +5,7 @@ import marketSlice from "./features/marketSlice";
 import inventorySlice from "./features/inventorySlice";
 import timerSlice from "./features/timerSlice";
 import roomSlice from "./features/roomSlice";
+import friendsSlice from "./features/friendsSlice";
 import dailyQuestSetSlice from "./features/dailyQuestSetSlice";
 
 export const store = configureStore({
@@ -15,6 +16,7 @@ export const store = configureStore({
     inventory: inventorySlice,
     timer: timerSlice,
     room: roomSlice,
+    friends: friendsSlice,
     quests: dailyQuestSetSlice,
   },
 });

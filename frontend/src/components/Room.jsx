@@ -120,13 +120,16 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
   );
 }
 
-export default function RoomScene({ isEditable = false }) {
+export default function RoomScene({
+  isEditable = false,
+  friendUsername = null,
+}) {
   const dispatch = useDispatch();
   const lightTarget = useRef(new THREE.Object3D());
 
   useEffect(() => {
-    dispatch(fetchRoom());
-  }, [dispatch]);
+    dispatch(fetchRoom(friendUsername));
+  }, [dispatch, friendUsername]);
 
   const adjustForScreenSize = () => {
     const isSmallScreen = window.innerWidth < 800;

@@ -8,6 +8,7 @@ import createAuthRouter from "../routes/auth.js";
 import decorRouter from "../routes/decorations.js";
 import questsRouter from "../routes/quests.js";
 import createRoomRouter from "../routes/rooms.js";
+import createFriendsRouter from "../routes/friends.js";
 import createDailyQuestSetRouter from "../routes/dailyQuestSet.js";
 
 import * as AuthHelper from "../util/AuthHelper.js";
@@ -55,6 +56,7 @@ export default class Server {
     this.express.use("/quests", questsRouter);
     this.express.use("/habits", createHabitsRouter(this.requireAuth));
     this.express.use("/rooms", createRoomRouter(this.requireAuth));
+    this.express.use("/friends", createFriendsRouter(this.requireAuth));
     this.express.use(
       "/daily-quests",
       createDailyQuestSetRouter(this.requireAuth)
