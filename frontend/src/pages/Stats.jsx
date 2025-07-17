@@ -36,42 +36,42 @@ export default function Stats() {
   if (status === "loading") {
     return (
       <Box
-      sx={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        p: 2,
-      }}
-    >
-      <Typography variant="h6" gutterBottom sx={{ alignSelf: "center" }}>
-        My Metrics
-      </Typography>
-      <Typography gutterBottom sx={{ alignSelf: "center" }}>
-        Loading Stats
-      </Typography>
-    </Box>
+        sx={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          p: 2,
+        }}
+      >
+        <Typography variant="h6" gutterBottom sx={{ alignSelf: "center" }}>
+          My Metrics
+        </Typography>
+        <Typography gutterBottom sx={{ alignSelf: "center" }}>
+          Loading Stats
+        </Typography>
+      </Box>
     );
   }
 
   if (status === "failed") {
     return (
       <Box
-      sx={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        p: 2,
-      }}
-    >
-      <Typography variant="h6" gutterBottom sx={{ alignSelf: "center" }}>
-        My Metrics
-      </Typography>
-      <Typography gutterBottom sx={{ alignSelf: "center" }}>
-        Error loading stats
-      </Typography>
-    </Box>
+        sx={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          p: 2,
+        }}
+      >
+        <Typography variant="h6" gutterBottom sx={{ alignSelf: "center" }}>
+          My Metrics
+        </Typography>
+        <Typography gutterBottom sx={{ alignSelf: "center" }}>
+          Error loading stats
+        </Typography>
+      </Box>
     );
   }
 
@@ -159,10 +159,10 @@ export default function Stats() {
           >
             <CheckCircleOutlineOutlinedIcon
               sx={{
-                "marginRight": 5,
+                marginRight: 5,
               }}
             />
-            <Typography  variant="body1">
+            <Typography variant="body1">
               You have {category.toLowerCase()} for {hours} hours this week
             </Typography>
           </Paper>
@@ -179,7 +179,7 @@ export default function Stats() {
         >
           <CheckCircleOutlineOutlinedIcon
             sx={{
-              "marginRight": 5,
+              marginRight: 5,
             }}
           />
           <Typography variant="body1">

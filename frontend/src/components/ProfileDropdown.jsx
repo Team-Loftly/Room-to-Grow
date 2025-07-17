@@ -31,6 +31,7 @@ export default function ProfileDropdown() {
 
   const logoutUser = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("username");
     handleClose();
     navigate("/");
     window.location.reload();

@@ -291,7 +291,7 @@ const tasksSlice = createSlice({
   initialState,
   reducers: {
     setShowAllTasks: (state, action) => {
-      state.showAllTasks = action.payload
+      state.showAllTasks = action.payload;
     },
     setSelectedTaskId: (state, action) => {
       const { taskId } = action.payload;
@@ -316,7 +316,7 @@ const tasksSlice = createSlice({
         state.error = null;
 
         const newTask = action.payload;
-        const { progress, ...restOfPayload } = newTask
+        const { progress, ...restOfPayload } = newTask;
         state.allTaskList.push(restOfPayload);
 
         const dayNames = [
@@ -347,7 +347,7 @@ const tasksSlice = createSlice({
         state.status = "succeeded";
         state.error = null;
 
-        const { progress, ...restOfPayload } = action.payload
+        const { progress, ...restOfPayload } = action.payload;
         let index = state.allTaskList.findIndex(
           (task) => task._id === action.payload._id
         );
@@ -488,9 +488,7 @@ const tasksSlice = createSlice({
           state.allTaskList.splice(index, 1);
         }
 
-        index = state.taskList.findIndex(
-          (task) => task._id === action.payload
-        );
+        index = state.taskList.findIndex((task) => task._id === action.payload);
 
         if (index !== -1) {
           state.taskList.splice(index, 1);

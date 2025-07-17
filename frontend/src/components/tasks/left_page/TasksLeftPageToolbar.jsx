@@ -29,16 +29,21 @@ export default function TasksLeftPageToolBar() {
           mr: -1.2,
         }}
       >
-        <Button variant="outlined" onClick={(() => {dispatch(setShowAllTasks(!showAllTasks))})}
+        <Button
+          variant="outlined"
+          onClick={() => {
+            dispatch(setShowAllTasks(!showAllTasks));
+          }}
           sx={{
-            color: 'black',
-            borderColor: 'black',
+            color: "black",
+            borderColor: "black",
             mr: 2,
-            '&:hover': {
-              borderColor: 'black',
-              color: 'black',
+            "&:hover": {
+              borderColor: "black",
+              color: "black",
             },
-          }}>
+          }}
+        >
           {showAllTasks ? "Today's Habits" : "All Habits"}
         </Button>
 

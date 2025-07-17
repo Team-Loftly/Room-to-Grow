@@ -1,5 +1,5 @@
 // front end utility functions can go here
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 
 // check if the given JWT token is expired
 export function isTokenExpired(token) {

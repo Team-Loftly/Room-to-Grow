@@ -65,6 +65,10 @@ const requireAuth = function (req, res, next) {
   }
 };
 
+const validateUsername = function(username) {
+  return username.length > 0;
+}
+
 export {
   validateEmail,
   validatePassword,
@@ -72,4 +76,5 @@ export {
   compareHashedPassword,
   getJWT,
   requireAuth,
+  validateUsername,
 };
