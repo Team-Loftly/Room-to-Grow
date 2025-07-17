@@ -75,9 +75,10 @@ export const addFriend = createAsyncThunk(
 );
 
 const initialState = {
-  friends: [], // list of friends (usernames)
-  status: "idle",
-  error: null,
+    currentFriend: null,
+    friends: [], // list of friends (usernames)
+    status: "idle",
+    error: null,
 };
 
 const friendsSlice = createSlice({
@@ -87,6 +88,9 @@ const friendsSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+    setCurrentFriend: (state, action) => {
+        state.currentFriend = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -116,9 +120,10 @@ const friendsSlice = createSlice({
       });
   },
 });
-export const { clearError } = friendsSlice.actions;
+export const { clearError, setCurrentFriend } = friendsSlice.actions;
 export const selectFriends = (state) => state.friends.friends;
 export const selectFriendsStatus = (state) => state.friends.status;
+export const selectCurrentFriend = (state) => state.friends.currentFriend;
 export const selectFriendsError = (state) => state.friends.error;
 
 export default friendsSlice.reducer;
