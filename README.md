@@ -40,7 +40,7 @@ Login and Registration Page:
     - Result: The user can successfully register and login with the username  "><img src=x onerror=alert('XSS')>. The input treats this entire script as a "name" and doesn't execute the script.
     - Mitigation Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
   - Test 3: 
-    - Result: The user can successfully register and login with the username <div onmouseover="alert('XSS')">Hover me</div>. The input treats this entire script as a "name" and doesn't execute the script.
+    - Result: The user can successfully register and login with the username &lt;div onmouseover="alert('XSS')"&gt;Hover me&lt;div&gt;. The input treats this entire script as a "name" and doesn't execute the script.
     - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
 - Email address field: (Note for this test I put a@b.com at the end of each script to give it a valid email format).
   - Test 1:
@@ -60,7 +60,7 @@ Login and Registration Page:
     - Result: The user can successfully register and login with "><img src=x onerror=alert('XSS')> as a password. No alert script is executed.
     - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
   - Test 3:
-    - Result: The user can successfully register and login with <div onmouseover="alert('XSS')">Hover me</div>
+    - Result: The user can successfully register and login with &lt;div onmouseover="alert('XSS')"&gt;Hover me&lt;div&gt;
     - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
 Habits Page:
 - New habit title field:
@@ -71,7 +71,7 @@ Habits Page:
     - Result: The user can successfully create a habit with title "><img src=x onerror=alert('XSS')> . The input treats this entire script as a title and doesn't execute the script.
     - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
   - Test 3:
-    - Result: The user can successfully create a habit with title <div onmouseover="alert('XSS')">Hover me</div>. The input treats this entire script as a title and doesn't execute the script.
+    - Result: The user can successfully create a habit with title &lt;div onmouseover="alert('XSS')"&gt;Hover me&lt;div&gt;. The input treats this entire script as a title and doesn't execute the script.
     - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
 - New habit description field:
   - Test 1:
@@ -81,7 +81,7 @@ Habits Page:
     - Result: The user can successfully create a habit with description "><img src=x onerror=alert('XSS')> . The input treats this entire script as a description and doesn't execute the script.
     - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
   - Test 3:
-    - Result: The user can successfully create a habit with description <div onmouseover="alert('XSS')">Hover me</div>. The input treats this entire script as a description and doesn't execute the script.
+    - Result: The user can successfully create a habit with description &lt;div onmouseover="alert('XSS')"&gt;Hover me&lt;div&gt;. The input treats this entire script as a description and doesn't execute the script.
     - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
 Friends Page:
 - Friend Username field:
@@ -92,7 +92,7 @@ Friends Page:
     - Result: The user can successfully add "><img src=x onerror=alert('XSS')> as a friend if that username exists. If not, the appropriate user not found error is shown. No script is executed.
     - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
   - Test 3:
-    - Result: The user can successfully add <div onmouseover="alert('XSS')">Hover me</div> as a friend if that username exists. If not, the appropriate user not found error is shown. No script is executed.
+    - Result: The user can successfully add &lt;div onmouseover="alert('XSS')"&gt;Hover me&lt;div&gt; as a friend if that username exists. If not, the appropriate user not found error is shown. No script is executed.
     - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
 
 ### M4 highlights
