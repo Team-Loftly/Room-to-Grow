@@ -1,9 +1,74 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { TextField, Button, Box, Paper, Alert } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Box,
+  Alert,
+  Typography,
+  InputAdornment,
+} from "@mui/material";
+import { styled } from "@mui/system";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+
 import SiteHeader from "../components/SiteHeader";
+import loginIllustration from "../assets/login.png";
 import { fetchInventory } from "../features/inventorySlice";
 import { useDispatch } from "react-redux";
+
+
+const PageContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  minHeight: '100vh',
+  [theme.breakpoints.down('md')]: {
+    flexDirection: 'column',
+  },
+}));
+
+const IllustrationSection = styled(Box)(({ theme }) => ({
+  flex: 1,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  position: 'relative',
+  overflow: 'hidden',
+  [theme.breakpoints.down('md')]: {
+    minHeight: '300px',
+  },
+  backgroundImage: `url(${loginIllustration})`,
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
+}));
+
+const LoginFormSection = styled(Box)(({ theme }) => ({
+  flex: 1,
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'flex-start', // Align items to start for text and form elements
+  padding: theme.spacing(4),
+  maxWidth: '500px', // Constrain width
+  margin: 'auto',
+  backgroundColor: '#fff',
+  borderRadius: theme.shape.borderRadius,
+  boxShadow: 'none',
+  // Adjust padding and alignment for smaller screens
+  [theme.breakpoints.down('md')]: {
+    padding: theme.spacing(2),
+    alignItems: 'center', // Center content on small screens for better mobile layout
+    maxWidth: '100%',
+  },
+}));
+
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+  '& .MuiOutlinedInput-root': {
+    borderRadius: '8px',
+  },
+}));
+
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -11,7 +76,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // if we're logged in, navigate straight to home
+  // if logged in, navigate straight to home
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) navigate("/home");
@@ -36,11 +101,8 @@ export default function Login() {
       }
       // login was successful
       localStorage.setItem("token", data.token);
-      // set username from response body
       localStorage.setItem("username", data.username);
-      // fetch the user's inventory and store it in the slice
       dispatch(fetchInventory());
-      // navigate to home
       navigate("/home");
     } catch (err) {
       console.error(err);
@@ -51,59 +113,112 @@ export default function Login() {
   const goToRegister = () => navigate("/register");
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      minHeight="100vh"
-    >
-      <Paper
-        elevation={8}
-        sx={{
-          p: 4,
-          width: 450,
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-        }}
-      >
+    <PageContainer>
+      <Box sx={{ position: "absolute", top: 20, left: 20, zIndex: 100}}>
         <SiteHeader />
+      </Box>
+
+      <IllustrationSection>
+      </IllustrationSection>
+
+      <LoginFormSection>
+        <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
+          Welcome Back :)
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 3, textAlign: 'left' }}>
+          Login to start your day! <br />
+          Remember, we still have Room to Grow :)
+        </Typography>
+
         {error && (
-          <Alert severity="error" onClose={() => setError("")}>
+          <Alert severity="error" onClose={() => setError("")} sx={{ mb: 2, width: '100%' }}>
             {error}
           </Alert>
         )}
+
         <Box
           component="form"
           onSubmit={loginUser}
-          display="flex"
-          flexDirection="column"
-          gap={2}
+          sx={{ width: '100%' }}
         >
-          <TextField
-            label="Email"
+          <StyledTextField
+            fullWidth
+            label="Email Address"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            fullWidth
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <EmailOutlinedIcon />
+                </InputAdornment>
+              ),
+            }}
           />
-          <TextField
+
+          <StyledTextField
+            fullWidth
             label="Password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            fullWidth
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockOutlinedIcon />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ mb: 3 }}
           />
-          <Button type="submit" variant="contained" fullWidth>
-            Login
-          </Button>
-          <Button variant="outlined" onClick={goToRegister} fullWidth>
-            Register
-          </Button>
+
+          <Box sx={{ display: 'flex', gap: 2, width: '100%', mb: 3,
+            '@media (max-width: 600px)': {
+              flexDirection: 'column',
+              gap: 1,
+            }
+          }}>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                flexGrow: 1,
+                backgroundColor: '#0a571f', // Dark green for Login Now
+                '&:hover': {
+                  backgroundColor: '#119e38',
+                },
+                borderRadius: '8px',
+                py: 1.5,
+                textTransform: 'none',
+                fontWeight: 'bold',
+              }}
+            >
+              Login Now
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={goToRegister}
+              sx={{
+                flexGrow: 1,
+                borderColor: '#e0e0e0',
+                color: '#333',
+                '&:hover': {
+                  borderColor: '#ccc',
+                  backgroundColor: '#f5f5f5',
+                },
+                borderRadius: '8px',
+                py: 1.5,
+                textTransform: 'none',
+                fontWeight: 'bold',
+              }}
+            >
+              Create Account
+            </Button>
+          </Box>
         </Box>
-      </Paper>
-    </Box>
+      </LoginFormSection>
+    </PageContainer>
   );
 }
