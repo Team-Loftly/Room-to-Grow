@@ -34,19 +34,6 @@ export default function NavBar() {
     dispatch(fetchInventory());
   }, [dispatch]);
 
-  // handle loading and error
-  if (status === "loading") {
-    return (
-      <Stack
-        justifyContent="center"
-        alignItems="center"
-        sx={{ height: "100vh" }}
-      >
-        <Typography>Loading</Typography>
-      </Stack>
-    );
-  }
-
   return (
     <AppBar position="static" sx={{ backgroundColor: "#0a571f" }}>
       <Toolbar

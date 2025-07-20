@@ -274,7 +274,7 @@ const initialState = {
   selectedTaskId: -1,
   allTaskList: [],
   allHabitsStatus: "idle",
-  allHabitsError: "idle",
+  allHabitsError: "",
   taskList: [],
   completedTaskList: [],
   failedTaskList: [],
