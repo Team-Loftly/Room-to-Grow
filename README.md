@@ -26,7 +26,75 @@ TODO
 ### Non-Trivial Elements
 TODO
 ### XSS Security Assessment
-TODO
+This section covers the XSS security assessment conducted by our team. It will go over all of our site's input fields and tests we conducted by injecting javascript code into them.
+Our tests:
+- Test 1: Enter <script>alert('XSS')</script> into each of the input fields to see whether we can bypass our regular input handling workflow to instead run a malicious scrpt.
+- Test 2: Enter "><img src=x onerror=alert('XSS')> into each of the input fields to test whether we can inject an image tag to our inputs and use its event handler to run a malicious script.
+Test 3: Enter <div onmouseover="alert('XSS')">Hover me</div> into each of the input fields to test whether we can introduce a malicious script by user action (hovering in this case). This should also get through any checks for script tags as this uses a div.
+Login and Registration Page:
+- Username field:
+  - Test 1:
+    - Result: The user can successfully register and login with the username <script>alert('XSS')</script>. The input treats this entire script as a "name" and doesn't execute the script.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 2:
+    - Result: The user can successfully register and login with the username  "><img src=x onerror=alert('XSS')>. The input treats this entire script as a "name" and doesn't execute the script.
+    - Mitigation Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 3: 
+    - Result: The user can successfully register and login with the username <div onmouseover="alert('XSS')">Hover me</div>. The input treats this entire script as a "name" and doesn't execute the script.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+- Email address field: (Note for this test I put a@b.com at the end of each script to give it a valid email format).
+  - Test 1:
+    - Result: The email address input field blocks the use of "<" in the field and so clicking "register" or "login" does nothing except bring up a warning saying that the input contains an invalid character.
+    - Mitigation Actions: None required as this is sufficent to stop this XSS attack.
+  - Test 2:
+    - Result: The email address input field blocks the use of ' " ' in the field and so clicking "register" or "login" does nothing except bring up a warning saying that the input contains an invalid character.
+    - Mitigation Actions: None required as this is sufficent to stop this XSS attack.
+  - Test 3:
+    - Result: The email address input field blocks the use of "<" in the field and so clicking "register" or "login" does nothing except bring up a warning saying that the input contains an invalid character.
+    - Mitigation Actions: None required as this is sufficent to stop this XSS attack.
+- Password Field:
+  - Test 1:
+    - Result: The user can successfully register and login with <script>alert('XSS')</script> as a password. No alert script is executed.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 2:
+    - Result: The user can successfully register and login with "><img src=x onerror=alert('XSS')> as a password. No alert script is executed.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 3:
+    - Result: The user can successfully register and login with <div onmouseover="alert('XSS')">Hover me</div>
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+Habits Page:
+- New habit title field:
+  - Test 1:
+    - Result: The user can successfully create a habit with title <script>alert('XSS')</script>. The input treats this entire script as a title and doesn't execute the script.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 2:
+    - Result: The user can successfully create a habit with title "><img src=x onerror=alert('XSS')> . The input treats this entire script as a title and doesn't execute the script.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 3:
+    - Result: The user can successfully create a habit with title <div onmouseover="alert('XSS')">Hover me</div>. The input treats this entire script as a title and doesn't execute the script.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+- New habit description field:
+  - Test 1:
+    - Result: The user can successfully create a habit with description <script>alert('XSS')</script>. The input treats this entire script as a description and doesn't execute the script.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 2:
+    - Result: The user can successfully create a habit with description "><img src=x onerror=alert('XSS')> . The input treats this entire script as a description and doesn't execute the script.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 3:
+    - Result: The user can successfully create a habit with description <div onmouseover="alert('XSS')">Hover me</div>. The input treats this entire script as a description and doesn't execute the script.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+Friends Page:
+- Friend Username field:
+  - Test 1:
+    - Result: The user can successfully add <script>alert('XSS')</script> as a friend if that username exists. If not, the appropriate user not found error is shown. No script is executed.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 2:
+    - Result: The user can successfully add "><img src=x onerror=alert('XSS')> as a friend if that username exists. If not, the appropriate user not found error is shown. No script is executed.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 3:
+    - Result: The user can successfully add <div onmouseover="alert('XSS')">Hover me</div> as a friend if that username exists. If not, the appropriate user not found error is shown. No script is executed.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+
 ### M4 highlights
 - Usernames
   - User objects now must have a username in addition to an email and password.

@@ -27,9 +27,10 @@ function FriendsComponent() {
   const friends = useSelector(selectFriends);
   const status = useSelector(selectFriendsStatus);
   const error = useSelector(selectFriendsError);
-
+  const disallowedCharacters = /[<>"'\/\\]/;
   const friendUsername = useSelector(selectCurrentFriend);
   const [searchFriend, setSearchFriend] = useState("");
+  const [inputError, setInputError] = useState("");
 
   // fetch items on mount
   useEffect(() => {
@@ -49,6 +50,15 @@ function FriendsComponent() {
   const switchRoom = function (name) {
     dispatch(setCurrentFriend(name));
   };
+
+  const handleChangeUsername = (usr) => {
+    if (disallowedCharacters.test(usr)) {
+      setInputError("Input contains invalid characters!");
+    } else {
+      setInputError("");
+      setSearchFriend(usr);
+    }
+  }
 
   // handle loading and error
   if (status === "loading") {
@@ -102,7 +112,7 @@ function FriendsComponent() {
             fullWidth
             label="Friend's Username"
             value={searchFriend}
-            onChange={(e) => setSearchFriend(e.target.value)}
+            onChange={(e) => handleChangeUsername(e.target.value)}
             variant="outlined"
           />
           <Button variant="contained" onClick={handleAddFriend}>
@@ -112,6 +122,11 @@ function FriendsComponent() {
         {error && (
           <Alert severity="error" onClose={() => dispatch(clearError())}>
             {error}
+          </Alert>
+        )}
+        {inputError && (
+          <Alert severity="error" onClose={() => setInputError("")} sx={{ mb: 2, width: '100%' }}>
+            {inputError}
           </Alert>
         )}
       </Box>
