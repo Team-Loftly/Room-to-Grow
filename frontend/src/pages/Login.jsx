@@ -75,6 +75,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const disallowedCharacters = /[<>"'\/\\]/;
 
   // if logged in, navigate straight to home
   useEffect(() => {
@@ -109,6 +110,24 @@ export default function Login() {
       setError("Something went wrong. Try again later.");
     }
   };
+
+  const handleChangeEmail = (email) => {
+    if (disallowedCharacters.test(email)) {
+      setError("Input contains invalid characters!");
+    } else {
+      setError("");
+      setEmail(email);
+    }
+  }
+
+  const handleChangePassword = (password) => {
+    if (disallowedCharacters.test(password)) {
+      setError("Input contains invalid characters!");
+    } else {
+      setError("");
+      setPassword(password);
+    }
+  }
 
   const goToRegister = () => navigate("/register");
 
@@ -146,7 +165,7 @@ export default function Login() {
             label="Email Address"
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => handleChangeEmail(e.target.value)}
             required
             InputProps={{
               startAdornment: (
@@ -162,7 +181,7 @@ export default function Login() {
             label="Password"
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => handleChangePassword(e.target.value)}
             required
             InputProps={{
               startAdornment: (

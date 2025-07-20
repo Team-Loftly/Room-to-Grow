@@ -15,6 +15,7 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { Alert } from "@mui/material";
 
 // Dialog Components
 import Dialog from "@mui/material/Dialog";
@@ -37,6 +38,7 @@ const daysOfTheWeek = [
   { value: "Saturday", label: "Sa" },
 ];
 const allDayValues = daysOfTheWeek.map((day) => day.value);
+const disallowedCharacters = /[<>"'\/\\]/;
 
 export default function CreateTask({
   ExistingTask,
@@ -55,6 +57,7 @@ export default function CreateTask({
   };
 
   const [taskValues, setTaskValues] = useState(emptyTask);
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -91,6 +94,13 @@ export default function CreateTask({
 
   const handleBasicInput = (event) => {
     const { name, value } = event.target;
+
+    if (disallowedCharacters.test(value)) {
+      setError("Input contains invalid characters!");
+      return;
+    } else {
+      setError("");
+    }
 
     setTaskValues((prevValues) => {
       let updated = { ...prevValues, [name]: value };
@@ -157,6 +167,11 @@ export default function CreateTask({
           </DialogContentText>
           <Box component="form" noValidate autoComplete="off">
             <Stack spacing={2} sx={{ width: "100%" }}>
+              {error && (
+                <Alert severity="error" onClose={() => setError("")} sx={{ mb: 2, width: '100%' }}>
+                  {error}
+                </Alert>
+              )}
               <TextField
                 label="Title"
                 placeholder="Title"
