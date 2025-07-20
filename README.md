@@ -30,7 +30,7 @@ This section covers the XSS security assessment conducted by our team. It will g
 Our tests:
 - Test 1: Enter <script>alert('XSS')</script> into each of the input fields to see whether we can bypass our regular input handling workflow to instead run a malicious scrpt.
 - Test 2: Enter "><img src=x onerror=alert('XSS')> into each of the input fields to test whether we can inject an image tag to our inputs and use its event handler to run a malicious script.
-- Test 3: Enter "<div onmouseover="alert('XSS')">Hover me</div>" into each of the input fields to test whether we can introduce a malicious script by user action (hovering in this case). This should also get through any checks for script tags as this uses a div.
+- Test 3: Enter &lt;div&gt; onmouseover="alert('XSS')">Hover me&lt;div&gt; into each of the input fields to test whether we can introduce a malicious script by user action (hovering in this case). This should also get through any checks for script tags as this uses a div.
 Login and Registration Page:
 - Username field:
   - Test 1:
