@@ -176,8 +176,8 @@ export default function CreateTask({
                 </Alert>
               )}
               <TextField
-                label="Title"
-                placeholder="Title"
+                label="Name"
+                placeholder="Name"
                 size="small"
                 required
                 name="title"
