@@ -346,6 +346,7 @@ const tasksSlice = createSlice({
       .addCase(updateTask.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.error = null;
+        state.status = "idle";
 
         const { progress, ...restOfPayload } = action.payload;
         let index = state.allTaskList.findIndex(
