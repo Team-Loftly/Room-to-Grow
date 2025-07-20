@@ -97,9 +97,12 @@ export default function CreateTask({
       if (name === "type") {
         if (value === "timed") {
           updated.checkmarks = null;
+          updated.hours = 0;
+          updated.minutes = 1;
         } else if (value === "checkmark") {
           updated.hours = null;
           updated.minutes = null;
+          updated.checkmarks = 1;
         }
       }
       return updated;
