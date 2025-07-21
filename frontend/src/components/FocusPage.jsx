@@ -34,8 +34,6 @@ const FocusPage = () => {
     dispatch(fetchTasks());
   }, [dispatch]);
 
-  const focusTimeToday = '1h 15m';
-
   // display only timed tasks
   const currentTask = timedTasks.find(task => task._id === selectedTaskId);
 
@@ -94,7 +92,7 @@ const FocusPage = () => {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <RadioButtonUncheckedIcon sx={{ fontSize: 16, color: 'white' }} />
             <Typography variant="body1">
-              {currentTask ? currentTask.title : 'No timed task selected'}
+              {currentTask ? currentTask.title : 'No timed habit selected'}
             </Typography>
           </Box>
           {currentTask && (
@@ -130,7 +128,7 @@ const FocusPage = () => {
             <Box component="span" sx={{ color: 'red', mr: 0.5 }}>
               |
             </Box>
-            Today's Timed Tasks
+            Today's Timed Habits
           </Typography>
           <List dense sx={{ p: 0 }}>
             {timedTasks.length > 0 ? (
@@ -183,7 +181,7 @@ const FocusPage = () => {
               ))
             ) : (
               <Typography sx={{ color: 'white', opacity: 0.7 }}>
-                No timed tasks for today.
+                No timed habits for today.
               </Typography>
             )}
           </List>
