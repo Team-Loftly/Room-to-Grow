@@ -1,6 +1,9 @@
 import express from "express";
 import StatusCodes from "http-status-codes";
 import Habit from "../models/Habit.js";
+import DailyQuestSet from "../models/DailyQuestSet.js";
+import Quest from "../models/Quest.js";
+import Rooms from "../models/Rooms.js";
 import mongoose from "mongoose";
 
 export default function createHabitsRouter(requireAuth) {
@@ -392,7 +395,6 @@ export default function createHabitsRouter(requireAuth) {
     }
   });
 
-  // MARK a habit as completed/update progress
   router.post("/:id/complete", requireAuth, async (req, res) => {
     const user_id = req.userId;
     const habit_id = req.params.id;
@@ -502,7 +504,73 @@ export default function createHabitsRouter(requireAuth) {
 
       habit.currentStreak = calculateStreak(habit);
 
+      // Find daily quest set associated with user
+      let dailyQuestSet = await DailyQuestSet.findOne({
+        userId: user_id,
+        date: getStartOfDayLocal(new Date()),
+      }).populate({
+        path: "quests.questId",
+        model: "Quest",
+      });
+
+      let room = null;
+      if (dailyQuestSet) {
+        room = await Rooms.findOne({ userId: user_id });
+
+        dailyQuestSet.quests.forEach((dailyQ) => {
+          const questTemplate = dailyQ.questId;
+
+          // Only update if questTemplate exists and the quest is not already complete
+          if (questTemplate && !dailyQ.isComplete) {
+            // Capture the completion state before the progress update
+            const wasCompleteBefore =
+              dailyQ.progress >= questTemplate.targetValue;
+
+            // Logic for quests tied to certain task type (e.g., timed, checkmark)
+            if (questTemplate.relatedHabitType === habit.type) {
+              dailyQ.progress += value;
+            }
+            // Logic for quests tied to completion count
+            else if (
+              questTemplate.relatedHabitType === "any_completion" &&
+              habit.dailyStatuses[entryIndex].status === "complete"
+            ) {
+              dailyQ.progress += 1;
+            }
+
+            // Change status of individual quest if it was just completed
+            if (
+              dailyQ.progress >= questTemplate.targetValue &&
+              !wasCompleteBefore
+            ) {
+              dailyQ.isComplete = true;
+
+              // Award coins for individual quest
+              if (room) {
+                room.coins += questTemplate.reward;
+                console.log(
+                  `Awarded ${questTemplate.reward} coins for completing quest: ${questTemplate.name}`
+                );
+              }
+            }
+          }
+        });
+
+        // Change set status if all quests in the set are now complete
+        // NOTE: The bonus reward is NOT awarded here. It is handled by the "Claim Bonus" endpoint.
+        const allQuestsDone = dailyQuestSet.quests.every((q) => q.isComplete);
+        if (allQuestsDone && !dailyQuestSet.isComplete) {
+          dailyQuestSet.isComplete = true;
+        }
+
+        await dailyQuestSet.save();
+      }
+
       await habit.save();
+
+      if (room) {
+        await room.save();
+      }
 
       const updatedHabit = habit.toObject();
       const { dailyStatuses, ...habitWithoutDailyStatuses } = updatedHabit;
@@ -511,6 +579,7 @@ export default function createHabitsRouter(requireAuth) {
         ...habitWithoutDailyStatuses,
         progress: getHabitDailyStatus(updatedHabit, now),
         currentStreak: updatedHabit.currentStreak,
+        dailyQuestSet: dailyQuestSet ? dailyQuestSet.toObject() : null,
       });
     } catch (err) {
       console.error("Error completing habit:", err);

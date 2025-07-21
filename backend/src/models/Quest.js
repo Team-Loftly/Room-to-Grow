@@ -5,6 +5,8 @@ const questSchema = new mongoose.Schema({
   description: String,
   reward: Number,
   image: String,
+  relatedHabitType: String,
+  targetValue: Number,
 });
 
 const Quest = mongoose.model("Quest", questSchema);

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// Sub-schema for for each of a user's daily quests
 const dailyQuestSchema = new mongoose.Schema(
   {
     questId: {
@@ -12,10 +13,16 @@ const dailyQuestSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
+    progress: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
   },
   { _id: false }
 );
 
+// Schema for a user's set of daily quests
 const dailyQuestSetSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -44,6 +51,7 @@ const dailyQuestSetSchema = new mongoose.Schema({
   quests: [dailyQuestSchema],
 });
 
+// Each user has at most one daily quest set per day
 dailyQuestSetSchema.index({ userId: 1, date: 1 }, { unique: true });
 
 const DailyQuestSet = mongoose.model("DailyQuestSet", dailyQuestSetSchema);

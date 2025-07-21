@@ -1,12 +1,14 @@
-import { Box, Card, Typography, Stack } from "@mui/material";
+import { Box, Button, Typography, Stack } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchDailyQuests,
+  claimDailyQuestReward,
   selectDailyQuests,
   selectDailyQuestsStatus,
   selectDailyQueststError,
 } from "../features/dailyQuestSetSlice";
 import { useEffect } from "react";
+import iconMap from "../components/quests/IconMap";
 
 export default function Quests() {
   const dispatch = useDispatch();
@@ -21,17 +23,9 @@ export default function Quests() {
     }
   }, [dispatch, status]);
 
-  if (status === "loading" || status === "idle") {
-    return (
-      <Stack
-        justifyContent="center"
-        alignItems="center"
-        sx={{ height: "100vh" }}
-      >
-        <Typography>Loading Daily Quests...</Typography>
-      </Stack>
-    );
-  }
+  const handleClaimReward = () => {
+    dispatch(claimDailyQuestReward(dailyQuests._id));
+  };
 
   if (status === "failed") {
     return (
@@ -58,60 +52,109 @@ export default function Quests() {
   }
 
   return (
-    <Box
+    <Stack
+      direction="column"
+      spacing={8}
       sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
         height: "100%",
         width: "100%",
-        padding: 2,
-        boxSizing: "border-box",
+        justifyContent: "center",
+        alignItems: "center",
+        p: 8,
       }}
     >
-      <Card
+      {/* Title */}
+      <Box
         sx={{
           display: "flex",
           flexDirection: "column",
+          alignItems: "center",
+          p: 2,
           borderRadius: 4,
-          width: "90%",
-          height: "90%",
+          width: "100%",
+          height: "40%",
           bgcolor: "rgba(255,255,255,0.8)",
           overflowY: "auto",
         }}
       >
-        <Typography
-          variant="h4"
-          align="center"
-          gutterBottom
-          sx={{ width: "100%" }}
-        >
+        <Typography variant="h4" align="center" gutterBottom>
           Daily Quests
         </Typography>
+        <Typography>
+          Complete all three daily quests to receive a bonus of 25 coins!
+        </Typography>
+        <Button
+          onClick={handleClaimReward}
+          disabled={!dailyQuests.isComplete || dailyQuests.isRewardClaimed}
+          sx={{
+            marginTop: "12px",
+            p: 2,
+            backgroundColor: "#0a571f",
+            color: "white",
+            borderRadius: "5px",
+            fontSize: "17px",
+          }}
+        >
+          Claim Daily Bonus
+        </Button>
+      </Box>
+      {/* Individual Quests */}
+      <Stack
+        spacing={8}
+        direction="row"
+        sx={{
+          width: "100%",
+          height: "60%",
+          overflowY: "auto",
+        }}
+      >
         {dailyQuests.quests && dailyQuests.quests.length > 0 ? (
-          dailyQuests.quests.map((questItem) => (
-            <Box key={questItem.questId._id} sx={{ marginBottom: 2 }}>
-              <Typography>
-                {questItem.questId.name}
-                <br />
-                {questItem.questId.description}
-                <br />
-                {questItem.questId.reward} Coins <br /> Status:{" "}
-                {questItem.isComplete ? "Complete" : "Incomplete"}{" "}
-              </Typography>
-            </Box>
-          ))
+          dailyQuests.quests.map((questItem) => {
+            const IconComponent = iconMap[questItem.questId.image];
+            return (
+              <Box
+                key={questItem.questId._id}
+                sx={{
+                  bgcolor: "rgba(255, 255, 255, 0.8)",
+                  borderRadius: 4,
+                  width: "100%",
+                  opacity: questItem.isComplete ? 0.5 : 1,
+                  overflowY: "auto",
+                }}
+              >
+                <Typography
+                  variant="h5"
+                  align="center"
+                  sx={{ width: "100%", p: 2 }}
+                >
+                  {questItem.questId.name}
+                </Typography>
+                {IconComponent && (
+                  <IconComponent
+                    align="center"
+                    sx={{ width: "100%", color: "#0a571f", fontSize: 40 }}
+                  />
+                )}
+                <Typography align="center" sx={{ width: "100%", p: 2 }}>
+                  {questItem.questId.description} <br />
+                  Reward: {questItem.questId.reward} Coins <br />
+                  Status: {questItem.isComplete
+                    ? "Complete"
+                    : "Incomplete"}{" "}
+                  <br />
+                  Progress: {questItem.progress} out of{" "}
+                  {questItem.questId.targetValue}
+                  <br />
+                </Typography>
+              </Box>
+            );
+          })
         ) : (
           <Typography align="center" sx={{ marginTop: 2 }}>
             No individual quests found for today.
           </Typography>
         )}
-        <Typography>
-          Complete all three quests to receive a bonus of {dailyQuests.reward}{" "}
-          coins
-        </Typography>
-      </Card>
-    </Box>
+      </Stack>
+    </Stack>
   );
 }

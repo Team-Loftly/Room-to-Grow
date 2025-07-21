@@ -5,8 +5,10 @@
     },
     "name": "Timed Task Titan",
     "description": "Log 30 minutes towards a timed task today.",
-    "reward": 50,
-    "image": "./images/warp-pipe.png"
+    "reward": 20,
+    "image": "Forward30",
+    "relatedHabitType": "timed",
+    "targetValue": 30
   },
   {
     "_id": {
@@ -14,8 +16,10 @@
     },
     "name": "Habit Hero",
     "description": "Complete one habit today.",
-    "reward": 50,
-    "image": "./images/warp-pipe.png"
+    "reward": 20,
+    "image": "AddTask",
+    "relatedHabitType": "any_completion",
+    "targetValue": 1
   },
  {
     "_id": {
@@ -23,7 +27,9 @@
     },
     "name": "Checkmark Champion",
     "description": "Log three checkmarks towards habits today.",
-    "reward": 50,
-    "image": "./images/warp-pipe.png"
+    "reward": 20,
+    "image": "DoneAll",
+    "relatedHabitType": "checkmark",
+    "targetValue": 3
   }
 ]
