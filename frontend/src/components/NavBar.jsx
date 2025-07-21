@@ -34,19 +34,6 @@ export default function NavBar() {
     dispatch(fetchInventory());
   }, [dispatch]);
 
-  // handle loading and error
-  if (status === "loading") {
-    return (
-      <Stack
-        justifyContent="center"
-        alignItems="center"
-        sx={{ height: "100vh" }}
-      >
-        <Typography>Loading</Typography>
-      </Stack>
-    );
-  }
-
   return (
     <AppBar position="static" sx={{ backgroundColor: "#0a571f" }}>
       <Toolbar
@@ -55,15 +42,17 @@ export default function NavBar() {
         }}
       >
         <Box sx={{ flexGrow: 1, fontFamily: "Caveat" }}>
-          <Typography
-            className="hover:cursor-pointer"
-            variant="h4"
-            component="div"
-            sx={{ width: 180, fontFamily: "Caveat" }}
-            onClick={() => navigate("/home")}
-          >
-            Room to Grow
-          </Typography>
+          <Tooltip title="Home" arrow>
+            <Typography
+              className="hover:cursor-pointer"
+              variant="h4"
+              component="div"
+              sx={{ width: 180, fontFamily: "Caveat" }}
+              onClick={() => navigate("/home")}
+            >
+              Room to Grow
+            </Typography>
+          </Tooltip>
         </Box>
 
         <Stack direction="row" spacing={3} alignItems="center">

@@ -15,7 +15,8 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { Alert } from "@mui/material";
+import { Alert, Tooltip } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
 
 // Dialog Components
 import Dialog from "@mui/material/Dialog";
@@ -72,7 +73,7 @@ export default function CreateTask({
     setOpen(true);
   };
 
-  const [open, setOpen] = useState(false); // State for Dialog open/close
+  const [open, setOpen] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
@@ -107,9 +108,12 @@ export default function CreateTask({
       if (name === "type") {
         if (value === "timed") {
           updated.checkmarks = null;
+          updated.hours = 0;
+          updated.minutes = 1;
         } else if (value === "checkmark") {
           updated.hours = null;
           updated.minutes = null;
+          updated.checkmarks = 1;
         }
       }
       return updated;
@@ -154,9 +158,11 @@ export default function CreateTask({
   return (
     <Box>
       {!ExistingTask && (
-        <Button variant="contained" onClick={handleClickOpen}>
-          Add Habit
-        </Button>
+        <Tooltip title="Create New Habit">
+          <Button variant="contained" onClick={handleClickOpen}>
+            <AddIcon />
+          </Button>
+        </Tooltip>
       )}
 
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
@@ -173,8 +179,8 @@ export default function CreateTask({
                 </Alert>
               )}
               <TextField
-                label="Title"
-                placeholder="Title"
+                label="Name"
+                placeholder="Name"
                 size="small"
                 required
                 name="title"
