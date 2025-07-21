@@ -9,6 +9,7 @@ import Tasks from "./pages/Tasks";
 import Friends from "./pages/Friends";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
+import FocusPage from "./components/FocusPage";
 import { useEffect } from "react";
 import { isTokenExpired } from "./util";
 import { useNavigate } from "react-router-dom";
@@ -48,6 +49,7 @@ function App() {
             <Route path="/edit" element={<EditRoom />} />
             <Route path="/friends" element={<Friends />} />
             <Route path="/missions" element={<Missions />} />
+            <Route path="/timer" element={<FocusPage />} />
           </Route>
         </Routes>
       </main>
