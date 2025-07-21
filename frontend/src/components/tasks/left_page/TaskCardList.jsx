@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import Stack from "@mui/material/Stack";
 import TaskCard from "./TaskCard";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,6 +8,12 @@ import AccordionTasks from "./AccordionTasks";
 
 export default function TaskCardList() {
   const dispatch = useDispatch();
+
+  const sortBy = useSelector((state) => state.sortFilter.sortBy);
+  const sortDirection = useSelector((state) => state.sortFilter.sortDirection);
+  const filterBy = useSelector((state) => state.sortFilter.filterBy);
+
+  // Today's tasks
   const tasks = useSelector((state) => state.tasks.taskList);
   const completed_tasks = useSelector((state) => state.tasks.completedTaskList);
   const skipped_tasks = useSelector((state) => state.tasks.skippedTaskList);
@@ -15,7 +21,7 @@ export default function TaskCardList() {
   const status = useSelector((state) => state.tasks.status);
   const error = useSelector((state) => state.tasks.error);
 
-  // consts for all habits:
+  // All habits
   const showAllTasks = useSelector((state) => state.tasks.showAllTasks);
   const allTasks = useSelector((state) => state.tasks.allTaskList);
   const allHabitsStatus = useSelector((state) => state.tasks.allHabitsStatus);
@@ -33,6 +39,67 @@ export default function TaskCardList() {
     }
   }, [allHabitsStatus, dispatch]);
 
+  const filterTasks = (tasksArray) => {
+    if (filterBy === "default") {
+      return tasksArray;
+    }
+
+    const priorityMap = {
+      high: 1,
+      medium: 2,
+      low: 3,
+    };
+    const targetPriority = priorityMap[filterBy];
+
+    if (targetPriority) {
+      return tasksArray.filter((task) => task.priority === targetPriority);
+    }
+
+    return tasksArray;
+  };
+
+  // Sorting Helper Function
+  const sortTasks = (tasksArray) => {
+    let sorted = [...tasksArray];
+
+    if (sortBy === "name") {
+      sorted.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sortBy === "priority") {
+      sorted.sort((a, b) => a.priority - b.priority);
+    }
+
+    if (sortDirection === "desc") {
+      sorted.reverse();
+    }
+
+    return sorted;
+  };
+
+  const filteredAndSortedTasksToday = useMemo(() => {
+    const filtered = filterTasks(tasks);
+    return sortTasks(filtered);
+  }, [tasks, filterBy, sortBy, sortDirection]);
+
+  const filteredAndSortedAllTasks = useMemo(() => {
+    const filtered = filterTasks(allTasks);
+    return sortTasks(filtered);
+  }, [allTasks, filterBy, sortBy, sortDirection]);
+
+  const filteredAndSortedCompletedTasks = useMemo(() => {
+    const filtered = filterTasks(completed_tasks);
+    return sortTasks(filtered);
+  }, [completed_tasks, filterBy, sortBy, sortDirection]);
+
+  const filteredAndSortedSkippedTasks = useMemo(() => {
+    const filtered = filterTasks(skipped_tasks);
+    return sortTasks(filtered);
+  }, [skipped_tasks, filterBy, sortBy, sortDirection]);
+
+  const filteredAndSortedFailedTasks = useMemo(() => {
+    const filtered = filterTasks(failed_tasks);
+    return sortTasks(filtered);
+  }, [failed_tasks, filterBy, sortBy, sortDirection]);
+
   if (allHabitsError) {
     return <Typography>Error fetching all habits: {allHabitsError}</Typography>;
   }
@@ -44,21 +111,21 @@ export default function TaskCardList() {
           <Typography variant="body2" color="text.secondary" sx={{ p: 2 }}>
             Loading habits...
           </Typography>
-        ) : allTasks.length > 0 ? (
+        ) : filteredAndSortedAllTasks.length > 0 ? (
           <Stack
             direction="column"
             spacing={2}
             sx={{
-              p: 2, // Add padding inside the Stack for content spacing
+              p: 2,
             }}
           >
-            {allTasks.map((task) => (
+            {filteredAndSortedAllTasks.map((task) => (
               <TaskCard key={task._id} task={task} />
             ))}
           </Stack>
         ) : (
           <Typography variant="body2" color="text.secondary" sx={{ p: 2 }}>
-            Create a habit!
+            No habits match the current filter. Create a habit!
           </Typography>
         )}
       </>
@@ -77,41 +144,42 @@ export default function TaskCardList() {
         <Typography variant="body2" color="text.secondary" sx={{ p: 2 }}>
           Loading habits...
         </Typography>
-      ) : tasks.length > 0 ? (
+      ) : filteredAndSortedTasksToday.length > 0 ? (
         <Stack
           direction="column"
           spacing={2}
           sx={{
-            p: 2, // Add padding inside the Stack for content spacing
+            p: 2,
           }}
         >
-          {tasks.map((task) => (
+          {filteredAndSortedTasksToday.map((task) => (
             <TaskCard key={task._id} task={task} />
           ))}
         </Stack>
       ) : (
         <Typography variant="body2" color="text.secondary" sx={{ p: 2 }}>
-          No habits left to complete today.
+          No habits left to complete today or no habits match the current
+          filter.
         </Typography>
       )}
 
-      {completed_tasks.length > 0 && (
+      {filteredAndSortedCompletedTasks.length > 0 && (
         <AccordionTasks
-          tasks={completed_tasks}
+          tasks={filteredAndSortedCompletedTasks}
           accordion_title={"Completed"}
         ></AccordionTasks>
       )}
 
-      {skipped_tasks.length > 0 && (
+      {filteredAndSortedSkippedTasks.length > 0 && (
         <AccordionTasks
-          tasks={skipped_tasks}
+          tasks={filteredAndSortedSkippedTasks}
           accordion_title={"Skipped"}
         ></AccordionTasks>
       )}
 
-      {failed_tasks.length > 0 && (
+      {filteredAndSortedFailedTasks.length > 0 && (
         <AccordionTasks
-          tasks={failed_tasks}
+          tasks={filteredAndSortedFailedTasks}
           accordion_title={"Failed"}
         ></AccordionTasks>
       )}

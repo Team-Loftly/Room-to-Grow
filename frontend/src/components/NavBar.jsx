@@ -42,15 +42,17 @@ export default function NavBar() {
         }}
       >
         <Box sx={{ flexGrow: 1, fontFamily: "Caveat" }}>
-          <Typography
-            className="hover:cursor-pointer"
-            variant="h4"
-            component="div"
-            sx={{ width: 180, fontFamily: "Caveat" }}
-            onClick={() => navigate("/home")}
-          >
-            Room to Grow
-          </Typography>
+          <Tooltip title="Home" arrow>
+            <Typography
+              className="hover:cursor-pointer"
+              variant="h4"
+              component="div"
+              sx={{ width: 180, fontFamily: "Caveat" }}
+              onClick={() => navigate("/home")}
+            >
+              Room to Grow
+            </Typography>
+          </Tooltip>
         </Box>
 
         <Stack direction="row" spacing={3} alignItems="center">

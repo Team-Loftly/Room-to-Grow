@@ -55,6 +55,12 @@ export default function TaskCard({ task, task_status }) {
     Saturday: "Sa",
   };
 
+  const priorityMap = {
+    3: "Low",
+    2: "Medium",
+    1: "High",
+  };
+
   const formatDays = (daysArray) => {
     if (!daysArray || daysArray.length === 0) {
       return "No specific days";
@@ -186,7 +192,7 @@ export default function TaskCard({ task, task_status }) {
           },
           backgroundColor: isSelected ? "#d3d3d3" : "background.paper",
           display: "flex",
-          alignItems: "center",
+          alignItems: "stretch",
           justifyContent: "space-between",
           flexDirection: "row",
         }}
@@ -235,86 +241,100 @@ export default function TaskCard({ task, task_status }) {
             </Box>
           )}
         </Stack>
-        {task.progress && !task_status && !isTimedTask && (
-          <>
+
+        <Stack
+          direction="column"
+          spacing={1}
+          alignItems="flex-end"
+          sx={{ height: "100%" }}
+        >
+          <div>
+            {task.progress && !task_status && !isTimedTask && (
+              <>
+                <IconButton
+                  aria-label="decrement"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDecrement();
+                  }}
+                  sx={{ alignSelf: "flex-start", mt: -1, mr: -1 }}
+                >
+                  <RemoveIcon />
+                </IconButton>
+
+                <IconButton
+                  aria-label="increment"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleIncrement();
+                  }}
+                  sx={{ alignSelf: "flex-start", mt: -1, mr: -1 }}
+                >
+                  <AddIcon />
+                </IconButton>
+              </>
+            )}
+
+            {task.progress && !task_status && isTimedTask && (
+              <IconButton
+                aria-label="log_time"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleLogTimeClick();
+                }}
+                sx={{ alignSelf: "flex-start", mt: -1, mr: -1 }}
+              >
+                <AlarmOnIcon />
+              </IconButton>
+            )}
             <IconButton
-              aria-label="decrement"
+              aria-label="more"
+              aria-controls={menuOpen ? "long-menu" : undefined}
+              aria-expanded={menuOpen ? "true" : undefined}
+              aria-haspopup="true"
               onClick={(e) => {
                 e.stopPropagation();
-                handleDecrement();
+                handleMenuClick(e);
               }}
               sx={{ alignSelf: "flex-start", mt: -1, mr: -1 }}
             >
-              <RemoveIcon />
+              <MoreVertIcon />
             </IconButton>
-
-            <IconButton
-              aria-label="increment"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleIncrement();
+            <Menu
+              id="long-menu"
+              anchorEl={anchorEl}
+              open={menuOpen}
+              onClose={handleMenuClose}
+              slotProps={{
+                list: {
+                  "aria-labelledby": "long-button",
+                },
               }}
-              sx={{ alignSelf: "flex-start", mt: -1, mr: -1 }}
             >
-              <AddIcon />
-            </IconButton>
-          </>
-        )}
+              <MenuItem onClick={handleEditClick}>Edit</MenuItem>
 
-        {task.progress && !task_status && isTimedTask && (
-          <IconButton
-            aria-label="log_time"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleLogTimeClick();
-            }}
-            sx={{ alignSelf: "flex-start", mt: -1, mr: -1 }}
-          >
-            <AlarmOnIcon />
-          </IconButton>
-        )}
-        <IconButton
-          aria-label="more"
-          aria-controls={menuOpen ? "long-menu" : undefined}
-          aria-expanded={menuOpen ? "true" : undefined}
-          aria-haspopup="true"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleMenuClick(e);
-          }}
-          sx={{ alignSelf: "flex-start", mt: -1, mr: -1 }}
-        >
-          <MoreVertIcon />
-        </IconButton>
-        <Menu
-          id="long-menu"
-          anchorEl={anchorEl}
-          open={menuOpen}
-          onClose={handleMenuClose}
-          slotProps={{
-            list: {
-              "aria-labelledby": "long-button",
-            },
-          }}
-        >
-          <MenuItem onClick={handleEditClick}>Edit</MenuItem>
-
-          <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
-          {task.progress && task_status && (
-            <MenuItem onClick={handleUndo}>Undo {task_status}</MenuItem>
-          )}
-          {task.progress && !task_status && (
-            <>
-              <MenuItem onClick={handleSkip}>
-                Mark Skipped {task_status}
-              </MenuItem>
-              <MenuItem onClick={handleFail}>
-                Mark Failed {task_status}
-              </MenuItem>
-            </>
-          )}
-        </Menu>
+              <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
+              {task.progress && task_status && (
+                <MenuItem onClick={handleUndo}>Undo {task_status}</MenuItem>
+              )}
+              {task.progress && !task_status && (
+                <div>
+                  <MenuItem onClick={handleSkip}>
+                    Mark Skipped {task_status}
+                  </MenuItem>
+                  <MenuItem onClick={handleFail}>
+                    Mark Failed {task_status}
+                  </MenuItem>
+                </div>
+              )}
+            </Menu>
+          </div>
+          <Typography variant="caption" color="text.secondary" sx={{ pl: 1 }}>
+            Priority: {priorityMap[task.priority]}
+          </Typography>
+        </Stack>
       </Paper>
+
       {openEditMenuDialog && (
         <CreateTask
           ExistingTask={task}

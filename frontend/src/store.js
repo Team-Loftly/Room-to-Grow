@@ -6,6 +6,7 @@ import inventorySlice from "./features/inventorySlice";
 import timerSlice from "./features/timerSlice";
 import roomSlice from "./features/roomSlice";
 import friendsSlice from "./features/friendsSlice";
+import sortFilterSlice from "./features/sortFilterSlice"
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export const store = configureStore({
     timer: timerSlice,
     room: roomSlice,
     friends: friendsSlice,
+    sortFilter: sortFilterSlice
   },
 });
