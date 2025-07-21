@@ -20,13 +20,112 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 Introducing Room to Grow, a productivity web app where users can build up healthy habits to grow and personalize their very own virtual study room.
 Earn coins and spend them at the Marketplace to buy various decorations for your room! Every minute of focus counts!
 ### Standard Goals
-TODO
+- Users can set different types of tasks (timed, counted, recurring)
+  - Current State: Complete
+- Users have more flexibility with tasks (organized by priority, sub tasks for larger tasks, etc.)
+  - Current State: TODO
+- Daily quest/reward system, productivity streaks that give bonus points, achievements, or other ways to reward consistent progress.
+  - Current State: TODO
+- Users gain access to “trends” in their productivity and view visualizations
+  - Current State: TODO
+- Users can add other users as friends by username
+  - Current State: Complete
+- Interaction with certain elements of the app make noise
+  - Current State: TODO
 ### Stretch Goals
-TODO
+- Users can rotate the room to view it freely
+  - Current State: Complete
+- Assets present in the room have idle animations (cat stretches occasionally, fairly lights twinkle, etc.)
+  - Current State: TODO
+- Users can view and visit each others’ rooms.
+  - Current State: TODO
+- Users can purchase more complex room decorations (weather changes, lighting changes, etc)
+  - Current State: TODO
+- Users can create several different room layouts and save them to quickly switch between them.
+  - Current State: Not started (TODO: Are we dropping this?)
+- Users can connect their spotify account to play music in their rooms.
+  - Current State: Not started (TODO: Are we dropping this?)
 ### Non-Trivial Elements
-TODO
+| Feature                         | State     | Description                          |
+|----------------------------------|-----------|--------------------------------------|
+| Item marketplace                | Complete | Users can purchase items using coins earned by doing habits.            |
+| Habit tracking system           | Complete | Users can create, update, and complete habits to earn points.      |
+| ThreeJs room render & edit room| Complete | Users have a 3D study room that their can view and place purchased items in.           |
+| Add friends and view their room| Complete | Users can add friends by username and view their rooms.        |
+| View metrics about habits       | Complete | Users can view metrics about their habits.       |
+| Quest system                    | TODO     | TODO        |
+| Pomodoro Timer                  | Complete | Users can start a working Pomodoro timer.    |
+
 ### XSS Security Assessment
-TODO
+This section covers the XSS security assessment conducted by our team. It will go over all of our site's input fields and tests we conducted by injecting javascript code into them.
+Our tests:
+- Test 1: Enter <script>alert('XSS')</script> into each of the input fields to see whether we can bypass our regular input handling workflow to instead run a malicious scrpt.
+- Test 2: Enter "><img src=x onerror=alert('XSS')> into each of the input fields to test whether we can inject an image tag to our inputs and use its event handler to run a malicious script.
+- Test 3: Enter &lt;div onmouseover="alert('XSS')"&gt;Hover me&lt;div&gt; into each of the input fields to test whether we can introduce a malicious script by user action (hovering in this case). This should also get through any checks for script tags as this uses a div.
+Login and Registration Page:
+- Username field:
+  - Test 1:
+    - Result: The user can successfully register and login with the username <script>alert('XSS')</script>. The input treats this entire script as a "name" and doesn't execute the script.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 2:
+    - Result: The user can successfully register and login with the username  "><img src=x onerror=alert('XSS')>. The input treats this entire script as a "name" and doesn't execute the script.
+    - Mitigation Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 3: 
+    - Result: The user can successfully register and login with the username &lt;div onmouseover="alert('XSS')"&gt;Hover me&lt;div&gt;. The input treats this entire script as a "name" and doesn't execute the script.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+- Email address field: (Note for this test I put a@b.com at the end of each script to give it a valid email format).
+  - Test 1:
+    - Result: The email address input field blocks the use of "<" in the field and so clicking "register" or "login" does nothing except bring up a warning saying that the input contains an invalid character.
+    - Mitigation Actions: None required as this is sufficent to stop this XSS attack.
+  - Test 2:
+    - Result: The email address input field blocks the use of ' " ' in the field and so clicking "register" or "login" does nothing except bring up a warning saying that the input contains an invalid character.
+    - Mitigation Actions: None required as this is sufficent to stop this XSS attack.
+  - Test 3:
+    - Result: The email address input field blocks the use of "<" in the field and so clicking "register" or "login" does nothing except bring up a warning saying that the input contains an invalid character.
+    - Mitigation Actions: None required as this is sufficent to stop this XSS attack.
+- Password Field:
+  - Test 1:
+    - Result: The user can successfully register and login with <script>alert('XSS')</script> as a password. No alert script is executed.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 2:
+    - Result: The user can successfully register and login with "><img src=x onerror=alert('XSS')> as a password. No alert script is executed.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 3:
+    - Result: The user can successfully register and login with &lt;div onmouseover="alert('XSS')"&gt;Hover me&lt;div&gt;
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+Habits Page:
+- New habit title field:
+  - Test 1:
+    - Result: The user can successfully create a habit with title <script>alert('XSS')</script>. The input treats this entire script as a title and doesn't execute the script.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 2:
+    - Result: The user can successfully create a habit with title "><img src=x onerror=alert('XSS')> . The input treats this entire script as a title and doesn't execute the script.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 3:
+    - Result: The user can successfully create a habit with title &lt;div onmouseover="alert('XSS')"&gt;Hover me&lt;div&gt;. The input treats this entire script as a title and doesn't execute the script.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+- New habit description field:
+  - Test 1:
+    - Result: The user can successfully create a habit with description <script>alert('XSS')</script>. The input treats this entire script as a description and doesn't execute the script.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 2:
+    - Result: The user can successfully create a habit with description "><img src=x onerror=alert('XSS')> . The input treats this entire script as a description and doesn't execute the script.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 3:
+    - Result: The user can successfully create a habit with description &lt;div onmouseover="alert('XSS')"&gt;Hover me&lt;div&gt;. The input treats this entire script as a description and doesn't execute the script.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+Friends Page:
+- Friend Username field:
+  - Test 1:
+    - Result: The user can successfully add <script>alert('XSS')</script> as a friend if that username exists. If not, the appropriate user not found error is shown. No script is executed.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 2:
+    - Result: The user can successfully add "><img src=x onerror=alert('XSS')> as a friend if that username exists. If not, the appropriate user not found error is shown. No script is executed.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+  - Test 3:
+    - Result: The user can successfully add &lt;div onmouseover="alert('XSS')"&gt;Hover me&lt;div&gt; as a friend if that username exists. If not, the appropriate user not found error is shown. No script is executed.
+    - Mitigation Actions: Added an onChange handler to the input to check the input against a regular expression "/[<>"'\/\\]/" and give an error if it includes any of these characters so they can't be entered.
+
 ### M4 highlights
 - Usernames
   - User objects now must have a username in addition to an email and password.

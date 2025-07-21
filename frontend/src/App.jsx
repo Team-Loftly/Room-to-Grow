@@ -42,7 +42,7 @@ function App() {
             }
           >
             <Route path="/home" element={<Home />} />
-            <Route path="/tasks" element={<Tasks />} />
+            <Route path="/habits" element={<Tasks />} />
             <Route path="/stats" element={<Stats />} />
             <Route path="/marketplace" element={<Market />} />
             <Route path="/edit" element={<EditRoom />} />

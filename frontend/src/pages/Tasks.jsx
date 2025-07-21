@@ -13,7 +13,6 @@ export default function Tasks() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        bgcolor: "#1E2939",
       }}
     >
       <Stack
@@ -25,7 +24,6 @@ export default function Tasks() {
           pt: 5,
           px: 7,
           pb: 10,
-          bgcolor: "#1E2939",
           backgroundImage: `url(${Book})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "100% 100%",

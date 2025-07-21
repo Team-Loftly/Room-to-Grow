@@ -15,6 +15,8 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { Alert, Tooltip } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
 
 // Dialog Components
 import Dialog from "@mui/material/Dialog";
@@ -37,6 +39,7 @@ const daysOfTheWeek = [
   { value: "Saturday", label: "Sa" },
 ];
 const allDayValues = daysOfTheWeek.map((day) => day.value);
+const disallowedCharacters = /[<>"'\/\\]/;
 
 export default function CreateTask({
   ExistingTask,
@@ -55,6 +58,7 @@ export default function CreateTask({
   };
 
   const [taskValues, setTaskValues] = useState(emptyTask);
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -69,7 +73,7 @@ export default function CreateTask({
     setOpen(true);
   };
 
-  const [open, setOpen] = useState(false); // State for Dialog open/close
+  const [open, setOpen] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
@@ -92,14 +96,24 @@ export default function CreateTask({
   const handleBasicInput = (event) => {
     const { name, value } = event.target;
 
+    if (disallowedCharacters.test(value)) {
+      setError("Input contains invalid characters!");
+      return;
+    } else {
+      setError("");
+    }
+
     setTaskValues((prevValues) => {
       let updated = { ...prevValues, [name]: value };
       if (name === "type") {
         if (value === "timed") {
           updated.checkmarks = null;
+          updated.hours = 0;
+          updated.minutes = 1;
         } else if (value === "checkmark") {
           updated.hours = null;
           updated.minutes = null;
+          updated.checkmarks = 1;
         }
       }
       return updated;
@@ -144,9 +158,11 @@ export default function CreateTask({
   return (
     <Box>
       {!ExistingTask && (
-        <Button variant="contained" onClick={handleClickOpen}>
-          Add Habit
-        </Button>
+        <Tooltip title="Create New Habit">
+          <Button variant="contained" onClick={handleClickOpen}>
+            <AddIcon />
+          </Button>
+        </Tooltip>
       )}
 
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
@@ -157,9 +173,14 @@ export default function CreateTask({
           </DialogContentText>
           <Box component="form" noValidate autoComplete="off">
             <Stack spacing={2} sx={{ width: "100%" }}>
+              {error && (
+                <Alert severity="error" onClose={() => setError("")} sx={{ mb: 2, width: '100%' }}>
+                  {error}
+                </Alert>
+              )}
               <TextField
-                label="Title"
-                placeholder="Title"
+                label="Name"
+                placeholder="Name"
                 size="small"
                 required
                 name="title"

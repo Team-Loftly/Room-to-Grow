@@ -9,7 +9,6 @@ export const spendCoinsAndUpdate = (amount) => (dispatch, getState) => {
   dispatch(spendCoins(amount));
   const state = getState().inventory;
   dispatch(updateInventory(state));
-  dispatch(fetchInventory()); // fetch inventory again to populate decorId
 };
 
 export const addItemAndUpdate = (item) => (dispatch, getState) => {
@@ -17,16 +16,15 @@ export const addItemAndUpdate = (item) => (dispatch, getState) => {
   const state = getState().inventory;
   console.log("Current inventory state:", state);
   dispatch(updateInventory(state));
-  dispatch(fetchInventory()); // fetch inventory again to populate decorId
 };
 
 export const addCoinsAndUpdate = (amount) => (dispatch, getState) => {
   dispatch(addCoins(amount));
   const state = getState().inventory;
   dispatch(updateInventory(state));
-  dispatch(fetchInventory()); // fetch inventory again to populate decorId
 };
 
+// Unused
 export const fetchInventory = createAsyncThunk(
   "inventory/fetchInventory",
   async (_, { rejectWithValue }) => {
@@ -61,7 +59,8 @@ export const fetchInventory = createAsyncThunk(
   }
 );
 
-// called whenever an action is done on our inventory slice
+// Updates the inventory to backend, and fetches the updated inventory
+// to populate nested objects like decorations
 export const updateInventory = createAsyncThunk(
   "inventory/updateInventory",
   async (state, { rejectWithValue }) => {
@@ -80,7 +79,13 @@ export const updateInventory = createAsyncThunk(
         }
       );
 
-      return response.data;
+      const fetchResponse = await axios.get(`${BASE_API_URL}/rooms`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return fetchResponse.data;
     } catch (error) {
       console.error("Error fetching data with Axios:", error);
 

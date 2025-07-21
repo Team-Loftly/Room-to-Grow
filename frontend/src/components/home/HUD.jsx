@@ -36,7 +36,7 @@ export default function HUD() {
       <CustomTooltip title="Habits">
         <IconButton
           onClick={() => {
-            navigate("/tasks");
+            navigate("/habits");
           }}
         >
           <HabitsIcon sx={iconStyle} />

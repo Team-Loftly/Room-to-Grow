@@ -445,24 +445,6 @@ export default function createHabitsRouter(requireAuth) {
           habit.dailyStatuses[entryIndex].value = 0;
         }
 
-        let cur_value = habit.dailyStatuses[entryIndex].value;
-        // don't go over completed
-        if (
-          habit.type === "timed" &&
-          habit.hours !== null &&
-          habit.minutes !== null
-        ) {
-          const goalInMinutes = habit.hours * 60 + habit.minutes;
-          cur_value = cur_value >= goalInMinutes ? goalInMinutes : cur_value;
-        } else if (habit.type === "checkmark" && habit.checkmarks !== null) {
-          cur_value =
-            cur_value >= habit.checkmarks ? habit.checkmarks : cur_value;
-        }
-
-        habit.dailyStatuses[entryIndex].value = cur_value;
-
-        habit.dailyStatuses[entryIndex].date = now;
-        currentProgressValue = habit.dailyStatuses[entryIndex].value;
       } else {
         // Create new entry
         let new_value = value >= 0 ? value : 0;
@@ -483,6 +465,25 @@ export default function createHabitsRouter(requireAuth) {
         });
         entryIndex = habit.dailyStatuses.length - 1; // Get index of newly pushed entry
       }
+
+        let cur_value = habit.dailyStatuses[entryIndex].value;
+        // don't go over completed
+        if (
+          habit.type === "timed" &&
+          habit.hours !== null &&
+          habit.minutes !== null
+        ) {
+          const goalInMinutes = habit.hours * 60 + habit.minutes;
+          cur_value = cur_value >= goalInMinutes ? goalInMinutes : cur_value;
+        } else if (habit.type === "checkmark" && habit.checkmarks !== null) {
+          cur_value =
+            cur_value >= habit.checkmarks ? habit.checkmarks : cur_value;
+        }
+
+        habit.dailyStatuses[entryIndex].value = cur_value;
+
+        habit.dailyStatuses[entryIndex].date = now;
+        currentProgressValue = habit.dailyStatuses[entryIndex].value;
 
       // Determine the status (complete or incomplete) based on goal completion
       if (
