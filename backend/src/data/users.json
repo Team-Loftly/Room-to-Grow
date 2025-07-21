@@ -2,8 +2,8 @@
   "_id": {
     "$oid": "68660ef56fd728291e7ef8be"
   },
-  "username": "testUser1",
-  "email": "test@test.com",
+  "username": "admin",
+  "email": "admin@test.com",
   "hashedPassword": "$2b$10$We3MOoXWHEdbX6WYDI9tV.eflEf/ngvMc8Vgw9Ut7lDPBtaINPJ/m",
   "friends": []
 },
