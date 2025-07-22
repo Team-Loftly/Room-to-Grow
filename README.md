@@ -48,9 +48,9 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 - Users can purchase more complex room decorations (weather changes, lighting changes, etc)
   - Current State: TODO
 - Users can create several different room layouts and save them to quickly switch between them.
-  - Current State: Not started (TODO: Are we dropping this?)
+  - Current State: TODO
 - Users can connect their spotify account to play music in their rooms.
-  - Current State: Not started (TODO: Are we dropping this?)
+  - Current State: TODO
 
 ### Non-Trivial Elements
 | Feature                          | State     | Description                                                                            |
@@ -142,6 +142,15 @@ Friends Page:
 - Daily quests
   - Users now earn the bulk of their coins through the completion of daily quests, which discourages abuse of the habits rewards system and improves the pacing of room development by rewarding continual growth
   - Users are assigned three quests each day that are linked to the progress and completion of habits
+- Habits
+  - Users can now sort habits alphabetically and by priority.
+  - Users can filter habits by priority.
+  - Grouped side buttons in habits page as a collapsible menu.
+- Navbar
+  - Added a profile dropdown icon with logout as a menu item.
+  - Added text when hovering over buttons for a better user experience.
+  - Added a quests button to allow users to go to daily quests.
+  - Made coins a clickable button to navigate users to the marketplace.
 
 ### Bug List
 - Our team uses Github Issues to document our bugs which can be found here: https://github.students.cs.ubc.ca/CPSC455-2025S/team02/issues
