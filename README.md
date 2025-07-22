@@ -46,16 +46,17 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
   - Current State: Not started (TODO: Are we dropping this?)
 - Users can connect their spotify account to play music in their rooms.
   - Current State: Not started (TODO: Are we dropping this?)
+
 ### Non-Trivial Elements
 | Feature                          | State     | Description                                                                            |
 |----------------------------------|-----------|----------------------------------------------------------------------------------------|
-| Item marketplace                 | Complete  | Users can purchase items using coins earned by doing habits.                           |
-| Habit tracking system            | Complete  | Users can create, update, and complete habits to earn points.                          |
-| ThreeJs room render & edit room  | Complete  | Users have a 3D study room that their can view and place purchased items in.           |
+| Habit tracking system            | Complete  | Users can create, update, and complete habits to earn coins.                           |
+| Quest system                     | Complete  | Users can complete daily quests that reward consistent growth with coins.              |
+| Item marketplace                 | Complete  | Users can purchase a variety of room decorations with their hard earned coins.         |
+| ThreeJs room render & edit room  | Complete  | Users have a 3D study room that they can view and place purchased items in.            |
 | Add friends and view their room  | Complete  | Users can add friends by username and view their rooms.                                |
 | View metrics about habits        | Complete  | Users can view metrics about their habits.                                             |
-| Quest system                     | Complete  | Users can complete daily quests that reward them with coins.                           |
-| Pomodoro timer                   | Complete  | Users can start a working Pomodoro timer.                                              |
+| Pomodoro timer                   | Complete  | Users can activate a Pomodoro timer to boost their productivity.                       |
 
 ### XSS Security Assessment
 This section covers the XSS security assessment conducted by our team. It will go over all of our site's input fields and tests we conducted by injecting javascript code into them.
@@ -136,6 +137,9 @@ Friends Page:
 - Daily quests
   - Users now earn the bulk of their coins through the completion of daily quests, which discourages abuse of the habits rewards system and improves the pacing of room development by rewarding continual growth
   - Users are assigned three quests each day that are linked to the progress and completion of habits
+
+### Bug List
+- Our team uses Github Issues to document our bugs which can be found here: https://github.students.cs.ubc.ca/CPSC455-2025S/team02/issues
 
 ## M3
 
