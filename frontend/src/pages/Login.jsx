@@ -43,13 +43,13 @@ const IllustrationSection = styled(Box)(({ theme }) => ({
 }));
 
 const LoginFormSection = styled(Box)(({ theme }) => ({
-  flex: 1,
-  display: "flex",
+  flex: "0 0 40%",
+  minWidth: "40%",
   flexDirection: "column",
   justifyContent: "center",
-  alignItems: "flex-start", // Align items to start for text and form elements
+  alignItems: "flex-start",
   padding: theme.spacing(4),
-  maxWidth: "500px", // Constrain width
+  maxWidth: "500px",
   margin: "auto",
   backgroundColor: "#fff",
   borderRadius: theme.shape.borderRadius,
@@ -57,8 +57,10 @@ const LoginFormSection = styled(Box)(({ theme }) => ({
   // Adjust padding and alignment for smaller screens
   [theme.breakpoints.down("md")]: {
     padding: theme.spacing(2),
-    alignItems: "center", // Center content on small screens for better mobile layout
+    alignItems: "center",
     maxWidth: "100%",
+    flexBasis: "auto",
+    minWidth: "auto",
   },
 }));
 

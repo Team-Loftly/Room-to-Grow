@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { openTimer } from "../../features/timerSlice";
 import { Stack, IconButton } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
@@ -63,7 +62,7 @@ export default function HUD() {
       <CustomTooltip title="Timer">
         <IconButton
           onClick={() => {
-            dispatch(openTimer());
+            navigate("/timer");
           }}
         >
           <TimerIcon sx={iconStyle} />
