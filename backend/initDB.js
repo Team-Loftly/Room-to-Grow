@@ -5,6 +5,7 @@ import User from "./src/models/Users.js";
 import Decorations from "./src/models/Decorations.js";
 import Rooms from "./src/models/Rooms.js";
 import Habit from "./src/models/Habit.js";
+import Quests from "./src/models/Quest.js";
 import connectDB from "./src/connectDB.js";
 
 // converts {$oid: "..."} into mongoose.Types.ObjectId
@@ -112,6 +113,7 @@ const seed = async () => {
   try {
     await clearCollection(User, "users");
     await clearCollection(Decorations, "decorations");
+    await clearCollection(Quests, "quests");
     await clearCollection(Rooms, "rooms");
     await clearCollection(Habit, "habits");
 
@@ -124,6 +126,7 @@ const seed = async () => {
       Decorations,
       "decorations"
     );
+    await loadAndInsertData("./src/data/quests.json", Quests, "quests");
     await loadAndInsertData("./src/data/users.json", User, "users");
     await loadAndInsertData("./src/data/rooms.json", Rooms, "rooms", true);
     await loadAndInsertData("./src/data/habits.json", Habit, "habits");

@@ -63,18 +63,15 @@ export default function ProfileDropdown() {
         open={open}
         onClose={handleClose}
         className="mt-2"
-        MenuListProps={{
-          className: "bg-white rounded-lg shadow-xl py-2 min-w-[180px]",
-        }}
       >
-        <MenuItem
+        {/* <MenuItem
           disabled
           className="px-4 py-2 text-gray-700 font-semibold border-b border-gray-200"
         >
           <span className="truncate">user@example.com</span>
-        </MenuItem>
+        </MenuItem> */}
 
-        <MenuItem
+        {/* <MenuItem
           onClick={() => handleMenuItemClick("My Profile")}
           className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100 transition-colors duration-200 rounded-md mx-2 my-1"
         >
@@ -105,7 +102,7 @@ export default function ProfileDropdown() {
           <FeedbackIcon className="mr-2 text-orange-500" /> Send Feedback
         </MenuItem>
 
-        <div className="border-t border-gray-200 my-1 mx-2"></div>
+        <div className="border-t border-gray-200 my-1 mx-2"></div> */}
 
         <MenuItem
           onClick={logoutUser}

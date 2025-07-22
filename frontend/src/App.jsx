@@ -9,10 +9,11 @@ import Tasks from "./pages/Tasks";
 import Friends from "./pages/Friends";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
+import FocusPage from "./components/FocusPage";
 import { useEffect } from "react";
 import { isTokenExpired } from "./util";
 import { useNavigate } from "react-router-dom";
-import Missions from "./pages/Missions";
+import Quests from "./pages/Quests";
 function App() {
   const navigate = useNavigate();
   // check the user's token each time they attempt to navigate away
@@ -47,7 +48,8 @@ function App() {
             <Route path="/marketplace" element={<Market />} />
             <Route path="/edit" element={<EditRoom />} />
             <Route path="/friends" element={<Friends />} />
-            <Route path="/missions" element={<Missions />} />
+            <Route path="/quests" element={<Quests />} />
+            <Route path="/timer" element={<FocusPage />} />
           </Route>
         </Routes>
       </main>

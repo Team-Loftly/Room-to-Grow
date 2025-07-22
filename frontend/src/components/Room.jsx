@@ -2,7 +2,7 @@
 
 import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import { lazy, Suspense, useState, useRef, useEffect } from "react";
+import { lazy, Suspense, useState, useRef, useEffect, memo, useCallback } from "react"; // <--- Import memo
 import { useSelector, useDispatch } from "react-redux";
 import * as THREE from "three";
 import BaseRoom from "../models/BaseRoom";
@@ -82,23 +82,43 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
   }, [isSelected]);
 
   useEffect(() => {
+    // This effect runs when isSelected changes, specifically when an item is deselected.
+    // It captures the final position and rotation of the groupRef and dispatches them.
+    // This correctly saves the state of the furniture after movement/rotation.
     if (!isSelected && groupRef.current) {
       const finalPos = groupRef.current.position.toArray();
-      const finalRot = groupRef.current.rotation.toArray().slice(0, 3);
-      dispatch(
-        updateDecorationPosition({
-          index,
-          position: finalPos,
-        })
-      );
-      dispatch(
-        updateDecorationRotation({
-          index,
-          rotation: finalRot,
-        })
-      );
+      // Only take the Y rotation as that's what's being controlled
+      const finalRot = new THREE.Euler().setFromQuaternion(groupRef.current.quaternion).toArray().slice(0, 3); // Get Euler from quaternion
+
+      // Important: Only dispatch if the position/rotation has actually changed
+      // This prevents unnecessary Redux updates if the user just clicked on and off an item
+      const currentItem = item; // Use the item from props closure
+      const previousPosition = currentItem.position;
+      const previousRotation = currentItem.rotation;
+
+      const positionChanged = finalPos.some((val, i) => val !== previousPosition[i]);
+      const rotationChanged = finalRot.some((val, i) => val !== previousRotation[i]);
+
+
+      if (positionChanged) {
+        dispatch(
+          updateDecorationPosition({
+            index,
+            position: finalPos,
+          })
+        );
+      }
+      if (rotationChanged) {
+        dispatch(
+          updateDecorationRotation({
+            index,
+            rotation: finalRot,
+          })
+        );
+      }
     }
-  }, [isSelected, index, dispatch]);
+  }, [isSelected, index, dispatch, item]);
+
 
   const DynamicFurniture = loadFurniture(item.decorId.modelID);
 
@@ -120,10 +140,8 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
   );
 }
 
-export default function RoomScene({
-  isEditable = false,
-  friendUsername = null,
-}) {
+// Wrap RoomScene with React.memo
+export const Room = memo(({ isEditable = false, friendUsername = null, isRunning }) => {
   const dispatch = useDispatch();
   const lightTarget = useRef(new THREE.Object3D());
 
@@ -131,13 +149,13 @@ export default function RoomScene({
     dispatch(fetchRoom(friendUsername));
   }, [dispatch, friendUsername]);
 
-  const adjustForScreenSize = () => {
+  const adjustForScreenSize = useCallback(() => {
     const isSmallScreen = window.innerWidth < 800;
     return {
       scale: isSmallScreen ? [0.9, 0.9, 0.9] : [30, 30, 30],
       position: [0, -10, 0],
     };
-  };
+  }, []);
 
   const { scale: roomScale, position: roomPosition } = adjustForScreenSize();
   const furnitureList = useSelector((state) => state.room.decorations);
@@ -151,24 +169,21 @@ export default function RoomScene({
     setSaved(false);
   };
 
-  const handleObjectSelection = (index) => {
+  const handleObjectSelection = useCallback((index) => {
     if (!isEditable) return;
-    if (selectedDecor === index) {
-      setSelectedDecor(null);
-    } else {
-      setSelectedDecor(index);
-    }
-  };
+    setSelectedDecor(prevSelected => prevSelected === index ? null : index);
+  }, [isEditable]);
 
-  const handleBackgroundClick = () => {
+  const handleBackgroundClick = useCallback(() => {
     if (!isEditable) return;
     setSelectedDecor(null);
-  };
+  }, [isEditable]);
 
-  const handleEditRoom = () => {
+  const handleEditRoom = useCallback(() => {
     dispatch(updateRoom({ decorations: furnitureList }));
     setSaved(true);
-  };
+  }, [dispatch, furnitureList]);
+
 
   return (
     <>
@@ -262,4 +277,6 @@ export default function RoomScene({
       </Stack>
     </>
   );
-}
+});
+
+export default Room;

@@ -19,42 +19,44 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 ### App Summary
 Introducing Room to Grow, a productivity web app where users can build up healthy habits to grow and personalize their very own virtual study room.
 Earn coins and spend them at the Marketplace to buy various decorations for your room! Every minute of focus counts!
+
 ### Standard Goals
 - Users can set different types of tasks (timed, counted, recurring)
   - Current State: Complete
 - Users have more flexibility with tasks (organized by priority, sub tasks for larger tasks, etc.)
-  - Current State: TODO
+  - Current State: Complete
 - Daily quest/reward system, productivity streaks that give bonus points, achievements, or other ways to reward consistent progress.
-  - Current State: TODO
+  - Current State: Complete
 - Users gain access to “trends” in their productivity and view visualizations
-  - Current State: TODO
+  - Current State: Complete
 - Users can add other users as friends by username
   - Current State: Complete
 - Interaction with certain elements of the app make noise
-  - Current State: TODO
+  - Current State: Complete
 ### Stretch Goals
 - Users can rotate the room to view it freely
   - Current State: Complete
 - Assets present in the room have idle animations (cat stretches occasionally, fairly lights twinkle, etc.)
   - Current State: TODO
 - Users can view and visit each others’ rooms.
-  - Current State: TODO
+  - Current State: Complete
 - Users can purchase more complex room decorations (weather changes, lighting changes, etc)
   - Current State: TODO
 - Users can create several different room layouts and save them to quickly switch between them.
   - Current State: Not started (TODO: Are we dropping this?)
 - Users can connect their spotify account to play music in their rooms.
   - Current State: Not started (TODO: Are we dropping this?)
+
 ### Non-Trivial Elements
-| Feature                         | State     | Description                          |
-|----------------------------------|-----------|--------------------------------------|
-| Item marketplace                | Complete | Users can purchase items using coins earned by doing habits.            |
-| Habit tracking system           | Complete | Users can create, update, and complete habits to earn points.      |
-| ThreeJs room render & edit room| Complete | Users have a 3D study room that their can view and place purchased items in.           |
-| Add friends and view their room| Complete | Users can add friends by username and view their rooms.        |
-| View metrics about habits       | Complete | Users can view metrics about their habits.       |
-| Quest system                    | TODO     | TODO        |
-| Pomodoro Timer                  | Complete | Users can start a working Pomodoro timer.    |
+| Feature                          | State     | Description                                                                            |
+|----------------------------------|-----------|----------------------------------------------------------------------------------------|
+| Habit tracking system            | Complete  | Users can create, update, and complete habits to earn coins.                           |
+| Quest system                     | Complete  | Users can complete daily quests that reward consistent growth with coins.              |
+| Item marketplace                 | Complete  | Users can purchase a variety of room decorations with their hard earned coins.         |
+| ThreeJs room render & edit room  | Complete  | Users have a 3D study room that they can view and place purchased items in.            |
+| Add friends and view their room  | Complete  | Users can add friends by username and view their rooms.                                |
+| View metrics about habits        | Complete  | Users can view metrics about their habits.                                             |
+| Pomodoro timer                   | Complete  | Users can activate a Pomodoro timer to boost their productivity.                       |
 
 ### XSS Security Assessment
 This section covers the XSS security assessment conducted by our team. It will go over all of our site's input fields and tests we conducted by injecting javascript code into them.
@@ -132,6 +134,12 @@ Friends Page:
   - This helps with the add friends feature as friends can be added by their username.
 - Add friends and view their room!
   - Implemented a friends API to allow users to add each other as friends. Then, from the friends page they can view their friends' rooms using a new rooms API endpoint that fetches the room for a given username
+- Daily quests
+  - Users now earn the bulk of their coins through the completion of daily quests, which discourages abuse of the habits rewards system and improves the pacing of room development by rewarding continual growth
+  - Users are assigned three quests each day that are linked to the progress and completion of habits
+
+### Bug List
+- Our team uses Github Issues to document our bugs which can be found here: https://github.students.cs.ubc.ca/CPSC455-2025S/team02/issues
 
 ## M3
 

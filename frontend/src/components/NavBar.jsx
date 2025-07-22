@@ -6,6 +6,7 @@ import {
   Button,
   Typography,
   Stack,
+  Badge,
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -13,14 +14,14 @@ import {
   selectInventoryCoins,
   selectInventoryError,
   selectInventoryStatus,
+  fetchInventory,
 } from "../features/inventorySlice";
-import { fetchInventory } from "../features/inventorySlice";
 import { useEffect } from "react";
 import ProfileDropdown from "./ProfileDropdown";
 import PaidIcon from "@mui/icons-material/Paid";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-// nav bar that includes common functionality like log out, go to home, etc
-// should be included on every page except login/register
+import { selectHasUnseenCompletedQuest } from "../features/dailyQuestSetSlice";
+
 export default function NavBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -29,7 +30,8 @@ export default function NavBar() {
   const error = useSelector(selectInventoryError);
   const currentUserName = localStorage.getItem("username");
 
-  // fetch items on mount
+  const hasUnseenCompletedQuest = useSelector(selectHasUnseenCompletedQuest);
+
   useEffect(() => {
     dispatch(fetchInventory());
   }, [dispatch]);
@@ -60,16 +62,28 @@ export default function NavBar() {
             <Button
               color="inherit"
               onClick={() => {
-                navigate("/missions");
+                navigate("/quests");
               }}
               sx={{ textTransform: "none" }}
             >
-              <Typography
-                variant="body1"
-                sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 300 }}
+              <Badge
+                color="error"
+                variant="dot"
+                invisible={!hasUnseenCompletedQuest}
+                sx={{
+                  "& .MuiBadge-badge": {
+                    top: 8,
+                    right: 8,
+                  },
+                }}
               >
-                Quests <EmojiEventsIcon fontSize="large" className="mb-1" />
-              </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ fontFamily: "Be Vietnam Pro", fontWeight: 300 }}
+                >
+                  Quests <EmojiEventsIcon fontSize="large" className="mb-1" />
+                </Typography>
+              </Badge>
             </Button>
           </Tooltip>
 

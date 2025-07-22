@@ -15,26 +15,26 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import SiteHeader from "../components/SiteHeader";
 import loginIllustration from "../assets/login.png";
 import { fetchInventory } from "../features/inventorySlice";
+import { fetchDailyQuests } from "../features/dailyQuestSetSlice";
 import { useDispatch } from "react-redux";
 
-
 const PageContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  minHeight: '100vh',
-  [theme.breakpoints.down('md')]: {
-    flexDirection: 'column',
+  display: "flex",
+  minHeight: "100vh",
+  [theme.breakpoints.down("md")]: {
+    flexDirection: "column",
   },
 }));
 
 const IllustrationSection = styled(Box)(({ theme }) => ({
   flex: 1,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  position: 'relative',
-  overflow: 'hidden',
-  [theme.breakpoints.down('md')]: {
-    minHeight: '300px',
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  position: "relative",
+  overflow: "hidden",
+  [theme.breakpoints.down("md")]: {
+    minHeight: "300px",
   },
   backgroundImage: `url(${loginIllustration})`,
   backgroundSize: "cover",
@@ -43,29 +43,31 @@ const IllustrationSection = styled(Box)(({ theme }) => ({
 }));
 
 const LoginFormSection = styled(Box)(({ theme }) => ({
-  flex: 1,
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'flex-start', // Align items to start for text and form elements
+  flex: "0 0 40%",
+  minWidth: "40%",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "flex-start",
   padding: theme.spacing(4),
-  maxWidth: '500px', // Constrain width
-  margin: 'auto',
-  backgroundColor: '#fff',
+  maxWidth: "500px",
+  margin: "auto",
+  backgroundColor: "#fff",
   borderRadius: theme.shape.borderRadius,
-  boxShadow: 'none',
+  boxShadow: "none",
   // Adjust padding and alignment for smaller screens
-  [theme.breakpoints.down('md')]: {
+  [theme.breakpoints.down("md")]: {
     padding: theme.spacing(2),
-    alignItems: 'center', // Center content on small screens for better mobile layout
-    maxWidth: '100%',
+    alignItems: "center",
+    maxWidth: "100%",
+    flexBasis: "auto",
+    minWidth: "auto",
   },
 }));
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   marginBottom: theme.spacing(2),
-  '& .MuiOutlinedInput-root': {
-    borderRadius: '8px',
+  "& .MuiOutlinedInput-root": {
+    borderRadius: "8px",
   },
 }));
 
@@ -104,6 +106,7 @@ export default function Login() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("username", data.username);
       dispatch(fetchInventory());
+      dispatch(fetchDailyQuests());
       navigate("/home");
     } catch (err) {
       console.error(err);
@@ -118,7 +121,7 @@ export default function Login() {
       setError("");
       setEmail(email);
     }
-  }
+  };
 
   const handleChangePassword = (password) => {
     if (disallowedCharacters.test(password)) {
@@ -127,39 +130,47 @@ export default function Login() {
       setError("");
       setPassword(password);
     }
-  }
+  };
 
   const goToRegister = () => navigate("/register");
 
   return (
     <PageContainer>
-      <Box sx={{ position: "absolute", top: 20, left: 20, zIndex: 100}}>
+      <Box sx={{ position: "absolute", top: 20, left: 20, zIndex: 100 }}>
         <SiteHeader />
       </Box>
 
-      <IllustrationSection>
-      </IllustrationSection>
+      <IllustrationSection></IllustrationSection>
 
       <LoginFormSection>
-        <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
+        <Typography
+          variant="h4"
+          component="h1"
+          gutterBottom
+          sx={{ fontWeight: "bold" }}
+        >
           Welcome Back :)
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 3, textAlign: 'left' }}>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ mb: 3, textAlign: "left" }}
+        >
           Login to start your day! <br />
           Remember, we still have Room to Grow :)
         </Typography>
 
         {error && (
-          <Alert severity="error" onClose={() => setError("")} sx={{ mb: 2, width: '100%' }}>
+          <Alert
+            severity="error"
+            onClose={() => setError("")}
+            sx={{ mb: 2, width: "100%" }}
+          >
             {error}
           </Alert>
         )}
 
-        <Box
-          component="form"
-          onSubmit={loginUser}
-          sx={{ width: '100%' }}
-        >
+        <Box component="form" onSubmit={loginUser} sx={{ width: "100%" }}>
           <StyledTextField
             fullWidth
             label="Email Address"
@@ -193,25 +204,31 @@ export default function Login() {
             sx={{ mb: 3 }}
           />
 
-          <Box sx={{ display: 'flex', gap: 2, width: '100%', mb: 3,
-            '@media (max-width: 600px)': {
-              flexDirection: 'column',
-              gap: 1,
-            }
-          }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              width: "100%",
+              mb: 3,
+              "@media (max-width: 600px)": {
+                flexDirection: "column",
+                gap: 1,
+              },
+            }}
+          >
             <Button
               type="submit"
               variant="contained"
               sx={{
                 flexGrow: 1,
-                backgroundColor: '#0a571f', // Dark green for Login Now
-                '&:hover': {
-                  backgroundColor: '#119e38',
+                backgroundColor: "#0a571f", // Dark green for Login Now
+                "&:hover": {
+                  backgroundColor: "#119e38",
                 },
-                borderRadius: '8px',
+                borderRadius: "8px",
                 py: 1.5,
-                textTransform: 'none',
-                fontWeight: 'bold',
+                textTransform: "none",
+                fontWeight: "bold",
               }}
             >
               Login Now
@@ -221,16 +238,16 @@ export default function Login() {
               onClick={goToRegister}
               sx={{
                 flexGrow: 1,
-                borderColor: '#e0e0e0',
-                color: '#333',
-                '&:hover': {
-                  borderColor: '#ccc',
-                  backgroundColor: '#f5f5f5',
+                borderColor: "#e0e0e0",
+                color: "#333",
+                "&:hover": {
+                  borderColor: "#ccc",
+                  backgroundColor: "#f5f5f5",
                 },
-                borderRadius: '8px',
+                borderRadius: "8px",
                 py: 1.5,
-                textTransform: 'none',
-                fontWeight: 'bold',
+                textTransform: "none",
+                fontWeight: "bold",
               }}
             >
               Create Account
