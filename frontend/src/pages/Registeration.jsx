@@ -43,8 +43,8 @@ const IllustrationSection = styled(Box)(({ theme }) => ({
 }));
 
 const RegisterFormSection = styled(Box)(({ theme }) => ({
-  flex: 1,
-  display: 'flex',
+  flex: '0 0 40%',
+  minWidth: '40%',
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'flex-start',
@@ -54,10 +54,13 @@ const RegisterFormSection = styled(Box)(({ theme }) => ({
   backgroundColor: '#fff',
   borderRadius: theme.shape.borderRadius,
   boxShadow: 'none',
+  // Adjust padding and alignment for smaller screens
   [theme.breakpoints.down('md')]: {
     padding: theme.spacing(2),
     alignItems: 'center',
     maxWidth: '100%',
+    flexBasis: 'auto',
+    minWidth: 'auto',
   },
 }));
 
