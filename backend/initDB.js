@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import User from "./src/models/Users.js";
 import Decorations from "./src/models/Decorations.js";
 import Rooms from "./src/models/Rooms.js";
+import Habit from "./src/models/Habit.js";
 import Quests from "./src/models/Quest.js";
 import connectDB from "./src/connectDB.js";
 
@@ -17,11 +18,19 @@ const mongoReviver = (key, value) => {
   ) {
     return new mongoose.Types.ObjectId(value.$oid);
   }
+  if (
+    value &&
+    typeof value === "object" &&
+    value.$date &&
+    typeof value.$date === "string"
+  ) {
+    return new Date(value.$date);
+  }
   return value;
 };
 
 const clearCollection = async (Model, collectionName) => {
-  await Model.deleteMany();
+  await Model.deleteMany({});
   console.log(`Cleared ${collectionName}`);
 };
 
@@ -51,6 +60,9 @@ const dropIndexesMatching = async (Model, fieldPath) => {
 
 // Optional check for duplicate decorIds inside a single room
 const hasDuplicateDecorIds = (decorations) => {
+  if (!decorations || !Array.isArray(decorations)) {
+    return false;
+  }
   const ids = decorations.map((d) => d.decorId.toString());
   return new Set(ids).size !== ids.length;
 };
@@ -68,7 +80,7 @@ const loadAndInsertData = async (
 
     let dataToInsert = jsonData;
 
-    if (!dataToInsert || dataToInsert.length === 0) {
+    if (!dataToInsert || (Array.isArray(dataToInsert) && dataToInsert.length === 0)) {
       console.warn(
         `No data found in ${filePath} for ${collectionName}. Skipping insertion.`
       );
@@ -77,7 +89,7 @@ const loadAndInsertData = async (
 
     if (checkDuplicates && Array.isArray(dataToInsert)) {
       for (const item of dataToInsert) {
-        if (hasDuplicateDecorIds(item.decorations)) {
+        if (item.decorations && hasDuplicateDecorIds(item.decorations)) {
           console.warn(`Duplicate decorId found in room ${item._id}`);
         }
       }
@@ -99,11 +111,11 @@ const seed = async () => {
   await connectDB();
 
   try {
-    // Clear collections
     await clearCollection(User, "users");
     await clearCollection(Decorations, "decorations");
     await clearCollection(Quests, "quests");
     await clearCollection(Rooms, "rooms");
+    await clearCollection(Habit, "habits");
 
     // Drop any index on decorations.decorId to prevent conflicts
     await dropIndexesMatching(Rooms, "decorations.decorId");
@@ -116,7 +128,8 @@ const seed = async () => {
     );
     await loadAndInsertData("./src/data/quests.json", Quests, "quests");
     await loadAndInsertData("./src/data/users.json", User, "users");
-    await loadAndInsertData("./src/data/rooms.json", Rooms, "rooms", true); // check for duplicates
+    await loadAndInsertData("./src/data/rooms.json", Rooms, "rooms", true);
+    await loadAndInsertData("./src/data/habits.json", Habit, "habits");
   } catch (error) {
     console.error("An error occurred during the seeding process:", error);
   } finally {
