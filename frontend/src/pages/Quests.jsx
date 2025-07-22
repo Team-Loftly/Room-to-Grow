@@ -6,15 +6,25 @@ import {
   selectDailyQuests,
   selectDailyQuestsStatus,
   selectDailyQueststError,
+  clearQuestNotification,
 } from "../features/dailyQuestSetSlice";
 import { useEffect } from "react";
 import iconMap from "../components/quests/IconMap";
+import React from "react";
 
 export default function Quests() {
   const dispatch = useDispatch();
   const dailyQuests = useSelector(selectDailyQuests);
   const status = useSelector(selectDailyQuestsStatus);
   const error = useSelector(selectDailyQueststError);
+
+  const BONUS_SOUND_PATH = "/audio/daily-bonus.mp3";
+  const bonusSound = new Audio(BONUS_SOUND_PATH);
+
+  // Clear the notification dot when the Quests component mounts
+  useEffect(() => {
+    dispatch(clearQuestNotification());
+  }, [dispatch]);
 
   // fetch daily quests on mount
   useEffect(() => {
@@ -23,7 +33,14 @@ export default function Quests() {
     }
   }, [dispatch, status]);
 
-  const handleClaimReward = () => {
+  const handleClaimReward = async () => {
+    try {
+      bonusSound.volume = 0.5;
+      await bonusSound.play();
+    } catch (error) {
+      console.warn("Audio play failed:", error);
+    }
+
     dispatch(claimDailyQuestReward(dailyQuests._id));
   };
 
@@ -93,9 +110,21 @@ export default function Quests() {
             color: "white",
             borderRadius: "5px",
             fontSize: "17px",
+            "&.Mui-disabled": {
+              backgroundColor: "#a0a0a0",
+              color: "black",
+            },
           }}
         >
-          Claim Daily Bonus
+          {!dailyQuests.isComplete && (
+            <Typography>Complete All Quests to Unlock!</Typography>
+          )}
+          {dailyQuests.isComplete && !dailyQuests.isRewardClaimed && (
+            <Typography>Click Here to Redeem Daily Bonus!</Typography>
+          )}
+          {dailyQuests.isComplete && dailyQuests.isRewardClaimed && (
+            <Typography>Daily Bonus Redeemed</Typography>
+          )}
         </Button>
       </Box>
       {/* Individual Quests */}

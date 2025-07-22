@@ -72,12 +72,20 @@ const initialState = {
   dailyQuestSet: null,
   status: "idle",
   error: null,
+  hasUnseenCompletedQuest: false,
 };
 
 const questsSlice = createSlice({
   name: "dailyQuestSet",
   initialState,
-  reducers: {},
+  reducers: {
+    setHasUnseenCompletedQuest: (state, action) => {
+      state.hasUnseenCompletedQuest = action.payload;
+    },
+    clearQuestNotification: (state) => {
+      state.hasUnseenCompletedQuest = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchDailyQuests.pending, (state) => {
@@ -96,19 +104,47 @@ const questsSlice = createSlice({
       .addCase(updateProgress.fulfilled, (state, action) => {
         const { dailyQuestSet } = action.payload;
         if (dailyQuestSet) {
+          const previousQuests = state.dailyQuestSet
+            ? state.dailyQuestSet.quests
+            : [];
+          const newQuests = dailyQuestSet.quests;
+
+          const questJustCompleted = newQuests.some((newQuest) => {
+            const oldQuest = previousQuests.find(
+              (q) => q.questId._id === newQuest.questId._id
+            );
+            return newQuest.isComplete && (!oldQuest || !oldQuest.isComplete);
+          });
+
           state.dailyQuestSet = dailyQuestSet;
           state.status = "succeeded";
           state.error = null;
+
+          if (questJustCompleted) {
+            state.hasUnseenCompletedQuest = true;
+          }
         }
       })
       .addCase(claimDailyQuestReward.fulfilled, (state, action) => {
-        state.dailyQuestSet = action.payload.questSet;
+        state.dailyQuestSet =
+          action.payload.updatedDailyQuestSet || action.payload.dailyQuestSet;
+        state.status = "succeeded";
+        state.error = null;
+      })
+      .addCase(claimDailyQuestReward.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || action.error.message;
       });
   },
 });
 
+export const { setHasUnseenCompletedQuest, clearQuestNotification } =
+  questsSlice.actions;
+
 export const selectDailyQuests = (state) => state.quests.dailyQuestSet;
 export const selectDailyQuestsStatus = (state) => state.quests.status;
 export const selectDailyQueststError = (state) => state.quests.error;
+export const selectHasUnseenCompletedQuest = (state) =>
+  state.quests.hasUnseenCompletedQuest;
 
 export default questsSlice.reducer;

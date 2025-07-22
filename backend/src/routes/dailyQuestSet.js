@@ -63,29 +63,65 @@ export default function createDailyQuestSetRouter(requireAuth) {
     }
   });
 
+  // Claim the daily bonus for a completed quest set
   router.post("/:id/claim-bonus", requireAuth, async (req, res) => {
     const user_id = req.userId;
     const dailyQuestSetId = req.params.id;
 
-    const questSet = await DailyQuestSet.findOne({
-      _id: dailyQuestSetId,
-      userId: user_id,
-    });
+    try {
+      let questSet = await DailyQuestSet.findOne({
+        _id: dailyQuestSetId,
+        userId: user_id,
+      });
 
-    if (questSet.isComplete && !questSet.isRewardClaimed) {
-      const room = await Rooms.findOne({ userId: user_id });
-      room.coins += questSet.reward;
-      questSet.isRewardClaimed = true;
-      await room.save();
-      await questSet.save();
+      if (!questSet) {
+        return res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ message: "Daily Quest Set not found." });
+      }
 
-      return res
-        .status(StatusCodes.OK)
-        .json({ questSet, newCoins: room.coins });
-    } else {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ message: "Reward cannot be claimed." });
+      if (questSet.isComplete && !questSet.isRewardClaimed) {
+        const room = await Rooms.findOne({ userId: user_id });
+
+        if (!room) {
+          return res
+            .status(StatusCodes.NOT_FOUND)
+            .json({ message: "Room not found for user." });
+        }
+
+        room.coins += questSet.reward;
+        questSet.isRewardClaimed = true;
+
+        await room.save();
+        await questSet.save();
+
+        questSet = await DailyQuestSet.findById(questSet._id).populate({
+          path: "quests.questId",
+          model: "Quest",
+          select: "name description reward image relatedHabitType targetValue",
+        });
+
+        if (!questSet) {
+          return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            message:
+              "Failed to re-fetch and populate daily quest set after claiming.",
+          });
+        }
+
+        return res
+          .status(StatusCodes.OK)
+          .json({ dailyQuestSet: questSet, newCoins: room.coins });
+      } else {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          message:
+            "Reward cannot be claimed (already claimed or quests not complete).",
+        });
+      }
+    } catch (err) {
+      console.error("Error claiming daily bonus:", err);
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ message: "Internal server error during bonus claim." });
     }
   });
 

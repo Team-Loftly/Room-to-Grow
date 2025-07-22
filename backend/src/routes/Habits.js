@@ -395,6 +395,7 @@ export default function createHabitsRouter(requireAuth) {
     }
   });
 
+  // MARK a habit as completed/update progress
   router.post("/:id/complete", requireAuth, async (req, res) => {
     const user_id = req.userId;
     const habit_id = req.params.id;
@@ -444,7 +445,6 @@ export default function createHabitsRouter(requireAuth) {
         if (habit.dailyStatuses[entryIndex].value < 0) {
           habit.dailyStatuses[entryIndex].value = 0;
         }
-
       } else {
         // Create new entry
         let new_value = value >= 0 ? value : 0;
@@ -466,24 +466,24 @@ export default function createHabitsRouter(requireAuth) {
         entryIndex = habit.dailyStatuses.length - 1; // Get index of newly pushed entry
       }
 
-        let cur_value = habit.dailyStatuses[entryIndex].value;
-        // don't go over completed
-        if (
-          habit.type === "timed" &&
-          habit.hours !== null &&
-          habit.minutes !== null
-        ) {
-          const goalInMinutes = habit.hours * 60 + habit.minutes;
-          cur_value = cur_value >= goalInMinutes ? goalInMinutes : cur_value;
-        } else if (habit.type === "checkmark" && habit.checkmarks !== null) {
-          cur_value =
-            cur_value >= habit.checkmarks ? habit.checkmarks : cur_value;
-        }
+      let cur_value = habit.dailyStatuses[entryIndex].value;
+      // don't go over completed
+      if (
+        habit.type === "timed" &&
+        habit.hours !== null &&
+        habit.minutes !== null
+      ) {
+        const goalInMinutes = habit.hours * 60 + habit.minutes;
+        cur_value = cur_value >= goalInMinutes ? goalInMinutes : cur_value;
+      } else if (habit.type === "checkmark" && habit.checkmarks !== null) {
+        cur_value =
+          cur_value >= habit.checkmarks ? habit.checkmarks : cur_value;
+      }
 
-        habit.dailyStatuses[entryIndex].value = cur_value;
+      habit.dailyStatuses[entryIndex].value = cur_value;
 
-        habit.dailyStatuses[entryIndex].date = now;
-        currentProgressValue = habit.dailyStatuses[entryIndex].value;
+      habit.dailyStatuses[entryIndex].date = now;
+      currentProgressValue = habit.dailyStatuses[entryIndex].value;
 
       // Determine the status (complete or incomplete) based on goal completion
       if (
@@ -549,16 +549,11 @@ export default function createHabitsRouter(requireAuth) {
               // Award coins for individual quest
               if (room) {
                 room.coins += questTemplate.reward;
-                console.log(
-                  `Awarded ${questTemplate.reward} coins for completing quest: ${questTemplate.name}`
-                );
               }
             }
           }
         });
 
-        // Change set status if all quests in the set are now complete
-        // NOTE: The bonus reward is NOT awarded here. It is handled by the "Claim Bonus" endpoint.
         const allQuestsDone = dailyQuestSet.quests.every((q) => q.isComplete);
         if (allQuestsDone && !dailyQuestSet.isComplete) {
           dailyQuestSet.isComplete = true;
@@ -567,11 +562,11 @@ export default function createHabitsRouter(requireAuth) {
         await dailyQuestSet.save();
       }
 
-      await habit.save();
-
       if (room) {
         await room.save();
       }
+
+      await habit.save();
 
       const updatedHabit = habit.toObject();
       const { dailyStatuses, ...habitWithoutDailyStatuses } = updatedHabit;
@@ -581,6 +576,7 @@ export default function createHabitsRouter(requireAuth) {
         progress: getHabitDailyStatus(updatedHabit, now),
         currentStreak: updatedHabit.currentStreak,
         dailyQuestSet: dailyQuestSet ? dailyQuestSet.toObject() : null,
+        newCoins: room ? room.coins : undefined,
       });
     } catch (err) {
       console.error("Error completing habit:", err);
