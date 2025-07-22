@@ -49,7 +49,7 @@ const FocusPage = () => {
     <Box
       sx={{
         display: 'flex',
-        height: '100vh',
+        height: '90vh',
         width: '100vw',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
