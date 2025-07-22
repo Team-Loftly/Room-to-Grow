@@ -3,6 +3,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 const BASE_API_URL = import.meta.env.VITE_APP_API_URL;
+import { claimDailyQuestReward } from "./dailyQuestSetSlice";
+import { updateProgress } from "./tasksSlice";
 
 export const spendCoinsAndUpdate = (amount) => (dispatch, getState) => {
   dispatch(spendCoins(amount));
@@ -191,6 +193,21 @@ const inventorySlice = createSlice({
       .addCase(fetchInventory.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+      .addCase(claimDailyQuestReward.fulfilled, (state, action) => {
+        state.coins = action.payload.newCoins;
+        state.status = "succeeded";
+      })
+      .addCase(updateProgress.fulfilled, (state, action) => {
+        if (action.payload && typeof action.payload.newCoins === "number") {
+          state.coins = action.payload.newCoins;
+          state.status = "succeeded";
+        } else {
+          console.warn(
+            "updateProgress.fulfilled payload missing newCoins for inventory update:",
+            action.payload
+          );
+        }
       });
   },
 });
