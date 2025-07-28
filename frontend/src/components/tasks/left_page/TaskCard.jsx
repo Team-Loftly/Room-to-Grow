@@ -36,6 +36,7 @@ export default function TaskCard({ task, task_status }) {
   const completionSnackbarOpen = useSelector(
     (state) => state.tasks.isCompletionSnackbarOpen
   );
+  const selectedDate = useSelector((state) => state.tasks.selectedDate);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const menuOpen = Boolean(anchorEl);
 
@@ -46,6 +47,19 @@ export default function TaskCard({ task, task_status }) {
   const [openEditMenuDialog, setOpenEditMenuDialog] = React.useState(false);
 
   const [openLogTimeDialog, setOpenLogTimeDialog] = React.useState(false);
+
+  // Check if the selected date is today
+  const isToday = () => {
+    const today = new Date();
+    const selected = new Date(selectedDate);
+    return (
+      selected.getDate() === today.getDate() &&
+      selected.getMonth() === today.getMonth() &&
+      selected.getFullYear() === today.getFullYear()
+    );
+  };
+
+  const canInteract = isToday();
 
   const dayMap = {
     Sunday: "Su",
@@ -251,7 +265,7 @@ export default function TaskCard({ task, task_status }) {
           sx={{ height: "100%" }}
         >
           <div>
-            {task.progress && !task_status && !isTimedTask && (
+            {task.progress && !task_status && !isTimedTask && canInteract && (
               <>
                 <IconButton
                   aria-label="decrement"
@@ -277,7 +291,7 @@ export default function TaskCard({ task, task_status }) {
               </>
             )}
 
-            {task.progress && !task_status && isTimedTask && (
+            {task.progress && !task_status && isTimedTask && canInteract && (
               <IconButton
                 aria-label="log_time"
                 onClick={(e) => {
@@ -316,10 +330,10 @@ export default function TaskCard({ task, task_status }) {
               <MenuItem onClick={handleEditClick}>Edit</MenuItem>
 
               <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
-              {task.progress && task_status && (
+              {task.progress && task_status && canInteract && (
                 <MenuItem onClick={handleUndo}>Undo {task_status}</MenuItem>
               )}
-              {task.progress && !task_status && (
+              {task.progress && !task_status && canInteract && (
                 <div>
                   <MenuItem onClick={handleSkip}>
                     Mark Skipped {task_status}

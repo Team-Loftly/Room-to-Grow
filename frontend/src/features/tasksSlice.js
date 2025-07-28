@@ -32,10 +32,17 @@ export const fetchAllTasks = createAsyncThunk(
 
 export const fetchTasks = createAsyncThunk(
   "tasks/fetchTasks",
-  async (_, { rejectWithValue }) => {
+  async (date = null, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`${BASE_API_URL}/habits`, {
+      let url = `${BASE_API_URL}/habits`;
+      
+      if (date) {
+        const dateString = date.toISOString().split('T')[0];
+        url += `?date=${dateString}`;
+      }
+      
+      const response = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -284,6 +291,7 @@ const initialState = {
   isDeleteSnackbarOpen: false,
   isCompletionSnackbarOpen: false,
   showAllTasks: false,
+  selectedDate: new Date(), // Current selected date for viewing habits
 };
 
 const tasksSlice = createSlice({
@@ -292,6 +300,9 @@ const tasksSlice = createSlice({
   reducers: {
     setShowAllTasks: (state, action) => {
       state.showAllTasks = action.payload;
+    },
+    setSelectedDate: (state, action) => {
+      state.selectedDate = action.payload;
     },
     setSelectedTaskId: (state, action) => {
       const { taskId } = action.payload;
@@ -563,6 +574,7 @@ const tasksSlice = createSlice({
 
 export const {
   setShowAllTasks,
+  setSelectedDate,
   setSelectedTaskId,
   updateCheckmarkProgress,
   setIsDeleteSnackbarOpen,

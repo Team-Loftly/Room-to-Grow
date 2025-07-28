@@ -8,6 +8,7 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import { useSelector, useDispatch } from "react-redux";
 
 import CreateTask from "./CreateTask";
+import DatePickerButton from "./DatePickerButton";
 import { setShowAllTasks } from "../../../features/tasksSlice";
 import SortButton from "./SortButton";
 import FilterButton from "./filterButton";
@@ -46,9 +47,15 @@ export default function TasksLeftPageToolBar() {
         alignItems: "center",
       }}
     >
-      <Typography variant="h4" sx={{ ml: -1.2, fontWeight: 700 }}>
-        {showAllTasks ? "All Habits" : "Today"}
-      </Typography>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        {showAllTasks ? (
+          <Typography variant="h4" sx={{ ml: -1.2, fontWeight: 700 }}>
+            All Habits
+          </Typography>
+        ) : (
+          <DatePickerButton />
+        )}
+      </Box>
 
       <Box
         sx={{
