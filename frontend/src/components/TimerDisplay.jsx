@@ -234,46 +234,44 @@ const TimerDisplay = ({ onHabitComplete, onDeselectTask }) => {
           mt: 4,
         }}
       >
-        {/* Progress Circle - only show when habit is selected */}
-        {selectedTask && (
-          <svg
-            width="400"
-            height="400"
+        {/* Progress Circle */}
+        <svg
+          width="400"
+          height="400"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            transform: 'rotate(-90deg)',
+            pointerEvents: 'none',
+          }}
+        >
+          {/* Background circle */}
+          <circle
+            cx="200"
+            cy="200"
+            r={radius}
+            stroke="rgba(255, 255, 255, 0.1)"
+            strokeWidth="4"
+            fill="none"
+          />
+          {/* Progress circle */}
+          <circle
+            cx="200"
+            cy="200"
+            r={radius}
+            stroke="#4ade80"
+            strokeWidth="6"
+            fill="none"
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            strokeDashoffset={strokeDashoffset}
             style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              transform: 'rotate(-90deg)',
-              pointerEvents: 'none',
+              transition: 'stroke-dashoffset 0.5s ease-in-out',
+              filter: 'drop-shadow(0 0 8px rgba(74, 222, 128, 0.5))', // Glow effect
             }}
-          >
-            {/* Background circle */}
-            <circle
-              cx="200"
-              cy="200"
-              r={radius}
-              stroke="rgba(255, 255, 255, 0.1)"
-              strokeWidth="4"
-              fill="none"
-            />
-            {/* Progress circle */}
-            <circle
-              cx="200"
-              cy="200"
-              r={radius}
-              stroke="#4ade80"
-              strokeWidth="6"
-              fill="none"
-              strokeLinecap="round"
-              strokeDasharray={circumference}
-              strokeDashoffset={strokeDashoffset}
-              style={{
-                transition: 'stroke-dashoffset 0.5s ease-in-out',
-                filter: 'drop-shadow(0 0 8px rgba(74, 222, 128, 0.5))', // Glow effect
-              }}
-            />
-          </svg>
-        )}
+          />
+        </svg>
         
         <Box
           sx={{
