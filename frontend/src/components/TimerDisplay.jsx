@@ -25,9 +25,10 @@ const TimerDisplay = ({ onHabitComplete, onDeselectTask }) => {
   const [inputMinutes, setInputMinutes] = useState("");
   const [inputSeconds, setInputSeconds] = useState("");
   const [focusedInput, setFocusedInput] = useState(null);
-  const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
+  const [secondsCounter, setSecondsCounter] = useState(0); // Counter for seconds elapsed on current habit
 
   const isInitialMount = useRef(true);
+  const previousSelectedTaskId = useRef(selectedTaskId);
 
   // Function to check if habit is complete after progress update
   const checkHabitCompletion = useCallback((taskId) => {
@@ -68,41 +69,42 @@ const TimerDisplay = ({ onHabitComplete, onDeselectTask }) => {
     isInitialMount.current = false;
   }, [timeLeft, isRunning, focusedInput]);
 
+  // Reset seconds counter when selected task changes
+  useEffect(() => {
+    if (previousSelectedTaskId.current !== selectedTaskId) {
+      setSecondsCounter(0);
+      previousSelectedTaskId.current = selectedTaskId;
+    }
+  }, [selectedTaskId]);
+
   // Effect for timer ticking and habit progress tracking
   useEffect(() => {
     if (isRunning && timeLeft > 0) {
       const timer = setInterval(() => {
         dispatch(tick());
         
-        // Update habit progress every minute (when seconds reach 0)
-        if (selectedTaskId && selectedTaskId !== -1 && timeLeft % 60 === 1) {
-          // timeLeft % 60 === 1 means we're about to complete a minute
-          const now = Date.now();
-          if (now - lastUpdateTime >= 59000) { // Only update if at least 59 seconds have passed
-            dispatch(updateProgress({ taskId: selectedTaskId, value: 1 }));
-            setLastUpdateTime(now);
+        // Increment seconds counter for habit progress tracking
+        if (selectedTaskId && selectedTaskId !== -1) {
+          setSecondsCounter(prev => {
+            const newCounter = prev + 1;
             
-            // Check if habit is complete after this update
-            checkHabitCompletion(selectedTaskId)
-          }
+            // Update progress every 60 seconds (1 minute)
+            if (newCounter >= 60) {
+              dispatch(updateProgress({ taskId: selectedTaskId, value: 1 }));
+              checkHabitCompletion(selectedTaskId);
+              return 0; // Reset counter after updating progress
+            }
+            
+            return newCounter;
+          });
         }
       }, 1000);
       return () => clearInterval(timer);
     } else if (timeLeft === 0 && isRunning) {
       dispatch(stopTimer());
       
-      // Final progress update when timer completes
-      if (selectedTaskId && selectedTaskId !== -1) {
-        const now = Date.now();
-        const timeElapsedSinceLastUpdate = (now - lastUpdateTime) / 60000; // Convert to minutes
-        if (timeElapsedSinceLastUpdate >= 1) { // If at least 30 seconds have passed, count as partial minute
-          dispatch(updateProgress({ taskId: selectedTaskId, value: Math.round(timeElapsedSinceLastUpdate) }));
-          
-          checkHabitCompletion(selectedTaskId)
-        }
-      }
     }
-  }, [isRunning, timeLeft, dispatch, selectedTaskId, lastUpdateTime, checkHabitCompletion]);
+  }, [isRunning, timeLeft, dispatch, selectedTaskId, secondsCounter, checkHabitCompletion]);
 
   const calculateTotalSeconds = useCallback(() => {
     return (
@@ -126,7 +128,6 @@ const TimerDisplay = ({ onHabitComplete, onDeselectTask }) => {
       if (totalSeconds > 0) {
         dispatch(setTimer(totalSeconds));
         dispatch(startTimer());
-        setLastUpdateTime(Date.now()); // Reset the update timer when starting
       }
     }
   }, [isRunning, calculateTotalSeconds, dispatch]);
