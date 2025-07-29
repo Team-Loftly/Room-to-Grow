@@ -38,7 +38,11 @@ export const fetchTasks = createAsyncThunk(
       let url = `${BASE_API_URL}/habits`;
       
       if (date) {
-        const dateString = date.toISOString().split('T')[0];
+        // Convert date to YYYY-MM-DD format in local timezone
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const dateString = `${year}-${month}-${day}`;
         url += `?date=${dateString}`;
       }
       
@@ -164,6 +168,7 @@ export const updateProgress = createAsyncThunk(
       const value = progress.value;
 
       const token = localStorage.getItem("token");
+      
       const response = await axios.post(
         `${BASE_API_URL}/habits/${taskId}/complete`,
         { value },
@@ -199,7 +204,7 @@ export const markSkipped = createAsyncThunk(
       const token = localStorage.getItem("token");
       const response = await axios.post(
         `${BASE_API_URL}/habits/${taskId}/skip`,
-        null,
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -232,7 +237,7 @@ export const markFailed = createAsyncThunk(
       const token = localStorage.getItem("token");
       const response = await axios.post(
         `${BASE_API_URL}/habits/${taskId}/fail`,
-        null,
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
