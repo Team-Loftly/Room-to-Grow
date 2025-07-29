@@ -755,6 +755,10 @@ export default function createHabitsRouter(requireAuth) {
       let skippedDays = 0;
       let totalValue = 0;
 
+      const completedDates = [];
+      const failedDates = [];
+      const skippedDates = [];
+
       // --- Calculate current week boundaries (Sunday to Saturday) ---
       const now = new Date();
       now.setHours(0, 0, 0, 0);
@@ -781,12 +785,19 @@ export default function createHabitsRouter(requireAuth) {
           switch (entry.status) {
             case "complete":
               completedDays++;
+              completedDates.push(entry.date);
               break;
             case "failed":
               failedDays++;
+              failedDates.push(entry.date);
+              break;
+            case "incomplete":
+              failedDays++;
+              failedDates.push(entry.date);
               break;
             case "skipped":
               skippedDays++;
+              skippedDates.push(entry.date);
               break;
           }
           totalValue += entry.value || 0;
@@ -814,6 +825,10 @@ export default function createHabitsRouter(requireAuth) {
         type: habit.type,
         totalValue: totalValue,
         totalValuePerDayCurrentWeek: totalValuePerDayCurrentWeek,
+        dailyStatuses: habit.dailyStatuses || [],
+        completedDates: completedDates,
+        failedDates: failedDates,
+        skippedDates: skippedDates,
       };
 
       res.status(StatusCodes.OK).json(habitStats);
