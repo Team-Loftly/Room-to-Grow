@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   startTimer,
@@ -6,21 +6,56 @@ import {
   setTimer,
   tick,
 } from '../features/timerSlice';
+import { updateProgress } from '../features/tasksSlice';
+import { addCoinsAndUpdate } from '../features/inventorySlice';
 
-import { Box, Typography, TextField, Button } from '@mui/material';
+import { Box, Typography, TextField, Button, IconButton } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 
-const TimerDisplay = () => {
+const TimerDisplay = ({ onHabitComplete, onDeselectTask }) => {
   const dispatch = useDispatch();
   const timeLeft = useSelector((state) => state.timer.timeLeft);
   const isRunning = useSelector((state) => state.timer.isRunning);
+  const selectedTaskId = useSelector((state) => state.tasks.selectedTaskId);
+  const allTasks = useSelector((state) => state.tasks.taskList);
+
+  const TIMED_HABIT_COMPLETION_REWARD = 5;
 
   const [inputMinutes, setInputMinutes] = useState("");
   const [inputSeconds, setInputSeconds] = useState("");
   const [focusedInput, setFocusedInput] = useState(null);
+  const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
 
   const isInitialMount = useRef(true);
+
+  // Function to check if habit is complete after progress update
+  const checkHabitCompletion = useCallback((taskId) => {
+    if (taskId && taskId !== -1) {
+      const selectedTask = allTasks.find(task => task._id === taskId && task.type === "timed");
+      if (selectedTask) {
+        const goalInMinutes = (selectedTask.hours || 0) * 60 + (selectedTask.minutes || 0);
+        const currentProgress = selectedTask.progress?.value + 1 || 0;
+        
+        // Check if the habit is now complete
+        if (currentProgress >= goalInMinutes && selectedTask.progress?.status !== 'complete') {
+          // Stop the timer
+          dispatch(stopTimer());
+          
+          // Add coins for completing the habit
+          dispatch(addCoinsAndUpdate(TIMED_HABIT_COMPLETION_REWARD));
+          
+          // Notify parent component about completion
+          if (onHabitComplete) {
+            onHabitComplete(selectedTask.title);
+          }
+          
+          return true; // Habit was completed
+        }
+      }
+    }
+    return false; // Habit not completed
+  }, [allTasks, dispatch, onHabitComplete]);
 
   // Sync local input states with Redux timeLeft when timeLeft changes
   useEffect(() => {
@@ -33,18 +68,41 @@ const TimerDisplay = () => {
     isInitialMount.current = false;
   }, [timeLeft, isRunning, focusedInput]);
 
-  // Effect for timer ticking (This stays here as TimerDisplay manages the ticking UI)
+  // Effect for timer ticking and habit progress tracking
   useEffect(() => {
     if (isRunning && timeLeft > 0) {
       const timer = setInterval(() => {
         dispatch(tick());
+        
+        // Update habit progress every minute (when seconds reach 0)
+        if (selectedTaskId && selectedTaskId !== -1 && timeLeft % 60 === 1) {
+          // timeLeft % 60 === 1 means we're about to complete a minute
+          const now = Date.now();
+          if (now - lastUpdateTime >= 59000) { // Only update if at least 59 seconds have passed
+            dispatch(updateProgress({ taskId: selectedTaskId, value: 1 }));
+            setLastUpdateTime(now);
+            
+            // Check if habit is complete after this update
+            checkHabitCompletion(selectedTaskId)
+          }
+        }
       }, 1000);
       return () => clearInterval(timer);
     } else if (timeLeft === 0 && isRunning) {
       dispatch(stopTimer());
-      // dispatch action here if completion needs to trigger global state changes
+      
+      // Final progress update when timer completes
+      if (selectedTaskId && selectedTaskId !== -1) {
+        const now = Date.now();
+        const timeElapsedSinceLastUpdate = (now - lastUpdateTime) / 60000; // Convert to minutes
+        if (timeElapsedSinceLastUpdate >= 1) { // If at least 30 seconds have passed, count as partial minute
+          dispatch(updateProgress({ taskId: selectedTaskId, value: Math.round(timeElapsedSinceLastUpdate) }));
+          
+          checkHabitCompletion(selectedTaskId)
+        }
+      }
     }
-  }, [isRunning, timeLeft, dispatch]);
+  }, [isRunning, timeLeft, dispatch, selectedTaskId, lastUpdateTime, checkHabitCompletion]);
 
   const calculateTotalSeconds = useCallback(() => {
     return (
@@ -68,6 +126,7 @@ const TimerDisplay = () => {
       if (totalSeconds > 0) {
         dispatch(setTimer(totalSeconds));
         dispatch(startTimer());
+        setLastUpdateTime(Date.now()); // Reset the update timer when starting
       }
     }
   }, [isRunning, calculateTotalSeconds, dispatch]);
@@ -119,14 +178,54 @@ const TimerDisplay = () => {
     return String(parseInt(value, 10)).padStart(2, "0");
   };
 
+  // Get selected task for display
+  const selectedTask = useSelector((state) => {
+    if (selectedTaskId && selectedTaskId !== -1) {
+      return state.tasks.taskList.find(task => task._id === selectedTaskId);
+    }
+    return null;
+  });
+
+  // Calculate progress percentage for the progress circle
+  const getProgressPercentage = () => {
+    if (!selectedTask) return 0;
+    const goalInMinutes = (selectedTask.hours || 0) * 60 + (selectedTask.minutes || 0);
+    const currentProgress = selectedTask.progress?.value || 0;
+    return goalInMinutes > 0 ? Math.min((currentProgress / goalInMinutes) * 100, 100) : 0;
+  };
+
+  const progressPercentage = getProgressPercentage();
+  const radius = 185;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (progressPercentage / 100) * circumference;
+
   return (
     <>
+      {selectedTask && (
+        <Box
+          sx={{
+            mt: 3,
+            p: 2,
+            bgcolor: 'rgba(255, 255, 255, 0.1)',
+            borderRadius: 2,
+            textAlign: 'center',
+          }}
+        >
+          <Typography variant="h6" sx={{ color: 'white', mb: 1}}>
+            Tracking: {selectedTask.title}
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+            Goal: {selectedTask.hours}h {selectedTask.minutes}m | 
+            Progress: {Math.floor((selectedTask.progress?.value || 0) / 60)}h {(selectedTask.progress?.value || 0) % 60}m
+          </Typography>
+        </Box>
+      )}
+      
       <Box
         sx={{
           width: 400,
           height: 400,
           borderRadius: '50%',
-          border: '2px dashed rgba(255, 255, 255, 0.3)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -134,6 +233,47 @@ const TimerDisplay = () => {
           mt: 4,
         }}
       >
+        {/* Progress Circle - only show when habit is selected */}
+        {selectedTask && (
+          <svg
+            width="400"
+            height="400"
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              transform: 'rotate(-90deg)',
+              pointerEvents: 'none',
+            }}
+          >
+            {/* Background circle */}
+            <circle
+              cx="200"
+              cy="200"
+              r={radius}
+              stroke="rgba(255, 255, 255, 0.1)"
+              strokeWidth="4"
+              fill="none"
+            />
+            {/* Progress circle */}
+            <circle
+              cx="200"
+              cy="200"
+              r={radius}
+              stroke="#4ade80"
+              strokeWidth="6"
+              fill="none"
+              strokeLinecap="round"
+              strokeDasharray={circumference}
+              strokeDashoffset={strokeDashoffset}
+              style={{
+                transition: 'stroke-dashoffset 0.5s ease-in-out',
+                filter: 'drop-shadow(0 0 8px rgba(74, 222, 128, 0.5))', // Glow effect
+              }}
+            />
+          </svg>
+        )}
+        
         <Box
           sx={{
             width: 300,
@@ -145,6 +285,8 @@ const TimerDisplay = () => {
             justifyContent: 'center',
             bgcolor: 'rgba(0, 0, 0, 0.3)',
             gap: 0.5,
+            position: 'relative',
+            zIndex: 1,
           }}
         >
           <TextField

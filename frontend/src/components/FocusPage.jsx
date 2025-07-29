@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Box,
@@ -9,16 +9,21 @@ import {
   ListItemIcon,
   ListItemText,
   Paper,
+  Modal,
+  Fade,
 }
  from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import CloseIcon from '@mui/icons-material/Close';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import CelebrationIcon from '@mui/icons-material/Celebration';
 
 import { Room } from "./Room.jsx";
 import TimerDisplay from "./TimerDisplay";
 import { fetchTasks, setSelectedTaskId } from '../features/tasksSlice.js';
+import { stopTimer } from '../features/timerSlice.js';
 
 const FocusPage = () => {
   const dispatch = useDispatch();
@@ -27,11 +32,22 @@ const FocusPage = () => {
   const allTasks = useSelector((state) => state.tasks.taskList);
   const selectedTaskId = useSelector((state) => state.tasks.selectedTaskId);
 
+  const [isHabitCompletedSnackbarOpen, setIsHabitCompletedSnackbarOpen] = useState(false);
+  const [completedHabitTitle, setCompletedHabitTitle] = useState('');
+
   const timedTasks = allTasks.filter(task => task.type === "timed");
 
   // Fetch tasks when the component mounts
   useEffect(() => {
     dispatch(fetchTasks());
+  }, [dispatch]);
+
+  // Handler called by TimerDisplay when a habit is completed
+  const handleHabitComplete = useCallback((habitTitle) => {
+    setCompletedHabitTitle(habitTitle);
+    setIsHabitCompletedSnackbarOpen(true);
+    // Deselect the task since it's now complete
+    dispatch(setSelectedTaskId({ taskId: -1 }));
   }, [dispatch]);
 
   // display only timed tasks
@@ -44,6 +60,10 @@ const FocusPage = () => {
   const handleDeselectTask = useCallback(() => {
     dispatch(setSelectedTaskId({ taskId: -1 }));
   }, [dispatch]);
+
+  const handleHabitCompletedModalClose = useCallback(() => {
+    setIsHabitCompletedSnackbarOpen(false);
+  }, []);
 
   return (
     <Box
@@ -102,7 +122,7 @@ const FocusPage = () => {
           )}
         </Paper>
 
-        <TimerDisplay />
+        <TimerDisplay onHabitComplete={handleHabitComplete} onDeselectTask={handleDeselectTask} />
       </Box>
 
       <Paper
@@ -152,6 +172,8 @@ const FocusPage = () => {
                   <ListItemIcon sx={{ minWidth: 32 }}>
                     {task.progress.status === 'complete' ? (
                       <CheckCircleOutlineIcon sx={{ color: 'success.main', fontSize: 20 }} />
+                    ) : task._id === selectedTaskId ? (
+                      <RadioButtonCheckedIcon sx={{ color: 'white', fontSize: 20 }} />
                     ) : (
                       <RadioButtonUncheckedIcon sx={{ color: 'white', fontSize: 20 }} />
                     )}
@@ -187,6 +209,48 @@ const FocusPage = () => {
           </List>
         </Box>
       </Paper>
+      
+      <Modal
+        open={isHabitCompletedSnackbarOpen}
+        onClose={handleHabitCompletedModalClose}
+        onClick={handleHabitCompletedModalClose}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Fade in={isHabitCompletedSnackbarOpen}>
+          <Paper
+            sx={{
+              bgcolor: 'success.main',
+              color: 'white',
+              borderRadius: 4,
+              p: 4,
+              textAlign: 'center',
+              minWidth: 400,
+              maxWidth: 500,
+              boxShadow: 24,
+              outline: 'none',
+              border: 'none',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
+              <CelebrationIcon sx={{ fontSize: 29, mr: 1, color: 'yellow' }} />
+              <Typography variant="h5">
+                {completedHabitTitle} completed!
+              </Typography>
+            </Box>
+            <Typography variant="body1" sx={{ opacity: 0.9, fontWeight: 'bold' }}>
+              +5 coins earned
+            </Typography>
+            <Typography variant="body2" sx={{ mt: 2, opacity: 0.8, fontSize: '0.9rem' }}>
+              Click anywhere to close
+            </Typography>
+          </Paper>
+        </Fade>
+      </Modal>
     </Box>
   );
 };
