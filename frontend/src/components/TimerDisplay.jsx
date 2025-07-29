@@ -202,25 +202,47 @@ const TimerDisplay = ({ onHabitComplete, onDeselectTask }) => {
 
   return (
     <>
-      {selectedTask && (
-        <Box
-          sx={{
-            mt: 3,
-            p: 2,
-            bgcolor: 'rgba(255, 255, 255, 0.1)',
-            borderRadius: 2,
-            textAlign: 'center',
-          }}
-        >
-          <Typography variant="h6" sx={{ color: 'white', mb: 1}}>
-            Tracking: {selectedTask.title}
+      <Box
+        sx={{
+          p: 2,
+          bgcolor: 'rgba(0, 0, 0, 0.25)',
+          borderRadius: 2,
+          textAlign: 'center',
+          position: 'relative',
+        }}
+      >
+        {selectedTask ? (
+          <>
+            <Typography variant="h6" sx={{ color: 'white', mb: 1}}>
+              {selectedTask.title}
+            </Typography>
+            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)', mb: 2 }}>
+              Goal: {selectedTask.hours}h {selectedTask.minutes}m | 
+              Progress: {Math.floor((selectedTask.progress?.value || 0) / 60)}h {(selectedTask.progress?.value || 0) % 60}m
+            </Typography>
+            <Button
+              onClick={() => onDeselectTask && onDeselectTask()}
+              sx={{
+                minWidth: 'auto',
+                width: 24,
+                height: 24,
+                borderRadius: '50%',
+                color: 'rgba(255, 255, 255, 0.7)',
+                '&:hover': {
+                  bgcolor: 'rgba(0, 0, 0, 0.1)',
+                  color: 'white',
+                },
+              }}
+            >
+              ✕
+            </Button>
+          </>
+        ) : (
+          <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+            Select a timed habit to track your progress
           </Typography>
-          <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-            Goal: {selectedTask.hours}h {selectedTask.minutes}m | 
-            Progress: {Math.floor((selectedTask.progress?.value || 0) / 60)}h {(selectedTask.progress?.value || 0) % 60}m
-          </Typography>
-        </Box>
-      )}
+        )}
+      </Box>
       
       <Box
         sx={{

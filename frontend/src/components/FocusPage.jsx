@@ -90,38 +90,6 @@ const FocusPage = () => {
           position: 'relative',
         }}
       >
-        <Paper
-          sx={{
-            position: 'absolute',
-            top: '0%',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            bgcolor: 'rgba(255, 255, 255, 0.1)',
-            backdropFilter: 'blur(10px)',
-            color: 'white',
-            borderRadius: 8,
-            px: 3,
-            py: 1,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1,
-            minWidth: '300px',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <RadioButtonUncheckedIcon sx={{ fontSize: 16, color: 'white' }} />
-            <Typography variant="body1">
-              {currentTask ? currentTask.title : 'No timed habit selected'}
-            </Typography>
-          </Box>
-          {currentTask && (
-            <IconButton size="small" sx={{ color: 'white' }} onClick={handleDeselectTask}>
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          )}
-        </Paper>
-
         <TimerDisplay onHabitComplete={handleHabitComplete} onDeselectTask={handleDeselectTask} />
       </Box>
 
