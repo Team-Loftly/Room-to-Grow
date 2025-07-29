@@ -165,7 +165,7 @@ const FocusPage = () => {
         sx={{
           flex: '0 0 40%',
           minWidth: '300px',
-          bgcolor: 'rgba(171, 171, 171, 0.93)',
+          bgcolor: 'rgba(0, 0, 0, 0.6)',
           backdropFilter: 'blur(10px)',
           borderRadius: 4,
           p: 3,
@@ -180,7 +180,7 @@ const FocusPage = () => {
         </Box>
 
         <Box sx={{ flexShrink: 0, overflowY: 'auto' }}>
-          <Typography variant="subtitle2" sx={{ color: 'text.secondary', mb: 1 }}>
+          <Typography variant="subtitle2" sx={{ color: 'white', mb: 1 }}>
             <Box component="span" sx={{ color: 'red', mr: 0.5 }}>
               |
             </Box>
@@ -259,7 +259,7 @@ const FocusPage = () => {
         <Fade in={isHabitCompletedSnackbarOpen}>
           <Paper
             sx={{
-              bgcolor: 'success.main',
+              bgcolor: 'rgba(9, 92, 39, 1)',
               color: 'white',
               borderRadius: 4,
               p: 4,

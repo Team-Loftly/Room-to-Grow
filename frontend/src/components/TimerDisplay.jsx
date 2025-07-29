@@ -212,7 +212,7 @@ const TimerDisplay = ({ onHabitComplete, onDeselectTask, onSecondsCounterChange 
       <Box
         sx={{
           p: 2,
-          bgcolor: 'rgba(0, 0, 0, 0.25)',
+          bgcolor: 'rgba(0, 0, 0, 0.45)',
           borderRadius: 2,
           textAlign: 'center',
           position: 'relative',
