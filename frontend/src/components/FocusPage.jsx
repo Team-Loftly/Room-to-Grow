@@ -10,6 +10,11 @@ import {
   Paper,
   Modal,
   Fade,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
 }
  from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -21,6 +26,7 @@ import CelebrationIcon from '@mui/icons-material/Celebration';
 import { Room } from "./Room.jsx";
 import TimerDisplay from "./TimerDisplay";
 import { fetchTasks, setSelectedTaskId } from '../features/tasksSlice.js';
+import { stopTimer, startTimer } from '../features/timerSlice.js';
 
 const FocusPage = () => {
   const dispatch = useDispatch();
@@ -31,6 +37,13 @@ const FocusPage = () => {
 
   const [isHabitCompletedSnackbarOpen, setIsHabitCompletedSnackbarOpen] = useState(false);
   const [completedHabitTitle, setCompletedHabitTitle] = useState('');
+  const [secondsCounter, setSecondsCounter] = useState(0); // Track seconds counter from TimerDisplay
+  const [wasTimerRunning, setWasTimerRunning] = useState(false); // Track if timer was running before confirmation
+  const [confirmationDialog, setConfirmationDialog] = useState({
+    open: false,
+    action: null, // 'deselect' or 'select'
+    newTaskId: null,
+  });
 
   const timedTasks = allTasks.filter(task => task.type === "timed");
 
@@ -47,16 +60,70 @@ const FocusPage = () => {
     dispatch(setSelectedTaskId({ taskId: -1 }));
   }, [dispatch]);
 
+  // Handler to receive seconds counter updates from TimerDisplay
+  const handleSecondsCounterChange = useCallback((counter) => {
+    setSecondsCounter(counter);
+  }, []);
+
   // display only timed tasks
   const currentTask = timedTasks.find(task => task._id === selectedTaskId);
 
   const handleTaskSelect = useCallback((taskId) => {
-    dispatch(setSelectedTaskId({ taskId }));
-  }, [dispatch]);
+    // Check for unsaved progress OR timer running
+    if ((secondsCounter > 0 || isRunning) && selectedTaskId !== taskId) {
+      // Remember if timer was running before stopping it
+      setWasTimerRunning(isRunning);
+      if (isRunning) {
+        dispatch(stopTimer());
+      }
+      setConfirmationDialog({
+        open: true,
+        action: 'select',
+        newTaskId: taskId,
+      });
+    } else {
+      dispatch(setSelectedTaskId({ taskId }));
+    }
+  }, [dispatch, secondsCounter, selectedTaskId, isRunning]);
 
   const handleDeselectTask = useCallback(() => {
-    dispatch(setSelectedTaskId({ taskId: -1 }));
-  }, [dispatch]);
+    // Check for unsaved progress OR timer running
+    if (secondsCounter > 0 || isRunning) {
+      // Remember if timer was running before stopping it
+      setWasTimerRunning(isRunning);
+      if (isRunning) {
+        dispatch(stopTimer());
+      }
+      setConfirmationDialog({
+        open: true,
+        action: 'deselect',
+        newTaskId: null,
+      });
+    } else {
+      dispatch(setSelectedTaskId({ taskId: -1 }));
+    }
+  }, [dispatch, secondsCounter, isRunning]);
+
+  const handleConfirmationClose = useCallback(() => {
+    // If timer was running before confirmation, restart it
+    if (wasTimerRunning) {
+      dispatch(startTimer());
+    }
+    setWasTimerRunning(false);
+    setConfirmationDialog({ open: false, action: null, newTaskId: null });
+  }, [dispatch, wasTimerRunning]);
+
+  const handleConfirmationConfirm = useCallback(() => {
+    if (confirmationDialog.action === 'deselect') {
+      dispatch(setSelectedTaskId({ taskId: -1 }));
+    } else if (confirmationDialog.action === 'select') {
+      dispatch(setSelectedTaskId({ taskId: confirmationDialog.newTaskId }));
+    }
+    
+    // Close the dialog and reset timer state (don't restart timer since user confirmed the action)
+    setWasTimerRunning(false);
+    setConfirmationDialog({ open: false, action: null, newTaskId: null });
+  }, [dispatch, confirmationDialog]);
 
   const handleHabitCompletedModalClose = useCallback(() => {
     setIsHabitCompletedSnackbarOpen(false);
@@ -87,7 +154,11 @@ const FocusPage = () => {
           position: 'relative',
         }}
       >
-        <TimerDisplay onHabitComplete={handleHabitComplete} onDeselectTask={handleDeselectTask} />
+        <TimerDisplay 
+          onHabitComplete={handleHabitComplete} 
+          onDeselectTask={handleDeselectTask}
+          onSecondsCounterChange={handleSecondsCounterChange}
+        />
       </Box>
 
       <Paper
@@ -216,6 +287,44 @@ const FocusPage = () => {
           </Paper>
         </Fade>
       </Modal>
+
+      {/* Confirmation Dialog */}
+      <Dialog
+        open={confirmationDialog.open}
+        onClose={handleConfirmationClose}
+      >
+        <DialogTitle sx={{ pb: 1 }}>
+          Confirm Action
+        </DialogTitle>
+        <DialogContent>
+          <Typography>
+            {confirmationDialog.action === 'deselect' 
+              ? 'You have unsaved progress from the current minute. This will deselect the habit and the unsaved progress will be lost.'
+              : 'You have unsaved progress from the current minute. This will switch to a different habit and the unsaved progress will be lost.'
+            }
+          </Typography>
+          <Typography sx={{ mt: 1, fontWeight: 'bold' }}>
+            Do you want to continue?
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button onClick={handleConfirmationClose} color="inherit">
+            Cancel
+          </Button>
+          <Button 
+            onClick={handleConfirmationConfirm} 
+            variant="contained" 
+            sx={{
+              bgcolor: '#16a34a',
+              '&:hover': {
+                bgcolor: '#15803d',
+              },
+            }}
+          >
+            Continue
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

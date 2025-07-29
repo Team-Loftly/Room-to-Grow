@@ -13,7 +13,7 @@ import { Box, Typography, TextField, Button, IconButton } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 
-const TimerDisplay = ({ onHabitComplete, onDeselectTask }) => {
+const TimerDisplay = ({ onHabitComplete, onDeselectTask, onSecondsCounterChange }) => {
   const dispatch = useDispatch();
   const timeLeft = useSelector((state) => state.timer.timeLeft);
   const isRunning = useSelector((state) => state.timer.isRunning);
@@ -76,6 +76,13 @@ const TimerDisplay = ({ onHabitComplete, onDeselectTask }) => {
       previousSelectedTaskId.current = selectedTaskId;
     }
   }, [selectedTaskId]);
+
+  // Notify parent of seconds counter changes
+  useEffect(() => {
+    if (onSecondsCounterChange) {
+      onSecondsCounterChange(secondsCounter);
+    }
+  }, [secondsCounter, onSecondsCounterChange]);
 
   // Effect for timer ticking and habit progress tracking
   useEffect(() => {
