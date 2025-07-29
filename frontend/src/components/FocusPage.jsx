@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   Box,
   Typography,
-  IconButton,
   List,
   ListItem,
   ListItemIcon,
@@ -16,14 +15,12 @@ import {
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
-import CloseIcon from '@mui/icons-material/Close';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import CelebrationIcon from '@mui/icons-material/Celebration';
 
 import { Room } from "./Room.jsx";
 import TimerDisplay from "./TimerDisplay";
 import { fetchTasks, setSelectedTaskId } from '../features/tasksSlice.js';
-import { stopTimer } from '../features/timerSlice.js';
 
 const FocusPage = () => {
   const dispatch = useDispatch();
