@@ -74,6 +74,43 @@ export const addFriend = createAsyncThunk(
   }
 );
 
+export const removeFriend = createAsyncThunk(
+  "market/removeFriend",
+  async (username, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(
+        `${BASE_API_URL}/friends/remove`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          data: { username },
+        }
+      );
+
+      return response.data.friends;
+    } catch (error) {
+      console.error("Error adding friend with Axios:", error);
+
+      if (axios.isAxiosError(error) && error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+        return rejectWithValue(
+          error.response.data.message ||
+            `Request failed with status ${error.response.status}`
+        );
+      } else if (axios.isAxiosError(error) && error.request) {
+        console.error("No response received:", error.request);
+        return rejectWithValue("Network error: No response from server.");
+      } else {
+        console.error("Error message:", error.message);
+        return rejectWithValue(error.message || "An unknown error occurred.");
+      }
+    }
+  }
+);
+
 const initialState = {
     currentFriend: null,
     friends: [], // list of friends (usernames)
@@ -115,6 +152,18 @@ const friendsSlice = createSlice({
         state.error = null;
       })
       .addCase(addFriend.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(removeFriend.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(removeFriend.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.friends = action.payload;
+        state.error = null;
+      })
+      .addCase(removeFriend.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });

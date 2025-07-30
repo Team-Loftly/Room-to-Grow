@@ -61,5 +61,35 @@ export default function createFriendsRouter(requireAuth) {
           .json({ message: "Error adding friend" });
       }
     });
+
+    // remove friend
+    router.delete("/remove", requireAuth, async (req, res) => {
+      const user_id = req.userId;
+      const friendUsername = req.body.username;
+      try {
+        const user = await User.findOne({ _id: user_id });
+        if (!user) {
+          return res.status(StatusCodes.NOT_FOUND).json({ message: "User not found" });
+        }
+  
+        const friend = await User.findOne({ username: friendUsername });
+        if (!friend) {
+          return res.status(StatusCodes.NOT_FOUND).json({ message: "Friend not found" });
+        }
+  
+        // Remove friend from user's list
+        user.friends = user.friends.filter(username => username !== friendUsername);
+        // Remove user from friend's list
+        friend.friends = friend.friends.filter(username => username !== user.username);
+  
+        await user.save();
+        await friend.save();
+  
+        res.status(StatusCodes.OK).json({ message: "Friend removed successfully", friends: user.friends });
+      } catch (err) {
+        console.log(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Error removing friend" });
+      }
+    });
   return router;
 }

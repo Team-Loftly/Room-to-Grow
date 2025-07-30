@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchFriends,
   addFriend,
+  removeFriend,
   selectFriendsStatus,
   selectFriendsError,
   selectFriends,
@@ -44,6 +45,10 @@ function FriendsComponent() {
       dispatch(addFriend(searchFriend));
     }
   };
+
+  const handleDeleteFriend = (friend) => {
+    dispatch(removeFriend(friend));
+  }
 
   // switch currentRoomUsername to given name
   // fetch and display the friend's room
@@ -101,6 +106,16 @@ function FriendsComponent() {
                   }}
                 >
                   View
+                </Button>
+                <Button
+                  onClick={() => {
+                    handleDeleteFriend(friend);
+                    if (friend === friendUsername) {
+                      switchRoom(null);
+                    }
+                  }}
+                >
+                  Remove
                 </Button>
               </ListItem>
             ))
