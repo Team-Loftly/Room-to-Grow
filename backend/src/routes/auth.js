@@ -63,7 +63,7 @@ export default function createAuthRouter(authHelper) {
     try {
       const { email, password } = req.body;
       // validate email/password
-      if (!validateEmail(email) || !validatePassword(password)) {
+      if (!validateEmail(email) || password?.length === 0) {
         return res
           .status(StatusCodes.BAD_REQUEST)
           .json({ message: "Invalid email or password" });
