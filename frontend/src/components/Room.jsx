@@ -2,7 +2,15 @@
 
 import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import { lazy, Suspense, useState, useRef, useEffect, memo, useCallback } from "react"; // <--- Import memo
+import {
+  lazy,
+  Suspense,
+  useState,
+  useRef,
+  useEffect,
+  memo,
+  useCallback,
+} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import * as THREE from "three";
 import BaseRoom from "../models/BaseRoom";
@@ -15,6 +23,8 @@ import {
 import Fab from "@mui/material/Fab";
 import Snackbar from "@mui/material/Snackbar";
 import Stack from "@mui/material/Stack";
+
+import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
 // Dynamically imports a furniture component by model name and loads it lazily
 const loadFurniture = (model) =>
@@ -82,23 +92,23 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
   }, [isSelected]);
 
   useEffect(() => {
-    // This effect runs when isSelected changes, specifically when an item is deselected.
-    // It captures the final position and rotation of the groupRef and dispatches them.
-    // This correctly saves the state of the furniture after movement/rotation.
     if (!isSelected && groupRef.current) {
       const finalPos = groupRef.current.position.toArray();
-      // Only take the Y rotation as that's what's being controlled
-      const finalRot = new THREE.Euler().setFromQuaternion(groupRef.current.quaternion).toArray().slice(0, 3); // Get Euler from quaternion
+      const finalRot = new THREE.Euler()
+        .setFromQuaternion(groupRef.current.quaternion)
+        .toArray()
+        .slice(0, 3);
 
-      // Important: Only dispatch if the position/rotation has actually changed
-      // This prevents unnecessary Redux updates if the user just clicked on and off an item
-      const currentItem = item; // Use the item from props closure
+      const currentItem = item;
       const previousPosition = currentItem.position;
       const previousRotation = currentItem.rotation;
 
-      const positionChanged = finalPos.some((val, i) => val !== previousPosition[i]);
-      const rotationChanged = finalRot.some((val, i) => val !== previousRotation[i]);
-
+      const positionChanged = finalPos.some(
+        (val, i) => val !== previousPosition[i]
+      );
+      const rotationChanged = finalRot.some(
+        (val, i) => val !== previousRotation[i]
+      );
 
       if (positionChanged) {
         dispatch(
@@ -118,7 +128,6 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
       }
     }
   }, [isSelected, index, dispatch, item]);
-
 
   const DynamicFurniture = loadFurniture(item.decorId.modelID);
 
@@ -140,143 +149,161 @@ function MovableFurniture({ item, index, isSelected, onSelect }) {
   );
 }
 
-// Wrap RoomScene with React.memo
-export const Room = memo(({ isEditable = false, friendUsername = null, isRunning }) => {
-  const dispatch = useDispatch();
-  const lightTarget = useRef(new THREE.Object3D());
+export const Room = memo(
+  ({ isEditable = false, friendUsername = null, isRunning }) => {
+    const dispatch = useDispatch();
+    const lightTarget = useRef(new THREE.Object3D());
 
-  useEffect(() => {
-    dispatch(fetchRoom(friendUsername));
-  }, [dispatch, friendUsername]);
+    useEffect(() => {
+      dispatch(fetchRoom(friendUsername));
+    }, [dispatch, friendUsername]);
 
-  const adjustForScreenSize = useCallback(() => {
-    const isSmallScreen = window.innerWidth < 800;
-    return {
-      scale: isSmallScreen ? [0.9, 0.9, 0.9] : [30, 30, 30],
-      position: [0, -10, 0],
+    const adjustForScreenSize = useCallback(() => {
+      const isSmallScreen = window.innerWidth < 800;
+      return {
+        scale: isSmallScreen ? [0.9, 0.9, 0.9] : [30, 30, 30],
+        position: [0, -10, 0],
+      };
+    }, []);
+
+    const { scale: roomScale, position: roomPosition } = adjustForScreenSize();
+    const furnitureList = useSelector((state) => state.room.decorations);
+    const [selectedDecor, setSelectedDecor] = useState(null);
+
+    const [saved, setSaved] = useState(false);
+    const handleClose = (event, reason) => {
+      if (reason === "clickaway") {
+        return;
+      }
+      setSaved(false);
     };
-  }, []);
 
-  const { scale: roomScale, position: roomPosition } = adjustForScreenSize();
-  const furnitureList = useSelector((state) => state.room.decorations);
-  const [selectedDecor, setSelectedDecor] = useState(null);
+    const handleObjectSelection = useCallback(
+      (index) => {
+        if (!isEditable) return;
+        setSelectedDecor((prevSelected) =>
+          prevSelected === index ? null : index
+        );
+      },
+      [isEditable]
+    );
 
-  const [saved, setSaved] = useState(false);
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setSaved(false);
-  };
+    const handleBackgroundClick = useCallback(() => {
+      if (!isEditable) return;
+      setSelectedDecor(null);
+    }, [isEditable]);
 
-  const handleObjectSelection = useCallback((index) => {
-    if (!isEditable) return;
-    setSelectedDecor(prevSelected => prevSelected === index ? null : index);
-  }, [isEditable]);
+    const handleEditRoom = useCallback(() => {
+      dispatch(updateRoom({ decorations: furnitureList }));
+      setSaved(true);
+    }, [dispatch, furnitureList]);
 
-  const handleBackgroundClick = useCallback(() => {
-    if (!isEditable) return;
-    setSelectedDecor(null);
-  }, [isEditable]);
-
-  const handleEditRoom = useCallback(() => {
-    dispatch(updateRoom({ decorations: furnitureList }));
-    setSaved(true);
-  }, [dispatch, furnitureList]);
-
-
-  return (
-    <>
-      <Snackbar
-        open={saved}
-        autoHideDuration={5000}
-        onClose={handleClose}
-        message="Room changes saved"
-      />
-      <Stack
-        direction="row"
-        sx={{
-          height: "100%",
-          width: "100%",
-          boxSizing: "border-box",
-          justifyContent: "center",
-          alignItems: "center",
-          m: 2,
-        }}
-      >
-        {isEditable && (
-          <Fab
-            variant="extended"
-            onClick={handleEditRoom}
-            style={{
-              marginTop: "12px",
-              padding: "5px 10px",
-              backgroundColor: "#0a571f",
-              color: "white",
-              borderRadius: "5px",
-              fontSize: "14px",
-              position: "fixed",
-              bottom: 20,
-              left: 20,
-            }}
-          >
-            Save Changes
-          </Fab>
-        )}
-        <Canvas
-          camera={{ position: [-60, 48, 60], fov: 60 }}
-          onPointerMissed={handleBackgroundClick}
-          shadows
+    return (
+      <>
+        <Snackbar
+          open={saved}
+          autoHideDuration={5000}
+          onClose={handleClose}
+          message="Room changes saved"
+        />
+        <Stack
+          direction="row"
+          sx={{
+            height: "100%",
+            width: "100%",
+            boxSizing: "border-box",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          <ambientLight intensity={0.7} />
-          <directionalLight
-            color="#fff5b6"
-            position={[20, 60, 0]}
-            intensity={1.5}
-            castShadow
-            shadow-mapSize-width={2048}
-            shadow-mapSize-height={2048}
-            shadow-bias={-0.0005}
-            shadow-camera-near={1}
-            shadow-camera-far={200}
-            shadow-camera-left={-200}
-            shadow-camera-right={200}
-            shadow-camera-top={200}
-            shadow-camera-bottom={-200}
+          {isEditable && (
+            <Fab
+              variant="extended"
+              onClick={handleEditRoom}
+              style={{
+                marginTop: "12px",
+                padding: "5px 10px",
+                backgroundColor: "#0a571f",
+                color: "white",
+                borderRadius: "5px",
+                fontSize: "14px",
+                position: "fixed",
+                bottom: 20,
+                left: 20,
+              }}
+            >
+              Save Changes
+            </Fab>
+          )}
+          <Canvas
+            camera={{ position: [-60, 48, 60], fov: 60 }}
+            onPointerMissed={handleBackgroundClick}
+            gl={{
+              antialias: true,
+              toneMapping: THREE.ACESFilmicToneMapping,
+              outputColorSpace: THREE.SRGBColorSpace,
+            }}
+            shadows
           >
-            <primitive object={lightTarget.current} position={[0, -10, 0]} />
-          </directionalLight>
+            <EffectComposer disableNormalPass>
+              <Bloom
+                mipmapBlur
+                luminanceThreshold={1}
+                luminanceSmoothing={0.025}
+                intensity={1.2}
+              />
+            </EffectComposer>
 
-          <BaseRoom scale={roomScale} position={roomPosition} />
+            <ambientLight intensity={0.7} />
+            <directionalLight
+              color="#fdfbd3"
+              position={[0, 30, -50]}
+              intensity={1.5}
+              castShadow
+              shadow-mapSize-width={2048}
+              shadow-mapSize-height={2048}
+              shadow-bias={-0.0005}
+              shadow-camera-near={1}
+              shadow-camera-far={200}
+              shadow-camera-left={-200}
+              shadow-camera-right={200}
+              shadow-camera-top={200}
+              shadow-camera-bottom={-200}
+            >
+              <primitive object={lightTarget.current} position={[0, -10, 0]} />
+            </directionalLight>
 
-          <group position={[0, -10, 0]}>
-            {furnitureList.map(
-              (item, index) =>
-                item.placed && (
-                  <MovableFurniture
-                    key={index}
-                    item={item}
-                    index={index}
-                    isSelected={selectedDecor === index}
-                    onSelect={handleObjectSelection}
-                  />
-                )
-            )}
-          </group>
+            <BaseRoom scale={roomScale} position={roomPosition} />
 
-          <OrbitControls
-            target={[0, 0, 0]}
-            minDistance={15}
-            maxDistance={150}
-            makeDefault
-            enablePan={false}
-            enableZoom
-            enableRotate
-          />
-        </Canvas>
-      </Stack>
-    </>
-  );
-});
+            <group position={[0, -10, 0]}>
+              {furnitureList.map(
+                (item, index) =>
+                  item.placed && (
+                    <MovableFurniture
+                      key={index}
+                      item={item}
+                      index={index}
+                      isSelected={selectedDecor === index}
+                      onSelect={handleObjectSelection}
+                    />
+                  )
+              )}
+            </group>
+
+            <OrbitControls
+              target={[0, 0, 0]}
+              minDistance={15}
+              maxDistance={150}
+              makeDefault
+              enablePan={false}
+              enableZoom
+              enableRotate
+            />
+          </Canvas>
+        </Stack>
+      </>
+    );
+  }
+);
 
 export default Room;

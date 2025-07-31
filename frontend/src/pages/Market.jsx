@@ -51,19 +51,39 @@ function Market() {
   return (
     <Stack
       direction="row"
+      spacing={2}
       sx={{
-        height: "100%",
+        height: "90vh",
         boxSizing: "border-box",
         justifyContent: "center",
         alignItems: "center",
+        p: 4,
       }}
     >
-      <ItemDisplay />
+      <ItemDisplay
+        sx={{
+          flexGrow: 2,
+          width: "30%", // Use direct percentage, Stack will manage spacing around it
+          // You might need min/max width if this ItemDisplay has content that
+          // makes it too small/large on extreme zooms or screen sizes.
+          // minWidth: '200px',
+          // maxWidth: '400px',
+        }}
+      />
       <Divider
         orientation="vertical"
-        sx={{ borderColor: "white", borderWidth: "1px", height: "90%" }}
+        sx={{
+          borderColor: "white",
+          borderWidth: "1px",
+          height: "90%",
+          flexShrink: 0,
+        }}
       />
-      <ItemGrid items={items} title="Marketplace" />
+      <ItemGrid
+        items={items}
+        title="Marketplace"
+        sx={{ flexGrow: 4, width: "40%" }}
+      />
     </Stack>
   );
 }
