@@ -21,18 +21,23 @@ Introducing Room to Grow, a productivity web app where users can build up health
 Earn coins and spend them at the Marketplace to buy various decorations for your room! Every minute of focus counts!
 
 ### Standard Goals
-- Users can set different types of tasks (timed, counted, recurring)
+- Users can set different types of habits (timed, counted)
   - Current State: Complete
-- Users have more flexibility with tasks (organized by priority, sub tasks for larger tasks, etc.)
+- Users have more flexibility with habits (organized by priority, etc.)
   - Current State: Complete
 - Daily quest/reward system, productivity streaks that give bonus points, achievements, or other ways to reward consistent progress.
   - Current State: Complete
-- Users gain access to “trends” in their productivity and view visualizations
+- Users gain access to “trends” in their productivity and view visualizations for every habit
   - Current State: Complete
-- Users can add other users as friends by username
+- Users can add other users as friends by username  
   - Current State: Complete
 - Interaction with certain elements of the app make noise
   - Current State: Complete
+
+### Changes to Standard Goals
+- Tasks are now referred to as habits. We made this change because we it fit the identity of our app better. As the aim of the app is to help users become more productive by gamifying habit tracking, it would make more sense for them to build healthy habits than to complete one off tasks.
+- Instead of displaying overall trends in productivity, we decided it would be more useful to view trends in productivity per habit. This will allow users to track their progress for a specific habit, as some habits may be easier than maintain than others.
+
 ### Stretch Goals
 - Users can rotate the room to view it freely
   - Current State: Complete
@@ -43,9 +48,9 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 - Users can purchase more complex room decorations (weather changes, lighting changes, etc)
   - Current State: TODO
 - Users can create several different room layouts and save them to quickly switch between them.
-  - Current State: Not started (TODO: Are we dropping this?)
+  - Current State: TODO
 - Users can connect their spotify account to play music in their rooms.
-  - Current State: Not started (TODO: Are we dropping this?)
+  - Current State: TODO
 
 ### Non-Trivial Elements
 | Feature                          | State     | Description                                                                            |
@@ -137,6 +142,15 @@ Friends Page:
 - Daily quests
   - Users now earn the bulk of their coins through the completion of daily quests, which discourages abuse of the habits rewards system and improves the pacing of room development by rewarding continual growth
   - Users are assigned three quests each day that are linked to the progress and completion of habits
+- Habits
+  - Users can now sort habits alphabetically and by priority.
+  - Users can filter habits by priority.
+  - Grouped side buttons in habits page as a collapsible menu.
+- Navbar
+  - Added a profile dropdown icon with logout as a menu item.
+  - Added text when hovering over buttons for a better user experience.
+  - Added a quests button to allow users to go to daily quests.
+  - Made coins a clickable button to navigate users to the marketplace.
 
 ### Bug List
 - Our team uses Github Issues to document our bugs which can be found here: https://github.students.cs.ubc.ca/CPSC455-2025S/team02/issues
