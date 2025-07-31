@@ -5,7 +5,8 @@
   "username": "admin",
   "email": "admin@test.com",
   "hashedPassword": "$2b$10$We3MOoXWHEdbX6WYDI9tV.eflEf/ngvMc8Vgw9Ut7lDPBtaINPJ/m",
-  "friends": []
+  "friends": [],
+  "friendRequests": []
 },
 {
   "_id": {
@@ -14,5 +15,6 @@
   "username": "testUser2",
   "email": "test1@test.com",
   "hashedPassword": "$2b$10$We3MOoXWHEdbX6WYDI9tV.eflEf/ngvMc8Vgw9Ut7lDPBtaINPJ/m",
-  "friends": []
+  "friends": [],
+  "friendRequests": []
 }]

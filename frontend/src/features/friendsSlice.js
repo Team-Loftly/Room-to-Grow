@@ -37,6 +37,40 @@ export const fetchFriends = createAsyncThunk(
   }
 );
 
+export const fetchFriendRequests = createAsyncThunk(
+  "market/fetchFriendRequests",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${BASE_API_URL}/friends/friendRequests`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching data with Axios:", error);
+
+      // details in error.response for HTTP errors, error.request for network errors, error.message for other errors
+      if (axios.isAxiosError(error) && error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+        return rejectWithValue(
+          error.response.data.error ||
+            `Request failed with status ${error.response.status}`
+        );
+      } else if (axios.isAxiosError(error) && error.request) {
+        console.error("No response received:", error.request);
+        return rejectWithValue("Network error: No response from server.");
+      } else {
+        console.error("Error message:", error.message);
+        return rejectWithValue(error.message || "An unknown error occurred.");
+      }
+    }
+  }
+);
+
 export const addFriend = createAsyncThunk(
   "market/addFriend",
   async (username, { rejectWithValue }) => {
@@ -49,6 +83,80 @@ export const addFriend = createAsyncThunk(
           headers: {
             Authorization: `Bearer ${token}`,
           },
+        }
+      );
+
+      return response.data.friends;
+    } catch (error) {
+      console.error("Error adding friend with Axios:", error);
+
+      if (axios.isAxiosError(error) && error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+        return rejectWithValue(
+          error.response.data.message ||
+            `Request failed with status ${error.response.status}`
+        );
+      } else if (axios.isAxiosError(error) && error.request) {
+        console.error("No response received:", error.request);
+        return rejectWithValue("Network error: No response from server.");
+      } else {
+        console.error("Error message:", error.message);
+        return rejectWithValue(error.message || "An unknown error occurred.");
+      }
+    }
+  }
+);
+
+export const addFriendRequest = createAsyncThunk(
+  "market/addFriendRequest",
+  async (username, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `${BASE_API_URL}/friends/addRequest`,
+        { username },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data.message || "Friend request sent";
+    } catch (error) {
+      console.error("Error adding friend with Axios:", error);
+
+      if (axios.isAxiosError(error) && error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+        return rejectWithValue(
+          error.response.data.message ||
+            `Request failed with status ${error.response.status}`
+        );
+      } else if (axios.isAxiosError(error) && error.request) {
+        console.error("No response received:", error.request);
+        return rejectWithValue("Network error: No response from server.");
+      } else {
+        console.error("Error message:", error.message);
+        return rejectWithValue(error.message || "An unknown error occurred.");
+      }
+    }
+  }
+);
+
+export const removeFriendRequest = createAsyncThunk(
+  "market/removeFriendRequest",
+  async (username, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(
+        `${BASE_API_URL}/friends/removeRequest`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          data: { username },
         }
       );
 
@@ -114,6 +222,7 @@ export const removeFriend = createAsyncThunk(
 const initialState = {
     currentFriend: null,
     friends: [], // list of friends (usernames)
+    friendRequests: [],
     status: "idle",
     error: null,
 };
@@ -143,6 +252,18 @@ const friendsSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
+      .addCase(fetchFriendRequests.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchFriendRequests.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.friendRequests = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchFriendRequests.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
       .addCase(addFriend.pending, (state) => {
         state.status = "loading";
       })
@@ -152,6 +273,17 @@ const friendsSlice = createSlice({
         state.error = null;
       })
       .addCase(addFriend.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(addFriendRequest.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(addFriendRequest.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = null;
+      })
+      .addCase(addFriendRequest.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       })
@@ -166,6 +298,18 @@ const friendsSlice = createSlice({
       .addCase(removeFriend.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+      })
+      .addCase(removeFriendRequest.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(removeFriendRequest.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.friendRequests = action.payload;
+        state.error = null;
+      })
+      .addCase(removeFriendRequest.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
       });
   },
 });
@@ -174,5 +318,6 @@ export const selectFriends = (state) => state.friends.friends;
 export const selectFriendsStatus = (state) => state.friends.status;
 export const selectCurrentFriend = (state) => state.friends.currentFriend;
 export const selectFriendsError = (state) => state.friends.error;
+export const selectFriendRequests = (state) => state.friends.friendRequests;
 
 export default friendsSlice.reducer;

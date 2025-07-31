@@ -13,6 +13,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchFriends,
+  fetchFriendRequests,
   addFriend,
   removeFriend,
   selectFriendsStatus,
@@ -20,12 +21,16 @@ import {
   selectFriends,
   clearError,
   setCurrentFriend,
-  selectCurrentFriend
+  selectCurrentFriend,
+  selectFriendRequests,
+  removeFriendRequest,
+  addFriendRequest
 } from "../features/friendsSlice";
 
 function FriendsComponent() {
   const dispatch = useDispatch();
   const friends = useSelector(selectFriends);
+  const friendRequests = useSelector(selectFriendRequests);
   const status = useSelector(selectFriendsStatus);
   const error = useSelector(selectFriendsError);
   const disallowedCharacters = /[<>"'\/\\]/;
@@ -37,18 +42,36 @@ function FriendsComponent() {
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchFriends());
+      dispatch(fetchFriendRequests());
     }
   }, [dispatch, status]);
 
-  const handleAddFriend = () => {
-    if (searchFriend.trim()) {
-      dispatch(addFriend(searchFriend));
-    }
+  const handleAddFriend = (friend) => {
+    dispatch(addFriend(friend)).then(() => {
+      dispatch(fetchFriendRequests());
+      dispatch(fetchFriends());
+    });
   };
 
   const handleDeleteFriend = (friend) => {
-    dispatch(removeFriend(friend));
+    dispatch(removeFriend(friend)).then(() => {
+      dispatch(fetchFriendRequests());
+      dispatch(fetchFriends());
+    });
   }
+
+  const handleSendFriendRequest = (friend) => {
+    if (searchFriend.trim()) {
+      dispatch(addFriendRequest(searchFriend)).then(() => {
+      });
+    }
+  };
+
+  const handleDeleteFriendRequest = (friend) => {
+    dispatch(removeFriendRequest(friend)).then(() => {
+      dispatch(fetchFriendRequests());
+    });
+  };
 
   // switch currentRoomUsername to given name
   // fetch and display the friend's room
@@ -92,6 +115,7 @@ function FriendsComponent() {
       }}
       >
         <Typography variant="h5">Friends</Typography>
+        <Typography variant="caption">Visit your friends!</Typography>
         {friendUsername && <Typography>Now viewing {friendUsername}'s room.</Typography>}
         <List>
           {friends.length === 0 ? (
@@ -122,6 +146,36 @@ function FriendsComponent() {
           )}
         </List>
 
+        {/** approve friend reqs should call handleAddFriend
+         * also have an option to delete friend reqs 
+         */}
+        <Typography variant="h5">Approve Requests</Typography>
+        <List>
+          {friendRequests.length === 0 ? (
+            <Typography>No friend requests.</Typography>
+          ) : (
+            friendRequests.map((friend, index) => (
+              <ListItem key={index} disablePadding>
+                <ListItemText primary={friend} />
+                <Button
+                  onClick={() => {
+                    handleAddFriend(friend);
+                  }}
+                >
+                  Approve
+                </Button>
+                <Button
+                  onClick={() => {
+                    handleDeleteFriendRequest(friend);
+                  }}
+                >
+                  Remove
+                </Button>
+              </ListItem>
+            ))
+          )}
+        </List>
+
         <Stack direction="row" spacinga={2}>
           <TextField
             fullWidth
@@ -130,7 +184,7 @@ function FriendsComponent() {
             onChange={(e) => handleChangeUsername(e.target.value)}
             variant="outlined"
           />
-          <Button variant="contained" onClick={handleAddFriend}>
+          <Button variant="contained" onClick={handleSendFriendRequest}>
             Add
           </Button>
         </Stack>

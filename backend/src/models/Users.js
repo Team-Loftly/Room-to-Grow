@@ -17,6 +17,9 @@ const userSchema = new mongoose.Schema({
   },
   friends: {
     type: [String]
+  },
+  friendRequests: { // requests you have received that you can approve/ delete
+    type: [String]
   }
 });
 
