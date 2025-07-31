@@ -33,7 +33,7 @@ export default function createAuthRouter(authHelper) {
       if (!validatePassword(password)) {
         return res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ message: "Invalid Password" });
+          .json({ message: "Password must contain at least 8 characters with an uppercase, lowercase, number, and special character." });
       }
       // check if user already exists
       const user_em = await User.findOne({ email });

@@ -16,10 +16,22 @@ const validateEmail = function (email) {
   return emailRegex.test(email);
 };
 
-// length cannot be 0
-// TODO: Add more password validation?
 const validatePassword = function (password) {
-  return password?.length > 0;
+  if (typeof password !== 'string') return false;
+
+  const minLength = 8;
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+  return (
+    password.length >= minLength &&
+    hasUpperCase &&
+    hasLowerCase &&
+    hasNumber &&
+    hasSpecialChar
+  );
 };
 
 // hashes password and returns it
