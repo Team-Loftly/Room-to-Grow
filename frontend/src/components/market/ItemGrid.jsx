@@ -21,13 +21,11 @@ export default function ItemGrid({ items, title, isEditable = false }) {
     <Box
       flexDirection="column"
       sx={{
-        height: "90%",
-        width: "60%",
+        height: "100%",
+        width: "100%",
         display: "flex",
         bgcolor: "rgba(255, 255, 255, 0.8)",
-        m: 4,
         py: 3,
-
         borderRadius: 4,
       }}
     >

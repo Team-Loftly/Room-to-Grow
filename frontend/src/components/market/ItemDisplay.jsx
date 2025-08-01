@@ -74,11 +74,10 @@ export default function ItemDisplay() {
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "column",
-        m: 4,
         p: 2,
         borderRadius: 4,
         width: "40%",
-        height: "90%",
+        height: "100%",
         bgcolor: "rgba(255,255,255,0.8)",
         overflowY: "auto",
       }}
