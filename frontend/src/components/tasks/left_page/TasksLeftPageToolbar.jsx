@@ -8,6 +8,7 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import { useSelector, useDispatch } from "react-redux";
 
 import CreateTask from "./CreateTask";
+import DatePickerButton from "./DatePickerButton";
 import { setShowAllTasks } from "../../../features/tasksSlice";
 import SortButton from "./SortButton";
 import FilterButton from "./filterButton";
@@ -46,16 +47,33 @@ export default function TasksLeftPageToolBar() {
         alignItems: "center",
       }}
     >
-      <Typography variant="h4" sx={{ ml: -1.2, fontWeight: 700 }}>
-        {showAllTasks ? "All Habits" : "Today"}
-      </Typography>
-
+      <Box
+        sx={{ flexGrow: 1, display: "flex", alignItems: "center", minWidth: 0 }}
+      >
+        {showAllTasks ? (
+          <Typography
+            variant="h4"
+            sx={{
+              ml: -1.2,
+              fontWeight: 700,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            All Habits
+          </Typography>
+        ) : (
+          <DatePickerButton />
+        )}
+      </Box>
       <Box
         sx={{
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
           mr: -1.2,
+          flexShrink: 1,
         }}
       >
         <Tooltip
@@ -74,7 +92,6 @@ export default function TasksLeftPageToolBar() {
             )}
           </IconButton>
         </Tooltip>
-
         <Collapse
           orientation="horizontal"
           in={openTools}
@@ -88,9 +105,12 @@ export default function TasksLeftPageToolBar() {
                 display: "flex",
                 flexDirection: "row",
                 minWidth: "280px",
+                flexShrink: 1,
               }}
             >
-              <Tooltip title={showAllTasks ? "Show Today's Habits" : "Show All Habits"}>
+              <Tooltip
+                title={showAllTasks ? "Show Today's Habits" : "Show All Habits"}
+              >
                 <Button
                   variant="outlined"
                   onClick={() => {
@@ -104,17 +124,15 @@ export default function TasksLeftPageToolBar() {
                       borderColor: "black",
                       color: "black",
                     },
-                    textTransform: 'none',
+                    textTransform: "none",
                   }}
                 >
-                  {showAllTasks ? "Today" : "All Habits"}
+                  {showAllTasks ? "Today" : "All"}
                 </Button>
               </Tooltip>
-
-              
-                <SortButton />
-                <FilterButton />
-                <CreateTask />
+              <SortButton />
+              <FilterButton />
+              <CreateTask />
             </Box>
           )}
         </Collapse>

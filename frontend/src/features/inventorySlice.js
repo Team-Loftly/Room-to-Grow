@@ -208,6 +208,15 @@ const inventorySlice = createSlice({
             action.payload
           );
         }
+      })
+      .addCase(updateInventory.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.decorations = action.payload.decorations;
+        state.coins = action.payload.coins;
+      })
+      .addCase(updateInventory.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
       });
   },
 });

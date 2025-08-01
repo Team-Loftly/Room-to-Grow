@@ -1140,6 +1140,11 @@ describe("Habits API", function () {
       expect(res.body.totalValuePerDayCurrentWeek[4]).to.equal(0); // Thursday (2025-07-03)
       expect(res.body.totalValuePerDayCurrentWeek[5]).to.equal(60); // Friday (2025-07-04)
       expect(res.body.totalValuePerDayCurrentWeek[6]).to.equal(0); // Saturday (not present)
+      
+      // Test date arrays
+      expect(res.body.completedDates).to.be.an("array").and.have.lengthOf(4);
+      expect(res.body.failedDates).to.be.an("array").and.have.lengthOf(1);
+      expect(res.body.skippedDates).to.be.an("array").and.have.lengthOf(1);
     });
 
     it("should return 404 if the habit is not found or not authorized", async () => {

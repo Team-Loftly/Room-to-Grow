@@ -32,10 +32,21 @@ export const fetchAllTasks = createAsyncThunk(
 
 export const fetchTasks = createAsyncThunk(
   "tasks/fetchTasks",
-  async (_, { rejectWithValue }) => {
+  async (date = null, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`${BASE_API_URL}/habits`, {
+      let url = `${BASE_API_URL}/habits`;
+      
+      if (date) {
+        // Convert date to YYYY-MM-DD format in local timezone
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const dateString = `${year}-${month}-${day}`;
+        url += `?date=${dateString}`;
+      }
+      
+      const response = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -157,6 +168,7 @@ export const updateProgress = createAsyncThunk(
       const value = progress.value;
 
       const token = localStorage.getItem("token");
+      
       const response = await axios.post(
         `${BASE_API_URL}/habits/${taskId}/complete`,
         { value },
@@ -192,7 +204,7 @@ export const markSkipped = createAsyncThunk(
       const token = localStorage.getItem("token");
       const response = await axios.post(
         `${BASE_API_URL}/habits/${taskId}/skip`,
-        null,
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -225,7 +237,7 @@ export const markFailed = createAsyncThunk(
       const token = localStorage.getItem("token");
       const response = await axios.post(
         `${BASE_API_URL}/habits/${taskId}/fail`,
-        null,
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -284,6 +296,7 @@ const initialState = {
   isDeleteSnackbarOpen: false,
   isCompletionSnackbarOpen: false,
   showAllTasks: false,
+  selectedDate: new Date(), // Current selected date for viewing habits
 };
 
 const tasksSlice = createSlice({
@@ -292,6 +305,9 @@ const tasksSlice = createSlice({
   reducers: {
     setShowAllTasks: (state, action) => {
       state.showAllTasks = action.payload;
+    },
+    setSelectedDate: (state, action) => {
+      state.selectedDate = action.payload;
     },
     setSelectedTaskId: (state, action) => {
       const { taskId } = action.payload;
@@ -563,6 +579,7 @@ const tasksSlice = createSlice({
 
 export const {
   setShowAllTasks,
+  setSelectedDate,
   setSelectedTaskId,
   updateCheckmarkProgress,
   setIsDeleteSnackbarOpen,
