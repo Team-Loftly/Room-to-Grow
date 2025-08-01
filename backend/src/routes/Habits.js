@@ -366,25 +366,17 @@ export default function createHabitsRouter(requireAuth) {
       let hasStreakUpdates = false;
 
       for (const habit of habits) {
-        // Only recalculate streak if it hasn't been updated today
-        const today = getStartOfDayLocal(new Date());
-        const lastUpdate = habit.lastStreakUpdateDate ? getStartOfDayLocal(habit.lastStreakUpdateDate) : null;
+        // Recalculate streak for each habit
+        const recalculatedStreak = calculateStreak(habit);
         
-        let currentStreak = habit.currentStreak;
+        let currentStreak = recalculatedStreak;
         
-        // Recalculate streak if it hasn't been updated today or if lastStreakUpdateDate is missing
-        if (!lastUpdate || lastUpdate.getTime() < today.getTime()) {
-          const recalculatedStreak = calculateStreak(habit);
-          
-          // Only update the database if the streak has changed
-          if (habit.currentStreak !== recalculatedStreak) {
-            habit.currentStreak = recalculatedStreak;
-            habit.lastStreakUpdateDate = new Date();
-            habit._needsStreakUpdate = true;
-            hasStreakUpdates = true;
-          }
-          
-          currentStreak = recalculatedStreak;
+        // Update the database if the streak has changed or lastStreakUpdateDate is missing
+        if (habit.currentStreak !== recalculatedStreak || !habit.lastStreakUpdateDate) {
+          habit.currentStreak = recalculatedStreak;
+          habit.lastStreakUpdateDate = new Date();
+          habit._needsStreakUpdate = true;
+          hasStreakUpdates = true;
         }
 
         const dailyStatus = getHabitDailyStatus(habit, targetDate);

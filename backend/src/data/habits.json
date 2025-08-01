@@ -76,12 +76,20 @@
       { "date": { "$date": "2025-07-23T00:00:00.000Z" }, "status": "complete", "value": 30, "dayOfWeek": "Wednesday", "month": 7, "year": 2025 },
       { "date": { "$date": "2025-07-24T00:00:00.000Z" }, "status": "complete", "value": 30, "dayOfWeek": "Thursday", "month": 7, "year": 2025 },
       { "date": { "$date": "2025-07-25T00:00:00.000Z" }, "status": "complete", "value": 30, "dayOfWeek": "Friday", "month": 7, "year": 2025 },
-      { "date": { "$date": "2025-07-26T00:00:00.000Z" }, "status": "incomplete", "value": 0, "dayOfWeek": "Saturday", "month": 7, "year": 2025 }
+      { "date": { "$date": "2025-07-26T00:00:00.000Z" }, "status": "failed", "value": 0, "dayOfWeek": "Saturday", "month": 7, "year": 2025 },
+      { "date": { "$date": "2025-07-27T00:00:00.000Z" }, "status": "skipped", "value": 0, "dayOfWeek": "Sunday", "month": 7, "year": 2025 },
+      { "date": { "$date": "2025-07-28T00:00:00.000Z" }, "status": "complete", "value": 30, "dayOfWeek": "Monday", "month": 7, "year": 2025 },
+      { "date": { "$date": "2025-07-29T00:00:00.000Z" }, "status": "complete", "value": 30, "dayOfWeek": "Tuesday", "month": 7, "year": 2025 },
+      { "date": { "$date": "2025-07-30T00:00:00.000Z" }, "status": "skipped", "value": 0, "dayOfWeek": "Wednesday", "month": 7, "year": 2025 },
+      { "date": { "$date": "2025-07-31T00:00:00.000Z" }, "status": "complete", "value": 30, "dayOfWeek": "Thursday", "month": 7, "year": 2025 },
+      { "date": { "$date": "2025-08-01T00:00:00.000Z" }, "status": "complete", "value": 30, "dayOfWeek": "Friday", "month": 8, "year": 2025 },
+      { "date": { "$date": "2025-08-02T00:00:00.000Z" }, "status": "complete", "value": 30, "dayOfWeek": "Saturday", "month": 8, "year": 2025 },
+      { "date": { "$date": "2025-08-03T00:00:00.000Z" }, "status": "incomplete", "value": 0, "dayOfWeek": "Sunday", "month": 8, "year": 2025 }
     ],
-    "currentStreak": 66,
-    "lastStreakUpdateDate": { "$date": "2025-07-25T00:00:00.000Z" },
+    "currentStreak": 300,
+    "lastStreakUpdateDate": { "$date": "2025-08-02T00:00:00.000Z" },
     "createdAt": { "$date": "2025-05-20T10:00:00.000Z" },
-    "updatedAt": { "$date": "2025-07-26T00:00:00.000Z" }
+    "updatedAt": { "$date": "2025-08-03T00:00:00.000Z" }
   },
   {
     "_id": { "$oid": "68660ef56fd728291e7ef8c0" },
@@ -120,15 +128,18 @@
       { "date": { "$date": "2025-07-15T00:00:00.000Z" }, "status": "complete", "value": 1, "dayOfWeek": "Tuesday", "month": 7, "year": 2025 },
       { "date": { "$date": "2025-07-17T00:00:00.000Z" }, "status": "complete", "value": 1, "dayOfWeek": "Thursday", "month": 7, "year": 2025 },
       { "date": { "$date": "2025-07-19T00:00:00.000Z" }, "status": "complete", "value": 1, "dayOfWeek": "Saturday", "month": 7, "year": 2025 },
-      { "date": { "$date": "2025-07-21T00:00:00.000Z" }, "status": "complete", "value": 1, "dayOfWeek": "Monday", "month": 7, "year": 2025 },
       { "date": { "$date": "2025-07-23T00:00:00.000Z" }, "status": "complete", "value": 1, "dayOfWeek": "Wednesday", "month": 7, "year": 2025 },
       { "date": { "$date": "2025-07-25T00:00:00.000Z" }, "status": "complete", "value": 1, "dayOfWeek": "Friday", "month": 7, "year": 2025 },
-      { "date": { "$date": "2025-07-26T00:00:00.000Z" }, "status": "incomplete", "value": 0, "dayOfWeek": "Saturday", "month": 7, "year": 2025 }
+      { "date": { "$date": "2025-07-28T00:00:00.000Z" }, "status": "failed", "value": 0, "dayOfWeek": "Monday", "month": 7, "year": 2025 },
+      { "date": { "$date": "2025-07-30T00:00:00.000Z" }, "status": "complete", "value": 1, "dayOfWeek": "Wednesday", "month": 7, "year": 2025 },
+      { "date": { "$date": "2025-08-01T00:00:00.000Z" }, "status": "skipped", "value": 0, "dayOfWeek": "Friday", "month": 8, "year": 2025 },
+      { "date": { "$date": "2025-08-02T00:00:00.000Z" }, "status": "complete", "value": 1, "dayOfWeek": "Saturday", "month": 8, "year": 2025 },
+      { "date": { "$date": "2025-08-03T00:00:00.000Z" }, "status": "complete", "value": 1, "dayOfWeek": "Sunday", "month": 8, "year": 2025 }
     ],
-    "currentStreak": 2,
-    "lastStreakUpdateDate": { "$date": "2025-07-25T00:00:00.000Z" },
+    "currentStreak": 1,
+    "lastStreakUpdateDate": { "$date": "2025-07-30T00:00:00.000Z" },
     "createdAt": { "$date": "2025-05-19T10:00:00.000Z" },
-    "updatedAt": { "$date": "2025-07-26T00:00:00.000Z" }
+    "updatedAt": { "$date": "2025-08-03T00:00:00.000Z" }
   },
   {
     "_id": { "$oid": "68660ef56fd728291e7ef8c1" },
@@ -204,15 +215,22 @@
       { "date": { "$date": "2025-07-20T00:00:00.000Z" }, "status": "complete", "value": 10, "dayOfWeek": "Sunday", "month": 7, "year": 2025 },
       { "date": { "$date": "2025-07-21T00:00:00.000Z" }, "status": "complete", "value": 10, "dayOfWeek": "Monday", "month": 7, "year": 2025 },
       { "date": { "$date": "2025-07-22T00:00:00.000Z" }, "status": "complete", "value": 10, "dayOfWeek": "Tuesday", "month": 7, "year": 2025 },
-      { "date": { "$date": "2025-07-23T00:00:00.000Z" }, "status": "complete", "value": 10, "dayOfWeek": "Wednesday", "month": 7, "year": 2025 },
       { "date": { "$date": "2025-07-24T00:00:00.000Z" }, "status": "complete", "value": 10, "dayOfWeek": "Thursday", "month": 7, "year": 2025 },
       { "date": { "$date": "2025-07-25T00:00:00.000Z" }, "status": "complete", "value": 10, "dayOfWeek": "Friday", "month": 7, "year": 2025 },
-      { "date": { "$date": "2025-07-26T00:00:00.000Z" }, "status": "incomplete", "value": 0, "dayOfWeek": "Saturday", "month": 7, "year": 2025 }
+      { "date": { "$date": "2025-07-26T00:00:00.000Z" }, "status": "failed", "value": 0, "dayOfWeek": "Saturday", "month": 7, "year": 2025 },
+      { "date": { "$date": "2025-07-27T00:00:00.000Z" }, "status": "failed", "value": 0, "dayOfWeek": "Sunday", "month": 7, "year": 2025 },
+      { "date": { "$date": "2025-07-28T00:00:00.000Z" }, "status": "skipped", "value": 0, "dayOfWeek": "Monday", "month": 7, "year": 2025 },
+      { "date": { "$date": "2025-07-29T00:00:00.000Z" }, "status": "complete", "value": 10, "dayOfWeek": "Tuesday", "month": 7, "year": 2025 },
+      { "date": { "$date": "2025-07-30T00:00:00.000Z" }, "status": "complete", "value": 10, "dayOfWeek": "Wednesday", "month": 7, "year": 2025 },
+      { "date": { "$date": "2025-07-31T00:00:00.000Z" }, "status": "complete", "value": 10, "dayOfWeek": "Thursday", "month": 7, "year": 2025 },
+      { "date": { "$date": "2025-08-01T00:00:00.000Z" }, "status": "complete", "value": 10, "dayOfWeek": "Friday", "month": 8, "year": 2025 },
+      { "date": { "$date": "2025-08-02T00:00:00.000Z" }, "status": "complete", "value": 10, "dayOfWeek": "Saturday", "month": 8, "year": 2025 },
+      { "date": { "$date": "2025-08-03T00:00:00.000Z" }, "status": "incomplete", "value": 6, "dayOfWeek": "Sunday", "month": 8, "year": 2025 }
     ],
-    "currentStreak": 66,
-    "lastStreakUpdateDate": { "$date": "2025-07-25T00:00:00.000Z" },
+    "currentStreak": 6,
+    "lastStreakUpdateDate": { "$date": "2025-08-03T00:00:00.000Z" },
     "createdAt": { "$date": "2025-05-20T10:00:00.000Z" },
-    "updatedAt": { "$date": "2025-07-26T00:00:00.000Z" }
+    "updatedAt": { "$date": "2025-08-03T00:00:00.000Z" }
   },
   {
     "_id": { "$oid": "68660ef56fd728291e7ef8c2" },
@@ -241,14 +259,14 @@
       { "date": { "$date": "2025-07-08T00:00:00.000Z" }, "status": "complete", "value": 2, "dayOfWeek": "Tuesday", "month": 7, "year": 2025 },
       { "date": { "$date": "2025-07-10T00:00:00.000Z" }, "status": "complete", "value": 2, "dayOfWeek": "Thursday", "month": 7, "year": 2025 },
       { "date": { "$date": "2025-07-15T00:00:00.000Z" }, "status": "incomplete", "value": 0, "dayOfWeek": "Tuesday", "month": 7, "year": 2025 },
-      { "date": { "$date": "2025-07-17T00:00:00.000Z" }, "status": "complete", "value": 2, "dayOfWeek": "Thursday", "month": 7, "year": 2025 },
       { "date": { "$date": "2025-07-22T00:00:00.000Z" }, "status": "complete", "value": 2, "dayOfWeek": "Tuesday", "month": 7, "year": 2025 },
       { "date": { "$date": "2025-07-24T00:00:00.000Z" }, "status": "complete", "value": 2, "dayOfWeek": "Thursday", "month": 7, "year": 2025 },
-      { "date": { "$date": "2025-07-26T00:00:00.000Z" }, "status": "incomplete", "value": 0, "dayOfWeek": "Saturday", "month": 7, "year": 2025 }
+      { "date": { "$date": "2025-07-29T00:00:00.000Z" }, "status": "complete", "value": 2, "dayOfWeek": "Tuesday", "month": 7, "year": 2025 },
+      { "date": { "$date": "2025-07-31T00:00:00.000Z" }, "status": "incomplete", "value": 1, "dayOfWeek": "Thursday", "month": 7, "year": 2025 }
     ],
-    "currentStreak": 3,
-    "lastStreakUpdateDate": { "$date": "2025-07-24T00:00:00.000Z" },
+    "currentStreak": 1,
+    "lastStreakUpdateDate": { "$date": "2025-07-29T00:00:00.000Z" },
     "createdAt": { "$date": "2025-05-19T10:00:00.000Z" },
-    "updatedAt": { "$date": "2025-07-26T00:00:00.000Z" }
+    "updatedAt": { "$date": "2025-08-03T00:00:00.000Z" }
   }
 ]
