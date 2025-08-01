@@ -14,6 +14,21 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 - docker compose up --build
 - access the site at: http://localhost:3000.
 
+## M5
+
+### Demo
+TODO
+### Minimal Goals
+TODO
+### Standard Goals
+TODO
+### Stretch Goals
+TODO
+### Non Trivial Elements
+TODO
+### M5 Highlights
+- Improved add friends feature: Improved the add friends feature so that now you can send a friend request to users and only become their friend if they accept the request. Also, you can now remove friends from your friend's list.
+
 ## M4
 
 ### App Summary
