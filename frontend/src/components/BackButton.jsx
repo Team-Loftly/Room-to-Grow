@@ -13,7 +13,7 @@ export default function BackButton(props) {
       sx={{
         position: "absolute",
         left: 0,
-        top: "40%",
+        top: 0,
         zIndex: 5,
         p: 5,
         color: "white",

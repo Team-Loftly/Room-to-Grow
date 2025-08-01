@@ -20,6 +20,7 @@ export default function TaskCardList() {
   const failed_tasks = useSelector((state) => state.tasks.failedTaskList);
   const status = useSelector((state) => state.tasks.status);
   const error = useSelector((state) => state.tasks.error);
+  const selectedDate = useSelector((state) => state.tasks.selectedDate);
 
   // All habits
   const showAllTasks = useSelector((state) => state.tasks.showAllTasks);
@@ -29,9 +30,9 @@ export default function TaskCardList() {
 
   useEffect(() => {
     if (status === "idle") {
-      dispatch(fetchTasks());
+      dispatch(fetchTasks(selectedDate));
     }
-  }, [status, dispatch]);
+  }, [status, dispatch, selectedDate]);
 
   useEffect(() => {
     if (allHabitsStatus === "idle") {

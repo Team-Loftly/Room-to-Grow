@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import TaskStatCard from "./TaskStatCard";
 import VisualInsight from "../../stats/VisualInsight";
+import MonthlyCalendarHeatmap from "../../stats/MonthlyCalendarHeatmap";
 import DoneIcon from "@mui/icons-material/Done";
 import TasksRightPageToolBar from "./TasksRightPageToolbar";
 import WhatshotIcon from "@mui/icons-material/Whatshot";
@@ -27,7 +28,7 @@ export default function SelectedTask() {
   const [habitStats, setHabitStats] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [selectedChart, setSelectedChart] = useState("dailyProgress");
+  const [selectedChart, setSelectedChart] = useState("monthlyCalendar");
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -122,7 +123,7 @@ export default function SelectedTask() {
     );
   }
 
-  if (loading || habitStats === null) {
+  if (loading) {
     return (
       <Box
         sx={{
@@ -138,6 +139,28 @@ export default function SelectedTask() {
         }}
       >
         <TasksRightPageToolBar selected_task_name="" />
+        <Typography>Loading habit statistics...</Typography>
+      </Box>
+    );
+  }
+
+  if (!selectedTaskId || selectedTaskId === -1) {
+    return (
+      <Box
+        sx={{
+          width: "90%",
+          height: "90%",
+          boxSizing: "border-box",
+          display: "flex",
+          flexDirection: "column",
+          marginTop: 4,
+          p: 2,
+          borderRadius: 3,
+          bgcolor: "transparent",
+        }}
+      >
+        <TasksRightPageToolBar selected_task_name="" />
+        <Typography>Select a habit to view statistics</Typography>
       </Box>
     );
   }
@@ -146,7 +169,7 @@ export default function SelectedTask() {
   const dailyProgressChartData = {};
 
   if (
-    habitStats.totalValuePerDayCurrentWeek &&
+    habitStats?.totalValuePerDayCurrentWeek &&
     Array.isArray(habitStats.totalValuePerDayCurrentWeek)
   ) {
     habitStats.totalValuePerDayCurrentWeek.forEach((value, index) => {
@@ -168,7 +191,7 @@ export default function SelectedTask() {
         bgcolor: "transparent",
       }}
     >
-      <TasksRightPageToolBar selected_task_name={habitStats.title} />
+      <TasksRightPageToolBar selected_task_name={habitStats?.title || "No Habit Selected"} />
 
       <Box
         sx={{
@@ -178,58 +201,66 @@ export default function SelectedTask() {
           boxSizing: "border-box",
         }}
       >
-        <TaskStatCard
-          stat_icon={WhatshotIcon}
-          stat_icon_color="orange"
-          stat_text={`Current Streak: ${habitStats.currentStreak} days`}
-        />
-        <Paper
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-around",
-            alignItems: "stretch",
-            bgcolor: "transparent",
-            boxShadow: "none",
-            gap: 2,
-          }}
-        >
-          <TaskStatCard
-            card_width="50%"
-            stat_icon={DoneIcon}
-            stat_icon_color="green"
-            stat_text={`Total Completions: ${habitStats.completedDays} days`}
-          />
-          <TaskStatCard
-            card_width="50%"
-            stat_icon={ClearIcon}
-            stat_icon_color="red"
-            stat_text={`Total Failed: ${habitStats.failedDays} days`}
-          />
-        </Paper>
+        {habitStats ? (
+          <>
+            <TaskStatCard
+              stat_icon={WhatshotIcon}
+              stat_icon_color="orange"
+              stat_text={`Current Streak: ${habitStats.currentStreak || 0} days`}
+            />
+            <Paper
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-around",
+                alignItems: "stretch",
+                bgcolor: "transparent",
+                boxShadow: "none",
+                gap: 2,
+              }}
+            >
+              <TaskStatCard
+                card_width="50%"
+                stat_icon={DoneIcon}
+                stat_icon_color="green"
+                stat_text={`Total Completions: ${habitStats.completedDays || 0} days`}
+              />
+              <TaskStatCard
+                card_width="50%"
+                stat_icon={ClearIcon}
+                stat_icon_color="red"
+                stat_text={`Total Failed: ${habitStats.failedDays || 0} days`}
+              />
+            </Paper>
 
-        <Paper
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-around",
-            alignItems: "stretch",
-            bgcolor: "transparent",
-            boxShadow: "none",
-            gap: 2,
-          }}
-        >
-          <TaskStatCard
-            card_width="50%"
-            stat_icon={ArrowForwardIcon}
-            stat_text={`Total Skipped: ${habitStats.skippedDays} days`}
-          />
-          <TaskStatCard
-            card_width="50%"
-            stat_icon={TrendingUpIcon}
-            stat_text={`Total: ${habitStats.totalValue} ${habitStats.type === "checkmark" ? "times" : "min"}`}
-          />
-        </Paper>
+            <Paper
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-around",
+                alignItems: "stretch",
+                bgcolor: "transparent",
+                boxShadow: "none",
+                gap: 2,
+              }}
+            >
+              <TaskStatCard
+                card_width="50%"
+                stat_icon={ArrowForwardIcon}
+                stat_text={`Total Skipped: ${habitStats.skippedDays || 0} days`}
+              />
+              <TaskStatCard
+                card_width="50%"
+                stat_icon={TrendingUpIcon}
+                stat_text={`Total: ${habitStats.totalValue || 0} ${habitStats.type === "checkmark" ? "times" : "min"}`}
+              />
+            </Paper>
+          </>
+        ) : (
+          <Typography variant="h6" sx={{ textAlign: 'center', mt: 4 }}>
+            No habit data available. Please select a habit or ensure the habit has some recorded activity.
+          </Typography>
+        )}
 
         <Paper
           elevation={3}
@@ -242,7 +273,7 @@ export default function SelectedTask() {
           }}
         >
           <Typography variant="h5" color="primary" gutterBottom>
-            Weekly Overview
+            Habit Overview
           </Typography>
 
           <FormControl fullWidth sx={{ mb: 2 }}>
@@ -254,14 +285,20 @@ export default function SelectedTask() {
               label="View Chart"
               onChange={handleChartChange}
             >
+              <MenuItem value="monthlyCalendar">
+                Heatmap
+              </MenuItem>
               <MenuItem value="dailyProgress">
                 Daily Progress This Week
               </MenuItem>
-              {/* Add more MenuItem options in the future */}
             </Select>
           </FormControl>
 
-          {selectedChart === "dailyProgress" && (
+          {selectedChart === "monthlyCalendar" && (
+            <MonthlyCalendarHeatmap habitStats={habitStats} />
+          )}
+
+          {selectedChart === "dailyProgress" && habitStats && (
             <VisualInsight
               title="Daily Progress This Week"
               chartLabel={

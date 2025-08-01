@@ -16,7 +16,7 @@ import TextField from "@mui/material/TextField";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { Alert, Tooltip } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 
 // Dialog Components
 import Dialog from "@mui/material/Dialog";
@@ -159,7 +159,11 @@ export default function CreateTask({
     <Box>
       {!ExistingTask && (
         <Tooltip title="Create New Habit">
-          <Button variant="contained" onClick={handleClickOpen}>
+          <Button
+            variant="contained"
+            onClick={handleClickOpen}
+            sx={{ bgcolor: "black" }}
+          >
             <AddIcon />
           </Button>
         </Tooltip>
@@ -174,7 +178,11 @@ export default function CreateTask({
           <Box component="form" noValidate autoComplete="off">
             <Stack spacing={2} sx={{ width: "100%" }}>
               {error && (
-                <Alert severity="error" onClose={() => setError("")} sx={{ mb: 2, width: '100%' }}>
+                <Alert
+                  severity="error"
+                  onClose={() => setError("")}
+                  sx={{ mb: 2, width: "100%" }}
+                >
                   {error}
                 </Alert>
               )}
