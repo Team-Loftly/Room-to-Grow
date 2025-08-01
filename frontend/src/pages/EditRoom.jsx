@@ -1,4 +1,4 @@
-import { Stack, Divider, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import ItemGrid from "../components/market/ItemGrid";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -22,19 +22,6 @@ function EditRoom() {
     dispatch(fetchInventory());
   }, [dispatch]);
 
-  // handle loading and error
-  if (status === "loading") {
-    return (
-      <Stack
-        justifyContent="center"
-        alignItems="center"
-        sx={{ height: "100vh" }}
-      >
-        <Typography>Loading</Typography>
-      </Stack>
-    );
-  }
-
   if (status === "failed") {
     return (
       <Stack
@@ -47,19 +34,53 @@ function EditRoom() {
     );
   }
   return (
-    <Stack
-      direction="row"
+    <Box // Parent Box
       sx={{
-        height: "100%",
         boxSizing: "border-box",
-        justifyContent: "center",
-        alignItems: "center",
+        height: "90vh",
+        width: "100vw",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
-      <Controls />
-      <Room isEditable={true} />
-      <ItemGrid items={decorations} title="Inventory" isEditable={true} />
-    </Stack>
+      <Box // Controls
+        sx={{
+          position: "absolute",
+          left: 0,
+          top: "50%",
+          transform: "translateY(-50%)",
+          zIndex: 2,
+        }}
+      >
+        <Controls />
+      </Box>
+      <Box // Room
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: "-30%",
+          width: "130%",
+          height: "100%",
+          zIndex: 0,
+        }}
+      >
+        <Room isEditable={true} />
+      </Box>
+      <Box // Inventory
+        sx={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          width: "40%",
+          height: "90%",
+          zIndex: 1,
+          padding: 0,
+          m: 4,
+        }}
+      >
+        <ItemGrid items={decorations} title="Inventory" isEditable={true} />
+      </Box>
+    </Box>
   );
 }
 
