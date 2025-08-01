@@ -147,4 +147,161 @@
       ]
     }
   ]
+},
+{
+  "_id": {
+    "$oid": "688c38e8b6bcb896cdd0b7f5"
+  },
+  "userId": {
+    "$oid": "688c38e8b6bcb896cdd0b7f2"
+  },
+  "coins": 800,
+  "decorations": [
+    {
+      "decorId": {
+        "$oid": "68660edaf079d0ff8d6cc86e"
+      },
+      "placed": true,
+      "position": [
+        11.922801261969752,
+        0,
+        -5.195310457027297
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "_id": {
+        "$oid": "688c38f6b6bcb896cdd0b812"
+      }
+    },
+    {
+      "decorId": {
+        "$oid": "68660edaf079d0ff8d6cc872"
+      },
+      "placed": true,
+      "position": [
+        8.598513744480222,
+        0,
+        -7.288828380669791
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "_id": {
+        "$oid": "688c38f6b6bcb896cdd0b813"
+      }
+    },
+    {
+      "decorId": {
+        "$oid": "68660edaf079d0ff8d6cc86f"
+      },
+      "placed": true,
+      "position": [
+        13.104777706422844,
+        0,
+        19.764514286237876
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "_id": {
+        "$oid": "688c3912b6bcb896cdd0b852"
+      }
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "688c395cb6bcb896cdd0b8c2"
+  },
+  "userId": {
+    "$oid": "688c395cb6bcb896cdd0b8bf"
+  },
+  "coins": 1200,
+  "decorations": [
+    {
+      "decorId": {
+        "$oid": "68660edaf079d0ff8d6cc870"
+      },
+      "placed": true,
+      "position": [
+        6.131031569526655,
+        0,
+        -21.449376895203578
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "_id": {
+        "$oid": "688c3969b6bcb896cdd0b909"
+      }
+    },
+    {
+      "decorId": {
+        "$oid": "68660edaf079d0ff8d6cc871"
+      },
+      "placed": true,
+      "position": [
+        29.842111268961872,
+        0,
+        5.63216717288628
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "_id": {
+        "$oid": "688c3969b6bcb896cdd0b90a"
+      }
+    },
+    {
+      "decorId": {
+        "$oid": "68660edaf079d0ff8d6cc86f"
+      },
+      "placed": true,
+      "position": [
+        11.667334655063371,
+        0,
+        20.888689654346187
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "_id": {
+        "$oid": "688c3969b6bcb896cdd0b90b"
+      }
+    },
+    {
+      "decorId": {
+        "$oid": "68660edaf079d0ff8d6cc86d"
+      },
+      "placed": true,
+      "position": [
+        -5.10811134475702,
+        0,
+        1.3214135320267495
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "_id": {
+        "$oid": "688c3969b6bcb896cdd0b90c"
+      }
+    }
+  ],
+  "__v": 0
 }]

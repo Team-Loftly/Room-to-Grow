@@ -5,8 +5,13 @@
   "username": "admin",
   "email": "admin@test.com",
   "hashedPassword": "$2b$10$We3MOoXWHEdbX6WYDI9tV.eflEf/ngvMc8Vgw9Ut7lDPBtaINPJ/m",
-  "friends": [],
-  "friendRequests": []
+  "friends": [
+    "user1"
+  ],
+  "friendRequests": [
+    "user2"
+  ],
+  "__v": 7
 },
 {
   "_id": {
@@ -17,4 +22,29 @@
   "hashedPassword": "$2b$10$We3MOoXWHEdbX6WYDI9tV.eflEf/ngvMc8Vgw9Ut7lDPBtaINPJ/m",
   "friends": [],
   "friendRequests": []
-}]
+},
+{
+  "_id": {
+    "$oid": "688c38e8b6bcb896cdd0b7f2"
+  },
+  "username": "user1",
+  "email": "user1@test.com",
+  "hashedPassword": "$2b$10$3nQa6pg0BCBN6P2crz.vNOjqgc9./H5usrh1qgha3FrIFnJbZL7fq",
+  "friends": [
+    "admin"
+  ],
+  "friendRequests": [],
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "688c395cb6bcb896cdd0b8bf"
+  },
+  "username": "user2",
+  "email": "user2@test.com",
+  "hashedPassword": "$2b$10$Zj1RK3TGUSfiJkHE5RH2O.CBzR7WO8eieXIZDrQ44qqqWevmiHwOm",
+  "friends": [],
+  "friendRequests": [],
+  "__v": 0
+}
+]
