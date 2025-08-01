@@ -7,7 +7,6 @@ import {
   tick,
 } from '../features/timerSlice';
 import { updateProgress } from '../features/tasksSlice';
-import { addCoinsAndUpdate } from '../features/inventorySlice';
 
 import { Box, Typography, TextField, Button, IconButton } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -42,9 +41,6 @@ const TimerDisplay = ({ onHabitComplete, onDeselectTask, onSecondsCounterChange 
         if (currentProgress >= goalInMinutes && selectedTask.progress?.status !== 'complete') {
           // Stop the timer
           dispatch(stopTimer());
-          
-          // Add coins for completing the habit
-          dispatch(addCoinsAndUpdate(TIMED_HABIT_COMPLETION_REWARD));
           
           // Notify parent component about completion
           if (onHabitComplete) {
