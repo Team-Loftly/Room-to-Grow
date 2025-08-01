@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Button,
-  Popover,
-  Paper,
-} from "@mui/material";
+import { Button, Popover, Paper, Typography } from "@mui/material";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -15,7 +11,7 @@ export default function DatePickerButton() {
   const dispatch = useDispatch();
   const selectedDate = useSelector((state) => state.tasks.selectedDate);
   const showAllTasks = useSelector((state) => state.tasks.showAllTasks);
-  
+
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleButtonClick = (event) => {
@@ -34,7 +30,7 @@ export default function DatePickerButton() {
 
   const formatDisplayDate = (date) => {
     const today = new Date();
-    const isToday = 
+    const isToday =
       date.getDate() === today.getDate() &&
       date.getMonth() === today.getMonth() &&
       date.getFullYear() === today.getFullYear();
@@ -66,8 +62,6 @@ export default function DatePickerButton() {
         sx={{
           color: "text.primary",
           textTransform: "none",
-          fontWeight: 700,
-          fontSize: "2.125rem",
           padding: 0,
           minWidth: "auto",
           "&:hover": {
@@ -80,11 +74,25 @@ export default function DatePickerButton() {
               fontSize: "1.5rem",
             },
           },
+          display: "flex",
+          alignItems: "center",
+          flexShrink: 1,
+          minWidth: 0,
         }}
       >
-        {formatDisplayDate(selectedDate)}
+        <Typography
+          sx={{
+            fontWeight: 700,
+            fontSize: "2.125rem",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            minWidth: 0,
+          }}
+        >
+          {formatDisplayDate(selectedDate)}
+        </Typography>
       </Button>
-
       <Popover
         open={open}
         anchorEl={anchorEl}
