@@ -1,16 +1,14 @@
-import { useEffect} from "react";
-import {
-  Stack,
-  Typography,
-} from "@mui/material";
+import { useEffect } from "react";
+import { Stack, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchFriends,
   selectFriendsStatus,
-  selectCurrentFriend
+  selectCurrentFriend,
 } from "../features/friendsSlice";
 import Room from "../components/Room.jsx";
 import FriendsComponent from "../components/Friends.jsx";
+import BackButton from "../components/BackButton.jsx";
 
 function Friends() {
   const dispatch = useDispatch();
@@ -46,10 +44,12 @@ function Friends() {
         boxSizing: "border-box",
         justifyContent: "center",
         alignItems: "center",
+        position: "relative",
       }}
     >
-    <Room friendUsername={friendUsername}></Room>
-    <FriendsComponent />
+      <BackButton />
+      <Room friendUsername={friendUsername}></Room>
+      <FriendsComponent />
     </Stack>
   );
 }

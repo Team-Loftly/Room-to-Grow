@@ -9,6 +9,7 @@ import {
   selectMarketStatus,
   selectMarketError,
 } from "../features/marketSlice";
+import BackButton from "../components/BackButton.jsx";
 
 function Market() {
   const dispatch = useDispatch();
@@ -45,8 +46,10 @@ function Market() {
         justifyContent: "center",
         alignItems: "center",
         p: 7,
+        position: "relative",
       }}
     >
+      <BackButton />
       <ItemDisplay
         sx={{
           flexGrow: 2,

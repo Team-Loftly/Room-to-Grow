@@ -10,6 +10,7 @@ import { fetchInventory } from "../features/inventorySlice";
 import { useEffect } from "react";
 import Room from "../components/Room.jsx";
 import Controls from "../components/edit/Controls.jsx";
+import BackButton from "../components/BackButton.jsx";
 
 function EditRoom() {
   const dispatch = useDispatch();
@@ -43,6 +44,11 @@ function EditRoom() {
         overflow: "hidden",
       }}
     >
+      <BackButton
+        sx={{
+          top: "0%",
+        }}
+      />
       <Box // Controls
         sx={{
           position: "absolute",

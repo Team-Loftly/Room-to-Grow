@@ -4,6 +4,7 @@ import BookPage from "../components/tasks/BookPage";
 import StatPage from "../components/tasks/right_page/SelectedTask";
 import MyTasks from "../components/tasks/left_page/MyTasks";
 import Book from "../assets/Book.png";
+import BackButton from "../components/BackButton.jsx";
 
 export default function Tasks() {
   return (
@@ -13,8 +14,10 @@ export default function Tasks() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        position: "relative",
       }}
     >
+      <BackButton />
       <Stack
         direction="row"
         spacing={4}
