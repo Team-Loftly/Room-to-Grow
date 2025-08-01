@@ -12,6 +12,7 @@ export default function createHabitsRouter(requireAuth) {
   // Constants
   const LOCALE = "en-US";
   const MAX_STREAK_CALCULATION_DAYS = 36500; // 100 years worth of days
+  const TASK_COMPLETION_REWARD = 5; // Coins awarded for completing a task
   const HABIT_TYPES = {
     TIMED: "timed",
     CHECKMARK: "checkmark"
@@ -620,6 +621,10 @@ export default function createHabitsRouter(requireAuth) {
       const targetDate = new Date();
       const entryIndex = findOrCreateDailyStatusEntry(habit, targetDate);
 
+      // Get the previous status to check if this was just completed
+      const previousStatus = habit.dailyStatuses[entryIndex]?.status;
+      const wasAlreadyComplete = previousStatus === STATUS_TYPES.COMPLETE;
+
       // Update progress value
       let newValue = Math.max(0, habit.dailyStatuses[entryIndex].value + value);
       newValue = clampProgressValue(habit, newValue);
@@ -641,6 +646,17 @@ export default function createHabitsRouter(requireAuth) {
         value, 
         completionStatus === STATUS_TYPES.COMPLETE
       );
+
+      // If the task was just completed (not already complete), award completion coins
+      if (completionStatus === STATUS_TYPES.COMPLETE && !wasAlreadyComplete) {
+        let room = await Rooms.findOne({ userId: user_id });
+        if (room) {
+          room.coins += TASK_COMPLETION_REWARD;
+          await room.save();
+          // Update the questUpdate coins to reflect the new total
+          questUpdate.coins = room.coins;
+        }
+      }
 
       await habit.save();
 

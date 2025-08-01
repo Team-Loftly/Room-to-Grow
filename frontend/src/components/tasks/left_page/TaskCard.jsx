@@ -22,14 +22,11 @@ import {
   markSkipped,
   markFailed,
 } from "../../../features/tasksSlice";
-import { addCoinsAndUpdate } from "../../../features/inventorySlice";
 import { completeTask } from "../../../features/metricsSlice";
 import CreateTask from "./CreateTask";
 import LogTimeDialog from "./LogTimeDialog";
 
 export default function TaskCard({ task, task_status }) {
-  const TASK_COMPLETION_REWARD = 5;
-
   const deleteSnackbarOpen = useSelector(
     (state) => state.tasks.isDeleteSnackbarOpen
   );
@@ -143,7 +140,6 @@ export default function TaskCard({ task, task_status }) {
   };
 
   const handleCompleteTask = () => {
-    dispatch(addCoinsAndUpdate(TASK_COMPLETION_REWARD));
     // dispatch(completeTask()); // Update metrics
     dispatch(setIsCompletionSnackbarOpen(true));
   };
