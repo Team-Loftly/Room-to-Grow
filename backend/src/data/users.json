@@ -2,7 +2,7 @@
   "_id": {
     "$oid": "68660ef56fd728291e7ef8be"
   },
-  "username": "admin",
+  "username": "Loftly",
   "email": "admin@test.com",
   "hashedPassword": "$2b$10$We3MOoXWHEdbX6WYDI9tV.eflEf/ngvMc8Vgw9Ut7lDPBtaINPJ/m",
   "friends": []
@@ -11,7 +11,7 @@
   "_id": {
     "$oid": "6867544f9726722b96834d93"
   },
-  "username": "testUser2",
+  "username": "Lofi Girl",
   "email": "test1@test.com",
   "hashedPassword": "$2b$10$We3MOoXWHEdbX6WYDI9tV.eflEf/ngvMc8Vgw9Ut7lDPBtaINPJ/m",
   "friends": []
