@@ -36,7 +36,7 @@ const Fan1 = (props) => {
           castShadow
           receiveShadow
           geometry={nodes.Blades.geometry}
-          material={nodes.Blades.material}
+          material={materials["YELLOWIS WHITE"]}
           rotation={[0, 0.698, 0]}
           scale={0.474}
         />
@@ -45,19 +45,19 @@ const Fan1 = (props) => {
             castShadow
             receiveShadow
             geometry={nodes.Cube001.geometry}
-            material={nodes.Cube001.material}
+            material={materials["YELLOWIS WHITE"]}
           />
           <mesh
             castShadow
             receiveShadow
             geometry={nodes.Cube001_1.geometry}
-            material={nodes.Cube001_1.material}
+            material={materials["YELLOWIS WHITE"]}
           />
           <mesh
             castShadow
             receiveShadow
             geometry={nodes.Cube001_2.geometry}
-            material={nodes.Cube001_2.material}
+            material={materials["YELLOWIS WHITE"]}
           />
         </group>
         <mesh
@@ -108,7 +108,7 @@ const Fan1 = (props) => {
           castShadow
           receiveShadow
           geometry={nodes.Neck.geometry}
-          material={nodes.Neck.material}
+          material={materials["YELLOWIS WHITE"]}
           rotation={[-Math.PI / 2, 0, 0]}
         />
         <group rotation={[-Math.PI / 2, 0, 0]}>
