@@ -279,7 +279,7 @@ const FocusPage = () => {
               </Typography>
             </Box>
             <Typography variant="body1" sx={{ opacity: 0.9, fontWeight: 'bold' }}>
-              +5 coins earned
+              Coins earned
             </Typography>
             <Typography variant="body2" sx={{ mt: 2, opacity: 0.8, fontSize: '0.9rem' }}>
               Click anywhere to close

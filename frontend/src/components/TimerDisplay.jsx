@@ -19,8 +19,6 @@ const TimerDisplay = ({ onHabitComplete, onDeselectTask, onSecondsCounterChange 
   const selectedTaskId = useSelector((state) => state.tasks.selectedTaskId);
   const allTasks = useSelector((state) => state.tasks.taskList);
 
-  const TIMED_HABIT_COMPLETION_REWARD = 5;
-
   const [inputMinutes, setInputMinutes] = useState("");
   const [inputSeconds, setInputSeconds] = useState("");
   const [focusedInput, setFocusedInput] = useState(null);
