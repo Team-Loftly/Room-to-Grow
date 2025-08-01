@@ -23,6 +23,7 @@ const TimerDisplay = ({ onHabitComplete, onDeselectTask, onSecondsCounterChange 
   const [inputSeconds, setInputSeconds] = useState("");
   const [focusedInput, setFocusedInput] = useState(null);
   const [secondsCounter, setSecondsCounter] = useState(0); // Counter for seconds elapsed on current habit
+  const lastProgressUpdate = useRef(0); // Track last progress update time
 
   const isInitialMount = useRef(true);
   const previousSelectedTaskId = useRef(selectedTaskId);
@@ -91,8 +92,17 @@ const TimerDisplay = ({ onHabitComplete, onDeselectTask, onSecondsCounterChange 
             
             // Update progress every 60 seconds (1 minute)
             if (newCounter >= 60) {
-              dispatch(updateProgress({ taskId: selectedTaskId, value: 1 }));
-              checkHabitCompletion(selectedTaskId);
+              const now = Date.now();
+              const timeSinceLastUpdate = now - lastProgressUpdate.current;
+              
+              // Prevent duplicate calls within 500ms
+              if (timeSinceLastUpdate > 500) {
+                lastProgressUpdate.current = now;
+                dispatch(updateProgress({ taskId: selectedTaskId, value: 1 }));
+                checkHabitCompletion(selectedTaskId);
+              } else {
+                console.log('TimerDisplay: Skipping duplicate progress update, too soon since last update:', timeSinceLastUpdate, 'ms');
+              }
               return 0; // Reset counter after updating progress
             }
             
@@ -100,12 +110,14 @@ const TimerDisplay = ({ onHabitComplete, onDeselectTask, onSecondsCounterChange 
           });
         }
       }, 1000);
-      return () => clearInterval(timer);
+      return () => {
+        clearInterval(timer);
+      };
     } else if (timeLeft === 0 && isRunning) {
       dispatch(stopTimer());
       
     }
-  }, [isRunning, timeLeft, dispatch, selectedTaskId, secondsCounter, checkHabitCompletion]);
+  }, [isRunning, timeLeft, dispatch, selectedTaskId]);
 
   const calculateTotalSeconds = useCallback(() => {
     return (
