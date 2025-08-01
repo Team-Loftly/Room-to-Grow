@@ -24,8 +24,7 @@ export default function ItemGrid({ items, title, isEditable = false }) {
         height: "100%",
         width: "100%",
         display: "flex",
-        bgcolor: "rgba(255, 255, 255, 0.8)",
-        py: 3,
+        // bgcolor: "rgba(255, 255, 255, 0.8)",
         borderRadius: 4,
       }}
     >
@@ -33,15 +32,15 @@ export default function ItemGrid({ items, title, isEditable = false }) {
         variant="h4"
         align="center"
         gutterBottom
-        sx={{ width: "100%" }}
+        sx={{ width: "100%", color: "white" }}
       >
         {title}
       </Typography>
+
       <Grid
         container
-        spacing={{ xs: 1, md: 1 }}
         columns={{ xs: 4, sm: 8, md: 12 }}
-        sx={{ justifyContent: "space-evenly", overflowY: "auto" }}
+        sx={{ justifyContent: "center", overflowY: "auto" }}
       >
         {items.map((item, index) => (
           <Grid key={index} item xs={2} sm={4} md={4}>

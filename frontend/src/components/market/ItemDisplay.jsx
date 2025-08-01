@@ -17,6 +17,7 @@ import {
   addItemAndUpdate,
 } from "../../features/inventorySlice";
 import { useState, useEffect } from "react";
+import PaidIcon from "@mui/icons-material/Paid";
 
 export default function ItemDisplay() {
   const selectedItem = useSelector(selectSelectedItem);
@@ -72,22 +73,19 @@ export default function ItemDisplay() {
       sx={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "space-between",
         flexDirection: "column",
-        p: 2,
+        pt: 3,
         borderRadius: 4,
         width: "40%",
+        boxSizing: "border-box",
         height: "100%",
-        bgcolor: "rgba(255,255,255,0.8)",
+        bgcolor: "rgba(245, 245, 245, 0.95)",
+
         overflowY: "auto",
       }}
     >
-      <Typography
-        variant="h4"
-        align="center"
-        gutterBottom
-        sx={{ width: "100%" }}
-      >
+      <Typography variant="h4" align="center" sx={{ width: "100%", pb: 3 }}>
         {selectedItem.name}
       </Typography>
       <CardMedia
@@ -95,21 +93,34 @@ export default function ItemDisplay() {
         image={selectedItem.image}
         alt={selectedItem.category}
         sx={{
-          maxHeight: 300,
-          maxWidth: 300,
+          maxHeight: 250,
+          maxWidth: 250,
           objectFit: "contain",
+          border: "5px solid #0a571f",
           borderRadius: 4,
         }}
       />
       <CardContent>
         <Typography
+          align="center"
           sx={{
-            fontSize: 15,
+            fontSize: 20,
+            mx: 2,
           }}
         >
           {selectedItem.description}
         </Typography>
       </CardContent>
+      {purchaseMessage && (
+        <Alert
+          severity={
+            purchaseMessage === "Purchase successful!" ? "success" : "error"
+          }
+          onClose={() => setPurchaseMessage("")}
+        >
+          {purchaseMessage}
+        </Alert>
+      )}
       <CardActions
         sx={{
           mb: 3,
@@ -124,19 +135,10 @@ export default function ItemDisplay() {
             bgcolor: "#0a571f",
           }}
         >
-          Buy for {selectedItem.price} coins
+          Buy for {selectedItem.price}{" "}
+          <PaidIcon fontSize="medium" className="text-yellow-500" />
         </Button>
       </CardActions>
-      {purchaseMessage && (
-        <Alert
-          severity={
-            purchaseMessage === "Purchase successful!" ? "success" : "error"
-          }
-          onClose={() => setPurchaseMessage("")}
-        >
-          {purchaseMessage}
-        </Alert>
-      )}
     </Card>
   );
 }

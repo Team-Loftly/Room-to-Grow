@@ -1,4 +1,5 @@
-import { Card, CardMedia, Typography } from "@mui/material";
+import { Card, CardMedia, Fade, Typography } from "@mui/material";
+import PaidIcon from "@mui/icons-material/Paid";
 
 export default function ItemTile({
   item,
@@ -13,19 +14,21 @@ export default function ItemTile({
         display: "flex",
         alignItems: "center",
         flexDirection: "column",
-        bgcolor: "grey.100",
+        bgcolor: "white",
         borderRadius: 4,
         m: 2,
-        px: 2,
-        width: 200,
+        px: 5,
+        pt: 1,
         cursor: "pointer",
-        border: selected ? "3px solid #0a571f" : "2px solid transparent",
+        border: selected ? "5px solid #0a571f" : "5px solid transparent",
+        width: 250,
+        opacity: 0.95,
       }}
     >
+      {" "}
       <Typography
         variant="h6"
         sx={{
-          p: 1,
           whiteSpace: "nowrap",
           overflow: "hidden",
           textOverflow: "ellipsis",
@@ -36,7 +39,10 @@ export default function ItemTile({
         {item.name}
       </Typography>
       {isMarketplace && (
-        <Typography variant="b2">{item.price} Coins</Typography>
+        <Typography variant="b2">
+          {item.price}{" "}
+          <PaidIcon fontSize="medium" className="text-yellow-500" />
+        </Typography>
       )}
       <CardMedia
         component="img"
@@ -45,9 +51,8 @@ export default function ItemTile({
         sx={{
           height: 200,
           width: 200,
-          objectFit: "fill",
+          objectFit: "contain",
           borderRadius: 4,
-          my: 2,
         }}
       />
     </Card>

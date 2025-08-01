@@ -23,19 +23,6 @@ function Market() {
     }
   }, [dispatch, status]);
 
-  // handle loading and error
-  if (status === "loading") {
-    return (
-      <Stack
-        justifyContent="center"
-        alignItems="center"
-        sx={{ height: "100vh" }}
-      >
-        <Typography>Loading</Typography>
-      </Stack>
-    );
-  }
-
   if (status === "failed") {
     return (
       <Stack
@@ -51,39 +38,31 @@ function Market() {
   return (
     <Stack
       direction="row"
-      spacing={2}
+      spacing={4}
       sx={{
         height: "90vh",
         boxSizing: "border-box",
         justifyContent: "center",
         alignItems: "center",
-        p: 4,
+        p: 7,
       }}
     >
       <ItemDisplay
         sx={{
           flexGrow: 2,
-          width: "30%", // Use direct percentage, Stack will manage spacing around it
-          // You might need min/max width if this ItemDisplay has content that
-          // makes it too small/large on extreme zooms or screen sizes.
-          // minWidth: '200px',
-          // maxWidth: '400px',
+          width: "30%",
+          mr: 5,
         }}
       />
       <Divider
         orientation="vertical"
         sx={{
           borderColor: "white",
-          borderWidth: "1px",
-          height: "90%",
-          flexShrink: 0,
+          borderWidth: "3px",
+          height: "100%",
         }}
       />
-      <ItemGrid
-        items={items}
-        title="Marketplace"
-        sx={{ flexGrow: 4, width: "40%" }}
-      />
+      <ItemGrid items={items} title="Marketplace" />
     </Stack>
   );
 }
