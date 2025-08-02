@@ -28,6 +28,9 @@ TODO
 TODO
 ### M5 Highlights
 - Improved add friends feature: Improved the add friends feature so that now you can send a friend request to users and only become their friend if they accept the request. Also, you can now remove friends from your friend's list.
+- Added a window with day/night cycle to toom. Additionally added animations and a character to work alongside in your virtual study space.
+- Various UI improvements as well as 10+ new furniture items!
+
 
 ## M4
 
