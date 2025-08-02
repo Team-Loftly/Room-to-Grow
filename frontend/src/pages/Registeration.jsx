@@ -15,7 +15,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 import SiteHeader from "../components/SiteHeader";
 import loginIllustration from "../assets/login.png";
-import { createInventory } from "../features/inventorySlice";
+import { createRoom } from "../features/roomSlice";
 import { useDispatch } from "react-redux";
 
 const PageContainer = styled(Box)(({ theme }) => ({
@@ -106,7 +106,7 @@ export default function Register() {
       // registration was successful
       localStorage.setItem("token", data.token);
       // create a new inventory for the user
-      dispatch(createInventory());
+      dispatch(createRoom());
       // set the current user's username
       localStorage.setItem("username", username);
       // nav to home
