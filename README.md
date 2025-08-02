@@ -18,11 +18,28 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 
 ### Demo
 
+#### Habits
+Users can create habits and complete them rewards to earn coins. They can also view metrics about their progress.
 ![Habits page demo photo](frontend/public/images/habits.png)
+
+#### Marketplace
+Users can purchase a variety of items with their hard earned coins to decorate their room. 
 ![Marketplace page demo photo](frontend/public/images/marketplace.png)
+
+#### Edit Room
+Users can place decorations from their inventory into their room as a visual testament of their progress. 
 ![Edit room page demo photo](frontend/public/images/edit.png)
+
+#### Daily Quests
+Users receive a set of three quests daily that reward their consistent growth with coins. Completing all three quests unlocks a daily bonus!
 ![Quests page demo photo](frontend/public/images/quests.png)
+
+#### Pomodoro Timer
+Users can activate a Pomodoro timer to start a general focus session, or to log progress towards one of their timed habits.
 ![Timer page demo photo](/frontend/public/images/timer.png)
+
+#### Friends
+Users can add their friends by username and view their rooms to motivate each other.
 ![Friends page demp photo](/frontend/public/images/friends.png)
 
 ### Minimal Goals
