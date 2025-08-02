@@ -17,7 +17,14 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 ## M5
 
 ### Demo
-TODO
+
+![Habits page demo photo](frontend/public/images/habits.png)
+![Marketplace page demo photo](frontend/public/images/marketplace.png)
+![Edit room page demo photo](frontend/public/images/edit.png)
+![Quests page demo photo](frontend/public/images/quests.png)
+![Timer page demo photo](/frontend/public/images/timer.png)
+![Friends page demp photo](/frontend/public/images/friends.png)
+
 ### Minimal Goals
 TODO
 ### Standard Goals
