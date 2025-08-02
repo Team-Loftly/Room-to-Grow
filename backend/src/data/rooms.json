@@ -5,7 +5,7 @@
   "userId": {
     "$oid": "68660ef56fd728291e7ef8be"
   },
-  "coins": 3000,
+  "coins": 2400,
   "decorations": [
     {
       "decorId": {
@@ -104,25 +104,6 @@
     },
     {
       "decorId": {
-        "$oid": "688d676d0a520a3cbc136fa6"
-      },
-      "placed": false,
-      "position": [
-        0,
-        0,
-        0
-      ],
-      "rotation": [
-        0,
-        0,
-        0
-      ],
-      "_id": {
-        "$oid": "688d9b9140cda3e766bab35c"
-      }
-    },
-    {
-      "decorId": {
         "$oid": "688d60610a520a3cbc136fa5"
       },
       "placed": true,
@@ -142,25 +123,6 @@
     },
     {
       "decorId": {
-        "$oid": "68660edaf079d0ff8d6cc871"
-      },
-      "placed": true,
-      "position": [
-        28.47512622074329,
-        4.5,
-        -20.303096211635676
-      ],
-      "rotation": [
-        0,
-        -1.5707963267948966,
-        0
-      ],
-      "_id": {
-        "$oid": "688d9b9540cda3e766bab3b6"
-      }
-    },
-    {
-      "decorId": {
         "$oid": "68660edaf079d0ff8d6cc870"
       },
       "placed": false,
@@ -176,6 +138,25 @@
       ],
       "_id": {
         "$oid": "688d9b9740cda3e766bab3ec"
+      }
+    },
+    {
+      "decorId": {
+        "$oid": "688d59430a520a3cbc136fa2"
+      },
+      "placed": false,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "_id": {
+        "$oid": "688da20803e2b7620617db63"
       }
     }
   ]
