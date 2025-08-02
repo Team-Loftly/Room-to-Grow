@@ -26,18 +26,67 @@ Earn coins and spend them at the Marketplace to buy various decorations for your
 ![Friends page demp photo](/frontend/public/images/friends.png)
 
 ### Minimal Goals
-TODO
+
+- Users can create an account and log in to view their room (persistence)
+  - Current State: Complete
+- Users can create a habit list and add habits to complete to earn currency
+  - Current State: Complete
+- Users can purchase room decorations using the currency from a virtual marketplace
+  - Current State: Complete
+- Users can add and modify basic decorations in a virtual 3D room. Display on set locations in the room (e.g.: each room has one dresser that can hold 3-4 different decorations)
+  - Current State: Complete
+- Users can log general “focus” sessions for various activities (studying, workout, etc.) to earn currency.
+  - Current State: Complete
+
 ### Standard Goals
-TODO
+- Users can set different types of habits (timed, counted)
+  - Current State: Complete
+- Users have more flexibility with habits (organized by priority, etc.)
+  - Current State: Complete
+- Daily quest/reward system, productivity streaks that give bonus points, achievements, or other ways to reward consistent progress.
+  - Current State: Complete
+- Users gain access to “trends” in their productivity and view visualizations for every habit
+  - Current State: Complete
+- Users can add other users as friends by username  
+  - Current State: Complete
+- Interaction with certain elements of the app make noise
+  - Current State: Complete
+
 ### Stretch Goals
-TODO
-### Non Trivial Elements
-TODO
+
+- Users can rotate the room to view it freely
+  - Current State: Complete
+- Assets present in the room have idle animations (cat stretches occasionally, fairly lights twinkle, etc.)
+  - Current State: Complete
+- Users can view and visit each others’ rooms.
+  - Current State: Complete
+- Users can purchase more complex room decorations (weather changes, lighting changes, animated items, etc)
+  - Current State: Complete (Can purchase some animated items now)
+- Users can create several different room layouts and save them to quickly switch between them.
+  - Current State: Dropped
+- Users can connect their spotify account to play music in their rooms.
+  - Current State: Dropped
+
+  ### Non-Trivial Elements
+
+| Feature                          | State     | Description                                                                            |
+|----------------------------------|-----------|----------------------------------------------------------------------------------------|
+| Habit tracking system            | Complete  | Users can create, update, and complete habits to earn coins.                           |
+| Quest system                     | Complete  | Users can complete daily quests that reward consistent growth with coins.              |
+| Item marketplace                 | Complete  | Users can purchase a variety of room decorations with their hard earned coins.         |
+| ThreeJs room render & edit room  | Complete  | Users have a 3D study room that they can view and place purchased items in.            |
+| Add friends and view their room  | Complete  | Users can add friends by username and view their rooms.                                |
+| View metrics about habits        | Complete  | Users can view metrics about their habits.                                             |
+| Pomodoro timer                   | Complete  | Users can activate a Pomodoro timer to boost their productivity.                       |
+
+
 ### M5 Highlights
 - Improved add friends feature: Improved the add friends feature so that now you can send a friend request to users and only become their friend if they accept the request. Also, you can now remove friends from your friend's list.
 - Added a window with day/night cycle to toom. Additionally added animations and a character to work alongside in your virtual study space.
 - Various UI improvements as well as 10+ new furniture items!
-
+- Habits Page: Added heat maps in habit metrics, date picker to allow users to view habits from different dates.
+- Timer Page: Now able to select a incomplete habit for today and log progress towards it.
+- Dropped: Dropped 2 stretch requirements due to time constraints, although we did complete most of them. We attempted to integrate Spotify but were running into authentication issues so we decided to drop it.
 
 ## M4
 
