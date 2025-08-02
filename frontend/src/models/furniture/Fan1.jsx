@@ -12,7 +12,7 @@ const Fan1 = (props) => {
   const { nodes, materials } = useGLTF(fanScene);
 
   // Set overall model scale here
-  const overallScale = [0.5, 0.5, 0.5];
+  const overallScale = [0.4, 0.4, 0.4];
 
   return (
     <group ref={groupRef} {...props} scale={overallScale}>

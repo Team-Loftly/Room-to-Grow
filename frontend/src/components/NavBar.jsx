@@ -14,8 +14,8 @@ import {
   selectInventoryCoins,
   selectInventoryError,
   selectInventoryStatus,
-  fetchInventory,
-} from "../features/inventorySlice";
+  fetchRoom,
+} from "../features/roomSlice";
 import { useEffect } from "react";
 import ProfileDropdown from "./ProfileDropdown";
 import PaidIcon from "@mui/icons-material/Paid";
@@ -33,7 +33,7 @@ export default function NavBar() {
   const hasUnseenCompletedQuest = useSelector(selectHasUnseenCompletedQuest);
 
   useEffect(() => {
-    dispatch(fetchInventory());
+    dispatch(fetchRoom());
   }, [dispatch]);
 
   return (

@@ -14,7 +14,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 import SiteHeader from "../components/SiteHeader";
 import loginIllustration from "../assets/login.png";
-import { fetchInventory } from "../features/inventorySlice";
+import { fetchRoom } from "../features/roomSlice";
 import { fetchDailyQuests } from "../features/dailyQuestSetSlice";
 import { useDispatch } from "react-redux";
 

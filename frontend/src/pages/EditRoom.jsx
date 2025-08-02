@@ -5,8 +5,8 @@ import {
   selectInventoryItems,
   selectInventoryError,
   selectInventoryStatus,
-} from "../features/inventorySlice";
-import { fetchInventory } from "../features/inventorySlice";
+} from "../features/roomSlice";
+import { fetchRoom } from "../features/roomSlice";
 import { useEffect } from "react";
 import Room from "../components/Room.jsx";
 import Controls from "../components/edit/Controls.jsx";
@@ -20,7 +20,7 @@ function EditRoom() {
 
   // fetch items on mount
   useEffect(() => {
-    dispatch(fetchInventory());
+    dispatch(fetchRoom());
   }, [dispatch]);
 
   if (status === "failed") {

@@ -9,7 +9,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Stack from "@mui/material/Stack";
 import { useDispatch } from "react-redux";
 import { updateProgress } from "../../../features/tasksSlice";
-import { addCoinsAndUpdate } from "../../../features/inventorySlice";
+import { addCoinsAndUpdate } from "../../../features/roomSlice";
 import { completeTask } from "../../../features/metricsSlice";
 
 export default function LogTimeDialog({

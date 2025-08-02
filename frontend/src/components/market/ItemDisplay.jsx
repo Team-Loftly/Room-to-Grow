@@ -15,7 +15,7 @@ import {
   selectInventoryItems,
   spendCoinsAndUpdate,
   addItemAndUpdate,
-} from "../../features/inventorySlice";
+} from "../../features/roomSlice";
 import { useState, useEffect } from "react";
 import PaidIcon from "@mui/icons-material/Paid";
 

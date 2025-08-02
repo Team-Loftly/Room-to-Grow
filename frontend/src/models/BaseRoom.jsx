@@ -1,6 +1,6 @@
 // BaseRoom.jsx
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
@@ -27,14 +27,75 @@ const floor = new MeshStandardMaterial({
 const BaseRoom = (props) => {
   const roomRef = useRef();
   const { nodes, materials } = useGLTF(baseRoomScene);
+  const [timeOfDay, setTimeOfDay] = useState("day");
 
-  // Re-run if material changes for window (unlikely for static models)
+  // Function to determine time of day
+  const getTimeOfDay = () => {
+    const hour = new Date().getHours();
+
+    if (hour >= 6 && hour < 20) {
+      return "day";
+    } else {
+      return "night";
+    }
+  };
+
+  // Function to get window colors based on time of day
+  const getWindowConfig = (timeOfDay) => {
+    switch (timeOfDay) {
+      case "day":
+        return {
+          color: 0xfdfbd3, // Warm daylight
+          intensity: 2.5, // Bright
+          opacity: 0.8,
+        };
+      case "night":
+        return {
+          color: 0x1a1a2e, // Dark blue night
+          intensity: 0.3, // Very dim
+          opacity: 0.95,
+        };
+      default:
+        return {
+          color: 0xfdfbd3,
+          intensity: 2.5,
+          opacity: 0.8,
+        };
+    }
+  };
+
+  // Update time of day periodically
+  useEffect(() => {
+    const updateTimeOfDay = () => {
+      const currentTime = getTimeOfDay();
+      setTimeOfDay(currentTime);
+    };
+
+    // Update immediately
+    updateTimeOfDay();
+
+    // Update every minute
+    const interval = setInterval(updateTimeOfDay, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Update window material when time of day changes
   useEffect(() => {
     if (materials.Glow) {
-      materials.Glow.emissive = new THREE.Color(0xfdfbd3); // Glow color
-      materials.Glow.emissiveIntensity = 2.5; // Glow intensity
+      const config = getWindowConfig(timeOfDay);
+
+      materials.Glow.emissive = new THREE.Color(config.color);
+      materials.Glow.emissiveIntensity = config.intensity;
+      materials.Glow.opacity = config.opacity;
+      materials.Glow.transparent = true;
+
+      // Add a subtle color tint to the base color as well
+      materials.Glow.color = new THREE.Color(config.color);
+
+      console.log(`Window updated for ${timeOfDay} time`);
     }
-  }, [materials.Glow]);
+  }, [materials.Glow, timeOfDay]);
 
   return (
     <group {...props} ref={roomRef}>
@@ -49,7 +110,7 @@ const BaseRoom = (props) => {
           scale={[-0.023, -0.213, -0.384]}
         />
         <mesh
-          // Window glass
+          // Window glass - now dynamic based on time
           receiveShadow
           geometry={nodes.Glass.geometry}
           material={materials.Glow}

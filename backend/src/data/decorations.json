@@ -1,25 +1,25 @@
 [
   {
     "_id": {
-      "$oid": "68660edaf079d0ff8d6cc86d"
+      "$oid": "68660edaf079d0ff8d6cc86e"
     },
-    "name": "Warp Pipe",
-    "description": "A classic warp pipe from the Mushroom Kingdom.",
-    "modelID": "WarpPipe",
-    "price": 100,
+    "name": "Bill and His Desk",
+    "description": "This is Bill. He loves working at his desk. Try working alongside him!",
+    "modelID": "ManDesk",
+    "price": 500,
     "category": "Furniture",
-    "image": "./images/warp-pipe.png"
+    "image": "./images/manDesk.png"
   },
   {
     "_id": {
-      "$oid": "68660edaf079d0ff8d6cc86e"
+      "$oid": "688d5c240a520a3cbc136fa3"
     },
-    "name": "Modern Desk and Chair",
-    "description": "A modern desk and chair set for your virtual workspace.",
-    "modelID": "DeskChair1",
+    "name": "Aquarium in a Box",
+    "description": "An aquarium... in a box??",
+    "modelID": "Aquarium",
     "price": 500,
     "category": "Furniture",
-    "image": "./images/deskChair1.png"
+    "image": "./images/aquarium.png"
   },
   {
     "_id": {
@@ -34,14 +34,25 @@
   },
   {
     "_id": {
-      "$oid": "68660edaf079d0ff8d6cc870"
+      "$oid": "688d60610a520a3cbc136fa5"
     },
-    "name": "Electric Fan",
-    "description": "It keeps you cool and roots you on as your biggest fan.",
-    "modelID": "Fan1",
+    "name": "Leafy Potted Plant",
+    "description": "A nice medium sized plant to liven up your room!",
+    "modelID": "Plant1",
     "price": 200,
     "category": "Furniture",
-    "image": "./images/fan1.png"
+    "image": "./images/plant1.png"
+  },
+  {
+    "_id": {
+      "$oid": "688d676d0a520a3cbc136fa6"
+    },
+    "name": "Funny Cat",
+    "description": "oiiaioooooiai!",
+    "modelID": "MemeCat",
+    "price": 500,
+    "category": "Furniture",
+    "image": "./images/memeCat.png"
   },
   {
     "_id": {
@@ -56,13 +67,79 @@
   },
   {
     "_id": {
+      "$oid": "68660edaf079d0ff8d6cc870"
+    },
+    "name": "Electric Fan",
+    "description": "It keeps you cool and roots you on as your biggest fan.",
+    "modelID": "Fan1",
+    "price": 200,
+    "category": "Furniture",
+    "image": "./images/fan1.png"
+  },
+  {
+    "_id": {
       "$oid": "68660edaf079d0ff8d6cc872"
     },
     "name": "Pastel Rug",
-    "description": "A super soft and colourful rug",
+    "description": "A super soft and colourful rug.",
     "modelID": "Rug1",
     "price": 300,
     "category": "Furniture",
     "image": "./images/rug1.png"
+  },
+  {
+    "_id": {
+      "$oid": "688d56ad0a520a3cbc136fa1"
+    },
+    "name": "Bunny Plush",
+    "description": "A super soft and cute rabbit friend.",
+    "modelID": "Rabbit",
+    "price": 150,
+    "category": "Furniture",
+    "image": "./images/rabbit.png"
+  },
+  {
+    "_id": {
+      "$oid": "68660edaf079d0ff8d6cc86d"
+    },
+    "name": "Warp Pipe",
+    "description": "A classic warp pipe from the Mushroom Kingdom.",
+    "modelID": "WarpPipe",
+    "price": 100,
+    "category": "Furniture",
+    "image": "./images/warp-pipe.png"
+  },
+  {
+    "_id": {
+      "$oid": "688d59430a520a3cbc136fa2"
+    },
+    "name": "Gunther",
+    "description": "Gunther.",
+    "modelID": "Gunther",
+    "price": 500,
+    "category": "Furniture",
+    "image": "./images/gunther.png"
+  },
+  {
+    "_id": {
+      "$oid": "688d5e2d0a520a3cbc136fa4"
+    },
+    "name": "Lafufu Box",
+    "description": "A... Lafufu? ... in a box??",
+    "modelID": "Labubu",
+    "price": 1000,
+    "category": "Furniture",
+    "image": "./images/labubu.png"
+  },
+  {
+    "_id": {
+      "$oid": "688d775f0a520a3cbc136fa7"
+    },
+    "name": "Classic Table",
+    "description": "A table that stands the test of time and style.",
+    "modelID": "Table1",
+    "price": 300,
+    "category": "Furniture",
+    "image": "./images/table1.png"
   }
 ]
