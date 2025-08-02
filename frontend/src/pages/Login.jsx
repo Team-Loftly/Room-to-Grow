@@ -105,7 +105,7 @@ export default function Login() {
       // login was successful
       localStorage.setItem("token", data.token);
       localStorage.setItem("username", data.username);
-      dispatch(fetchInventory());
+      dispatch(fetchRoom());
       dispatch(fetchDailyQuests());
       navigate("/home");
     } catch (err) {
