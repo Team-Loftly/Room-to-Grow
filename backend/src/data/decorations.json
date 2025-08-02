@@ -141,5 +141,27 @@
     "price": 300,
     "category": "Furniture",
     "image": "./images/table1.png"
+  },
+  {
+    "_id": {
+      "$oid": "688d90d70a520a3cbc136fab"
+    },
+    "name": "Wall Clock",
+    "description": "Do you have the time?",
+    "modelID": "Clock",
+    "price": 150,
+    "category": "Furniture",
+    "image": "./images/clock.png"
+  },
+  {
+    "_id": {
+      "$oid": "688d95420a520a3cbc136fb5"
+    },
+    "name": "Waste Bin",
+    "description": "The perfect basketball hoop.",
+    "modelID": "Trash",
+    "price": 150,
+    "category": "Furniture",
+    "image": "./images/trash.png"
   }
 ]
